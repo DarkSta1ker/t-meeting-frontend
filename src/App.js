@@ -115,11 +115,6 @@ function App() {
               value={event.location}
               onChange={handleChange('location')}
             />
-            <input
-              className="EventPlace"
-              value={event.location}
-              onChange={handleChange('location')}
-            />
           </div>
         </div>
       </div>
