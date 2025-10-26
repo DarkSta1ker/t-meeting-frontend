@@ -38,7 +38,6 @@ function handleFetchFabric(event, fetchMethod) {
   }
 }
 
-
 function App() {
   
   const [event, setEvent] = useState({
