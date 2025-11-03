@@ -1,5 +1,6 @@
 import './styles/App.css';
 import React, { useState } from 'react';
+import CreateEventPage from "../pages/create_evemt_page/CreateEventPage";
 function handleFetchFabric(event, fetchMethod) {
   switch(fetchMethod) {
     case "POST":
@@ -96,6 +97,7 @@ function App() {
   const handleDelete = () => handleFetch('DELETE');
   return (
     <div className="App">
+        <CreateEventPage></CreateEventPage>
       <div className="Board">
         <input
           className="EventName"
