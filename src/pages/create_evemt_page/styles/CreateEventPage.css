@@ -1,0 +1,12 @@
+.CancelButton{
+    height: 56px;
+    width: 107px;
+    background-color: #fecd00;
+
+}
+.SaveButton{
+
+    height:56px;
+    width:130px;
+    background-color: #34c658;
+}
