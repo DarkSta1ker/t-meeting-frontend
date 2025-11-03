@@ -1,0 +1,51 @@
+.Header{
+    height:64px;
+    margin:0;
+    width: 100%;
+    background-color: #C3C3C3;
+    display:flex;
+    justify-content: center;
+}
+.HeaderElements{
+    box-sizing: border-box;
+    padding-left: 4px;
+    padding-right: 4px;
+    width: 1440px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.AvatarButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    overflow: hidden;
+    user-select: none;
+    width: 48px;
+    height: 48px;
+
+}
+.AvatarButton:hover{
+    background-color: #B3B3B3;
+}
+.AvatarIcon {
+    width: 32px;
+    height: 32px;
+
+}
+.ArrowLeftIcon {
+    width: 32px;
+    height: 32px;
+}
+.ReturnButton{
+    height: 56px;
+    width: 56px;
+}
+.ReturnButton:hover{
+    background-color: #B3B3B3;
+}
+.HeaderText{
+    height:28px;
+    font-size:22px;
+}
