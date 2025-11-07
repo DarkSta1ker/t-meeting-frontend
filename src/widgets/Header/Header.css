@@ -1,0 +1,54 @@
+.header{
+    height:64px;
+    margin:0;
+    width: 100%;
+    background-color: #C3C3C3;
+    display:flex;
+    justify-content: center;
+}
+.headerElements{
+    box-sizing: border-box;
+    padding-left: 4px;
+    padding-right: 4px;
+    width: 1440px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.avatarButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    overflow: hidden;
+    user-select: none;
+    width: 56px;
+    height: 56px;
+    background: transparent;
+    border: none;
+}
+.avatarButton:hover{
+    background-color: #B3B3B3;
+}
+.avatarIcon {
+    width: 32px;
+    height: 32px;
+
+}
+.arrowLeftIcon {
+    width: 32px;
+    height: 32px;
+}
+.returnButton{
+    height: 56px;
+    width: 56px;
+    background: transparent;
+    border: none;
+}
+.returnButton:hover{
+    background-color: #B3B3B3;
+}
+.headerText{
+    height:28px;
+    font-size:22px;
+}

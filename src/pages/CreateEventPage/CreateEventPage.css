@@ -1,0 +1,104 @@
+.createEventPage{
+    display: flex;
+    flex-direction: column;
+    margin:0;
+    justify-content: center;
+}
+.board{
+    width: 1232px;
+    height: 880px;
+    margin:auto;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+.createPageTextBlock{
+    padding-left:16px;
+    width:100%;
+    height:64px;
+    font-size:22px;
+    box-sizing: border-box;
+    margin:0;
+    display:flex;
+    align-items: center;
+    text-align : left;
+    font-weight: 400;
+}
+.editBlock{
+    width: 1232px;
+    height: 730px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #E2E2E2;
+    padding: 40px 60px;
+    box-sizing: border-box;
+}
+.nameAndDescription{
+    width: 450px;
+    height: 649px;
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+    flex-direction:column;
+    box-sizing: border-box;
+}
+.createPageInput{
+    width: 450px;
+    height: 56px;
+    font-size: 24px;
+    box-sizing: border-box;
+}
+.createPageTextArea{
+    width: 450px;
+    height: 534px;
+    font-size: 22px;
+    box-sizing: border-box;
+    resize: none;
+}
+.timeAndPlace{
+    width: 450px;
+    height: 649px;
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+    flex-direction:column;
+    box-sizing: border-box;
+}
+.buttonsBlock{
+    width: 1232px;
+    height: 96px;
+    display: flex;
+    justify-content: right;
+    align-items:center;
+    gap:30px;
+    box-sizing: border-box;
+}
+.cancelButton{
+    height: 56px;
+    width: 107px;
+    background-color: #fecd00;
+    box-sizing: border-box;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+}
+.cancelButton:hover{
+    border: 2px solid;
+}
+.saveButton{
+    height:56px;
+    width:130px;
+    background-color: #34c658;
+    box-sizing: border-box;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+}
+.saveButton:hover{
+
+    border: 2px solid;
+}
+
