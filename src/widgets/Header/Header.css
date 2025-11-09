@@ -29,6 +29,7 @@
 }
 .avatarButton:hover{
     background-color: #B3B3B3;
+    border: 2px solid;
 }
 .avatarIcon {
     width: 32px;
@@ -47,6 +48,7 @@
 }
 .returnButton:hover{
     background-color: #B3B3B3;
+    border: 2px solid;
 }
 .headerText{
     height:28px;

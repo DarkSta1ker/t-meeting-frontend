@@ -4,40 +4,40 @@ import {TextBlock} from "../../shared/blocks/TextBlock/TextBlock";
 import {Input} from "../../shared/ui/Input/Input";
 import {TextArea} from "../../shared/ui/TextArea/TextArea";
 import {Button} from "../../shared/ui/Button/Button";
-import './CreateEventPage.css';
-export const CreateEventPage: FC = () => {
+import './EditEventPage.css';
+export const EditEventPage: FC = () => {
     return (
-        <div className="createEventPage">
+        <div className="editEventPage">
             <Header/>
             <div className="board">
-                <TextBlock className="createPageTextBlock">Создание мероприятия</TextBlock>
-                <div className={"editBlock"}>
-                    <div className={"nameAndDescription"}>
+                <TextBlock className="editPageTextBlock">Редактирование мероприятия</TextBlock>
+                <div className="editBlock">
+                    <div className="nameAndDescription">
                         <Input
-                            className="createPageInput"
+                            className="editPageInput"
                             placeholder="Название мероприятия"
 
                         />
                         <TextArea
-                            className="createPageTextArea"
+                            className="editPageTextArea"
                             placeholder="Описание мероприятия"
                         />
                     </div>
                     <div className={"timeAndPlace"}>
                         <Input
-                            className="createPageInput"
+                            className="editPageInput"
                             placeholder="Время начала"
                         />
                         <Input
-                            className="createPageInput"
+                            className="editPageInput"
                             placeholder="Время конца"
                         />
                         <Input
-                            className="createPageInput"
+                            className="editPageInput"
                             placeholder="Место проведения"
                         />
                         <Input
-                            className="createPageInput"
+                            className="editPageInput"
                             placeholder="Дата"
                         />
                     </div>
@@ -48,8 +48,12 @@ export const CreateEventPage: FC = () => {
                         Отмена
                     </Button>
                     <Button
+                        className="deleteButton">
+                        Удалить
+                    </Button>
+                    <Button
                         className="saveButton">
-                        Отправить
+                        Сохранить
                     </Button>
                 </div>
             </div>

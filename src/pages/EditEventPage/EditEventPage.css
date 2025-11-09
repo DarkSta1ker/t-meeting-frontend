@@ -1,4 +1,4 @@
-.createEventPage{
+.editEventPage{
     display: flex;
     flex-direction: column;
     margin:0;
@@ -12,7 +12,7 @@
     flex-direction: column;
     box-sizing: border-box;
 }
-.createPageTextBlock{
+.editPageTextBlock{
     padding-left:16px;
     width:100%;
     height:64px;
@@ -43,14 +43,14 @@
     flex-direction:column;
     box-sizing: border-box;
 }
-.createPageInput{
+.editPageInput{
     width: 450px;
     height: 56px;
     font-size: 24px;
     box-sizing: border-box;
     padding : 0 0 0 14px;
 }
-.createPageTextArea{
+.editPageTextArea{
     width: 450px;
     height: 534px;
     font-size: 22px;
@@ -100,6 +100,20 @@
     font-weight: bold;
 }
 .saveButton:hover{
+
+    border: 2px solid;
+}
+.deleteButton{
+    height:56px;
+    width:112px;
+    background-color: #ec231e;
+    box-sizing: border-box;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+}
+.deleteButton:hover{
 
     border: 2px solid;
 }

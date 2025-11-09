@@ -1,6 +1,8 @@
 import './App.css';
 import React, { useState } from 'react';
 import {CreateEventPage} from "../pages/CreateEventPage/CreateEventPage";
+import {EditEventPage} from "../pages/EditEventPage/EditEventPage";
+import {EventsListPage} from "../pages/EventsListPage/EventsListPage";
 // function handleFetchFabric(event, fetchMethod) {
 //   switch(fetchMethod) {
 //     case "POST":
@@ -99,6 +101,8 @@ function App() {
     return (
     <div className="App">
         <CreateEventPage/>
+        <EditEventPage/>
+        <EventsListPage/>
       {/*<div className="Board">*/}
       {/*  <input*/}
       {/*    className="EventName"*/}

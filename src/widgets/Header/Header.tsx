@@ -1,5 +1,5 @@
 import React , {type FC} from "react";
-import {AvatarIcon, ArrowLeftIcon} from "@radix-ui/react-icons"
+import { ArrowLeft , User} from 'lucide-react';
 import {Button} from "../../shared/ui/Button/Button";
 import './Header.css';
 interface HeaderProps {
@@ -11,13 +11,13 @@ export const Header: FC<HeaderProps>=({button1, button2})=>{
         <div className="header">
             <div className="headerElements">
                 <Button
-                    children={<ArrowLeftIcon className="arrowLeftIcon" />}
+                    children={<ArrowLeft size={36}/>}
                     className="returnButton"
                     onClick={button1}
                 ></Button>
                 <p className="headerText">T-meeting</p>
                 <Button
-                    children={<AvatarIcon className="avatarIcon"/>}
+                    children={<User size={36}/>}
                     className="avatarButton"
                     onClick={button2}
                 ></Button>
