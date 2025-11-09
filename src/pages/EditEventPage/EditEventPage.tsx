@@ -4,11 +4,13 @@ import {TextBlock} from "../../shared/blocks/TextBlock/TextBlock";
 import {Input} from "../../shared/ui/Input/Input";
 import {TextArea} from "../../shared/ui/TextArea/TextArea";
 import {Button} from "../../shared/ui/Button/Button";
+import { useNavigate } from 'react-router-dom';
 import './EditEventPage.css';
 export const EditEventPage: FC = () => {
+    const nav=useNavigate();
     return (
         <div className="editEventPage">
-            <Header/>
+            <Header button1={()=>nav(-1)} button2={()=>nav('/personalAccount')}/>
             <div className="board">
                 <TextBlock className="editPageTextBlock">Редактирование мероприятия</TextBlock>
                 <div className="editBlock">
@@ -44,7 +46,8 @@ export const EditEventPage: FC = () => {
                 </div>
                 <div className="buttonsBlock">
                     <Button
-                        className="cancelButton">
+                        className="cancelButton"
+                        onClick={()=>nav('/eventsList')}>
                         Отмена
                     </Button>
                     <Button

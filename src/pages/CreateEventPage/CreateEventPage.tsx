@@ -4,11 +4,13 @@ import {TextBlock} from "../../shared/blocks/TextBlock/TextBlock";
 import {Input} from "../../shared/ui/Input/Input";
 import {TextArea} from "../../shared/ui/TextArea/TextArea";
 import {Button} from "../../shared/ui/Button/Button";
+import { useNavigate } from 'react-router-dom';
 import './CreateEventPage.css';
 export const CreateEventPage: FC = () => {
+    const nav=useNavigate();
     return (
         <div className="createEventPage">
-            <Header/>
+            <Header button1={()=>nav(-1)} button2={()=>nav('/personalAccount')}/>
             <div className="board">
                 <TextBlock className="createPageTextBlock">Создание мероприятия</TextBlock>
                 <div className={"editBlock"}>
@@ -44,7 +46,8 @@ export const CreateEventPage: FC = () => {
                 </div>
                 <div className="buttonsBlock">
                     <Button
-                        className="cancelButton">
+                        className="cancelButton"
+                        onClick={()=>nav('/eventsList')}>
                         Отмена
                     </Button>
                     <Button

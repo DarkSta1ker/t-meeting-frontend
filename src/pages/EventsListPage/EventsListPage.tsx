@@ -2,13 +2,15 @@ import React, {type FC} from "react";
 import {Header} from "../../widgets/Header/Header";
 import {TextBlock} from "../../shared/blocks/TextBlock/TextBlock";
 import {Button} from "../../shared/ui/Button/Button";
+import { useNavigate } from 'react-router-dom';
 import {EllipsisVertical, Calendar, MapPinIcon, CirclePlus} from 'lucide-react';
 import { DropdownMenu } from "radix-ui";
 import './EventsListPage.css';
 export const EventsListPage: FC = () => {
+    const nav=useNavigate();
     return (
         <div className="eventsListPage">
-            <Header/>
+            <Header  button1={()=>nav(-1)} button2={()=>nav('/personalAccount')}/>
             <div className="board">
                 <TextBlock className="eventsListTextBlock">Список мероприятий</TextBlock>
                 <div className="eventsListBlock">
@@ -45,7 +47,7 @@ export const EventsListPage: FC = () => {
 
                                 <DropdownMenu.Portal>
                                     <DropdownMenu.Content className="dropdownMenuContent" side="left" sideOffset={5}>
-                                        <DropdownMenu.Item className="dropdownMenuItem">
+                                        <DropdownMenu.Item className="dropdownMenuItem" onSelect={()=>nav('/editEvent')}>
                                             Редактировать
                                         </DropdownMenu.Item>
                                         <DropdownMenu.Item className="dropdownMenuItem">
@@ -61,7 +63,7 @@ export const EventsListPage: FC = () => {
                             </DropdownMenu.Root>
                         </div>
                     </div>
-                    <Button className="addEventButton">
+                    <Button className="addEventButton" onClick={()=>nav('/createEvent')}>
                         <CirclePlus size={30}/>
                     </Button>
                 </div>
