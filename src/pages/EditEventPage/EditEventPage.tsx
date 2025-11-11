@@ -5,57 +5,57 @@ import {Input} from "../../shared/ui/Input/Input";
 import {TextArea} from "../../shared/ui/TextArea/TextArea";
 import {Button} from "../../shared/ui/Button/Button";
 import { useNavigate } from 'react-router-dom';
-import './EditEventPage.css';
+import styles from './EditEventPage.css';
 export const EditEventPage: FC = () => {
     const nav=useNavigate();
     return (
-        <div className="editEventPage">
+        <div className={styles.editEventPage}>
             <Header button1={()=>nav(-1)} button2={()=>nav('/personalAccount')}/>
-            <div className="board">
-                <TextBlock className="editPageTextBlock">Редактирование мероприятия</TextBlock>
-                <div className="editBlock">
-                    <div className="nameAndDescription">
+            <div className={styles.board}>
+                <TextBlock className={styles.editPageTextBlock}>Редактирование мероприятия</TextBlock>
+                <div className={styles.editBlock}>
+                    <div className={styles.nameAndDescription}>
                         <Input
-                            className="editPageInput"
+                            className={styles.editPageInput}
                             placeholder="Название мероприятия"
 
                         />
                         <TextArea
-                            className="editPageTextArea"
+                            className={styles.editPageTextArea}
                             placeholder="Описание мероприятия"
                         />
                     </div>
-                    <div className={"timeAndPlace"}>
+                    <div className={styles.timeAndPlace}>
                         <Input
-                            className="editPageInput"
+                            className={styles.editPageInput}
                             placeholder="Время начала"
                         />
                         <Input
-                            className="editPageInput"
+                            className={styles.editPageInput}
                             placeholder="Время конца"
                         />
                         <Input
-                            className="editPageInput"
+                            className={styles.editPageInput}
                             placeholder="Место проведения"
                         />
                         <Input
-                            className="editPageInput"
+                            className={styles.editPageInput}
                             placeholder="Дата"
                         />
                     </div>
                 </div>
-                <div className="buttonsBlock">
+                <div className={styles.buttonsBlock}>
                     <Button
-                        className="cancelButton"
+                        className={styles.cancelButton}
                         onClick={()=>nav('/eventsList')}>
                         Отмена
                     </Button>
                     <Button
-                        className="deleteButton">
+                        className={styles.deleteButton}>
                         Удалить
                     </Button>
                     <Button
-                        className="saveButton">
+                        className={styles.saveButton}>
                         Сохранить
                     </Button>
                 </div>
