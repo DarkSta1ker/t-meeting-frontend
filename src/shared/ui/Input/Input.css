@@ -1,0 +1,23 @@
+.input {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    padding: 12px 16px;
+    font-size: 15px;
+    line-height: 1;
+    color: #48454e;
+    background-color: white;
+    border: 1px solid;
+    box-sizing: border-box;
+    width: 200px;
+    height: 35px;
+}
+
+.input:focus {
+    box-shadow: 2px 2px 2px 2px #48454e;
+}
+
+.input::selection {
+    color:  #48454e;
+}
