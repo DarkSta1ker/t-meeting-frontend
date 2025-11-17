@@ -27,14 +27,6 @@ export const CreateEventPage: FC = () => {
                     <div className={styles.timeAndPlace}>
                         <Input
                             className={styles.createPageInput}
-                            placeholder="Время начала"
-                        />
-                        <Input
-                            className={styles.createPageInput}
-                            placeholder="Время конца"
-                        />
-                        <Input
-                            className={styles.createPageInput}
                             placeholder="Место проведения"
                         />
                         <Input

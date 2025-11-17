@@ -1,157 +1,120 @@
-import {useReducer, useState} from 'react';
+import {
+    Event,
+    ApiData,
+    ResultSuccess,
+    ResultError,
+} from '../../shared/eventServiceTypes/EventServiceTypesAndInterfaces';
 
-
-const FetchFabric= async (url:string,method:string,options?:Event): Promise<Response> => {
-    const FetchOptions:RequestInit = {
-        method:method,
+const requestApi= async <T = Record<string, unknown>>(data:ApiData<T>): Promise<Response> => {
+    const fetchOptions:RequestInit = {
+        method:data.method,
         headers:{"Content-Type":"application/json"},
-        body: options? JSON.stringify(options) : null
+        body: data.payload? JSON.stringify(data.payload) : undefined
     }
-    const response = await fetch(url,FetchOptions);
+    const response = await fetch(data.url,fetchOptions);
     if (!response.ok) {
         throw new Error(response.statusText);
     }
     return response;
 }
 
-interface Event{
-    id?: "",
-    name?: string,
-    metadata?: {
-        datetime?: string,
-        location?: string
+const createResultSuccess = <T>(payload: T):ResultSuccess<T> => {
+    return{
+        status: 'Success',
+        payload: payload
+    }
+}
+
+const createResultError = (error: unknown):ResultError => {
+    return{
+        status: 'Error',
+        payload: error
+    }
+}
+
+export const EventService = {
+    async addEvent(eventPayload: Event){
+        try{
+            const apiData:ApiData<Event>={
+                url : "/event",
+                method : "POST",
+                payload : eventPayload
+            }
+            const response = await requestApi(apiData);
+            if(!response.ok){
+                return createResultError(new Error(`HTTP Error: ${response.ok} ${response.statusText}`));
+            }
+            return createResultSuccess(response);
+        }
+        catch(error){
+            return createResultError(error);
+        }
     },
-    content?: EventContentBlock[]
-}
-
-type EventContentBlock = | PromoTextBlock
-
-interface PromoTextBlock {
-    block: "promotext";
-    payload: string[];
-}
-
-interface EventsState{
-    events: Event[];
-}
-
-type Action=
-    | {type: "AddEvent", payload:Event}
-    | {type: "SetEvent", payload:Event}
-    | {type: "SetEvents", payload:Event[]}
-    | {type: "DeleteEvent", payload:string}
-
-const reducer= (state:EventsState,action:Action):EventsState=>{
-    switch(action.type){
-        case 'AddEvent':
-            return{
-                ...state,
-                events: [...state.events, action.payload]
-            }
-        case 'SetEvent':
-            return{
-                ...state,
-                events: state.events.map(event=>
-                    (event.id===action.payload.id)? action.payload : event
-                )
-            }
-        case 'SetEvents':
-            return{
-                events: action.payload
-            }
-        case 'DeleteEvent':
-            return{
-                ...state,
-                events: state.events.filter(event=> event.id!==action.payload)
-            }
-
-    }
-}
-const initialState: EventsState = {
-    events: [],
-};
-export const CRUDService= ()=>{
-    const [state, dispatch] = useReducer(reducer,initialState);
-    const handleAddEvent = async (data: Event) => {
+    async getEvent(eventId: string){
         try{
-            const response = await FetchFabric("/event","POST",data)
+            const apiData:ApiData={
+                url : `/event/${eventId}`,
+                method : "GET",
+            }
+            const response = await requestApi(apiData);
             if (!response.ok){
-                dispatch({type:'AddEvent',payload:data})
-                console.log('Код ошибки', response.ok)
+                return createResultError(new Error(`HTTP Error: ${response.ok} ${response.statusText}`));
             }
-            else{
-                console.log('Запрос отправлен')
-            }
+            const payload:Event = await response.json();
+            return createResultSuccess<Event>(payload);
         }
         catch(error){
-            console.log(error)
+            return createResultError(error);
         }
-    }
-    const handleGetEvent = async (data: Event) => {
+    },
+    async getAllEvents(){
         try{
-            const response = await FetchFabric(`/event/${data.id}`,"GET")
+            const apiData:ApiData={
+                url : "/events",
+                method : "GET",
+            }
+            const response = await requestApi(apiData);
             if (!response.ok){
-                console.log('Код ошибки', response.ok)
+                return createResultError(new Error(`HTTP Error: ${response.ok} ${response.statusText}`));
             }
-            else{
-                console.log('Ответ получен')
-                const eventData: Event = await response.json();
-                return eventData;
-            }
+            const payload:Event[] = await response.json();
+            return createResultSuccess<Event[]>(payload);
         }
         catch(error){
-            console.log(error)
+            return createResultError(error);
         }
-    }
-
-    const handleGetAllEvents = async () => {
+    },
+    async deleteEvent(eventId: string){
         try{
-            const response = await FetchFabric(`/events`,"GET")
+            const apiData:ApiData={
+                url : `/event/${eventId}`,
+                method : "DELETE",
+            }
+            const response = await requestApi(apiData);
             if (!response.ok){
-                console.log('Код ошибки', response.ok)
+                return createResultError(new Error(`HTTP Error: ${response.ok} ${response.statusText}`));
             }
-            else{
-                console.log('Ответ получен')
-                const eventsList : Event[] = await response.json()
-                dispatch({type:'SetEvents',payload:eventsList})
-            }
+            return createResultSuccess(response);
         }
         catch(error){
-            console.log(error)
+            return createResultError(error);
         }
-    }
-
-
-    const handleDeleteEvent = async (data: Event) => {
+    },
+    async updateEvent(eventPayload: Event){
         try{
-            const response = await FetchFabric(`/event/${data.id}`,"DELTE")
+            const apiData:ApiData<Event>={
+                url : `/event/${eventPayload.id}`,
+                method : "PUT",
+                payload : eventPayload
+            }
+            const response = await requestApi(apiData)
             if (!response.ok){
-                console.log('Код ошибки', response.ok)
+                return createResultError(new Error(`HTTP Error: ${response.ok} ${response.statusText}`));
             }
-            else{
-                console.log('Запрос отправлен')
-                dispatch({type:'DeleteEvent',payload:`${data.id}`})
-            }
+            return createResultSuccess(response);
         }
         catch(error){
-            console.log(error)
-        }
-    }
-
-
-    const handleUpdateEvent = async (data: Event) => {
-        try{
-            const response = await FetchFabric(`/event/${data.id}`,"PUT", data)
-            if (!response.ok){
-                console.log('Код ошибки', response.ok)
-            }
-            else{
-                console.log('Запрос отправлен')
-                dispatch({type:'SetEvent',payload:data})
-            }
-        }
-        catch(error){
-            console.log(error)
+            return createResultError(error);
         }
     }
 }

@@ -28,14 +28,6 @@ export const EditEventPage: FC = () => {
                     <div className={styles.timeAndPlace}>
                         <Input
                             className={styles.editPageInput}
-                            placeholder="Время начала"
-                        />
-                        <Input
-                            className={styles.editPageInput}
-                            placeholder="Время конца"
-                        />
-                        <Input
-                            className={styles.editPageInput}
                             placeholder="Место проведения"
                         />
                         <Input
