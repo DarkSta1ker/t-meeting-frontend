@@ -1,4 +1,4 @@
-import React, {type FC} from "react";
+import React, {type FC, useCallback, useEffect, useState} from "react";
 import {Header} from "../../widgets/Header/Header";
 import {TextBlock} from "../../shared/blocks/TextBlock/TextBlock";
 import {Button} from "../../shared/ui/Button/Button";
@@ -6,63 +6,105 @@ import { useNavigate } from 'react-router-dom';
 import {EllipsisVertical, Calendar, MapPinIcon, CirclePlus} from 'lucide-react';
 import { DropdownMenu } from "radix-ui";
 import styles from './EventsListPage.css';
+import {useEvent} from "../../hooks/UseEvent";
+import {Event} from '../../shared/eventServiceTypes/EventServiceTypesAndInterfaces';
+
+
 export const EventsListPage: FC = () => {
+
     const nav=useNavigate();
+    const {events, getAllEvents, deleteEvent} = useEvent();
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleUpdateEventList = useCallback(async ()=>{
+        setIsLoading(true);
+        try{
+            const result = await getAllEvents();
+            if(result.status==="Success"){
+                console.log("Events list updated");
+            }
+            else{
+                console.log(`Error ${result.payload}`);
+            }
+        }
+        finally{
+            setIsLoading(false);
+        }
+    },[])
+
+    const handleDeleteEvent= useCallback(async(eventId:string)=>{
+        const result = await deleteEvent(eventId);
+        if(result.status==="Success"){
+            console.log("Event deleted");
+        }
+        else{
+            console.log(`Error ${result.payload}`);
+        }
+        await handleUpdateEventList();
+    },[]);
+
+    useEffect(() => {
+        handleUpdateEventList();
+    }, []);
+
+    const handleEditEvent = (eventId:string)=>{
+        nav(`/editEvent/${eventId}`);
+    }
+
     return (
         <div className={styles.eventsListPage}>
             <Header  button1={()=>nav(-1)} button2={()=>nav('/personalAccount')}/>
             <div className={styles.board}>
                 <TextBlock className={styles.eventsListTextBlock}>Список мероприятий</TextBlock>
                 <div className={styles.eventsListBlock}>
-                    <div className={styles.eventBlock}>
-                        <div className={styles.nameAndDescriptionListPage}>
-                            <TextBlock className={styles.eventName}>Название мероприятия</TextBlock>
-                            <TextBlock className={styles.eventDescription}>Описание мероприятия.
-                                проверка на то как будет переноситься текст
-                                проверка на то как будет переноситься текст
-                                проверка на то как будет переноситься текст
-                                проверка на то как будет переноситься текст
-                                проверка на то как будет переноситься текст
-                                проверка на то как будет переноситься текст
-                                проверка на то как будет переноситься текст
-                                проверка на то как бюудет переноситься текст</TextBlock>
-                        </div>
-                        <div className={styles.dataAndPlace}>
-                            <div className={styles.dataBlock}>
-                                <TextBlock className={styles.data}>Дата</TextBlock>
-                                <Calendar/>
-                            </div>
-                            <div className={styles.placeBlock}>
-                                <TextBlock className={styles.place}>Место проведения</TextBlock>
-                                <MapPinIcon/>
-                            </div>
-                        </div>
-                        <div className={styles.dropDownMenu}>
-                            <DropdownMenu.Root>
-                                <DropdownMenu.Trigger asChild>
-                                    <button className={styles.dropDownMenuButton} aria-label="Actions">
-                                        <EllipsisVertical/>
-                                    </button>
-                                </DropdownMenu.Trigger>
+                    {
+                        isLoading? <div>Загрузка мероприятий...</div> :
+                        events.map((event:Event)=>(
+                            <div key={event.id} className={styles.eventBlock}>
+                                <div className={styles.nameAndDescriptionListPage}>
+                                    <TextBlock className={styles.eventName}>{event.name}</TextBlock>
+                                    <TextBlock className={styles.eventDescription}>{event.content[0].payload.join(' ')}</TextBlock>
+                                </div>
+                                <div className={styles.dataAndPlace}>
+                                    <div className={styles.dataBlock}>
+                                        <TextBlock className={styles.data}>{event.metadata.datetime}</TextBlock>
+                                        <Calendar/>
+                                    </div>
+                                    <div className={styles.placeBlock}>
+                                        <TextBlock className={styles.place}>{event.metadata.location}</TextBlock>
+                                        <MapPinIcon/>
+                                    </div>
+                                </div>
+                                <div className={styles.dropDownMenu}>
+                                    <DropdownMenu.Root>
+                                        <DropdownMenu.Trigger asChild>
+                                            <button className={styles.dropDownMenuButton} aria-label="Actions">
+                                                <EllipsisVertical/>
+                                            </button>
+                                        </DropdownMenu.Trigger>
 
-                                <DropdownMenu.Portal>
-                                    <DropdownMenu.Content className={styles.dropdownMenuContent} side="left" sideOffset={5}>
-                                        <DropdownMenu.Item className={styles.dropdownMenuItem} onSelect={()=>nav('/editEvent')}>
-                                            Редактировать
-                                        </DropdownMenu.Item>
-                                        <DropdownMenu.Item className={styles.dropdownMenuItem}>
-                                            Отметить активным
-                                        </DropdownMenu.Item>
-                                        <DropdownMenu.Item className={styles.dropdownMenuItem}>
-                                            Удалить
-                                        </DropdownMenu.Item>
-                                        <DropdownMenu.Arrow className={styles.dropdownMenuArrow} />
+                                        <DropdownMenu.Portal>
+                                            <DropdownMenu.Content className={styles.dropdownMenuContent} side="left" sideOffset={5}>
+                                                <DropdownMenu.Item className={styles.dropdownMenuItem} onSelect={()=>handleEditEvent(event.id)}>
+                                                    Редактировать
+                                                </DropdownMenu.Item>
+                                                <DropdownMenu.Item className={styles.dropdownMenuItem}>
+                                                    Отметить активным
+                                                </DropdownMenu.Item>
+                                                <DropdownMenu.Item className={styles.dropdownMenuItem} onSelect={()=>handleDeleteEvent(event.id)}>
+                                                    Удалить
+                                                </DropdownMenu.Item>
+                                                <DropdownMenu.Arrow className={styles.dropdownMenuArrow} />
 
-                                    </DropdownMenu.Content>
-                                </DropdownMenu.Portal>
-                            </DropdownMenu.Root>
-                        </div>
-                    </div>
+                                            </DropdownMenu.Content>
+                                        </DropdownMenu.Portal>
+                                    </DropdownMenu.Root>
+                                </div>
+                            </div>
+                        ))
+                    }
+
+
                     <Button className={styles.addEventButton} onClick={()=>nav('/createEvent')}>
                         <CirclePlus size={30}/>
                     </Button>

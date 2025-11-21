@@ -1,4 +1,4 @@
-import {useReducer, useCallback} from 'react';
+import {useReducer, useCallback, useEffect} from 'react';
 import {Action, EventsState, Event} from "../shared/eventServiceTypes/EventServiceTypesAndInterfaces";
 import {EventService} from "../app/services/Service";
 
@@ -31,20 +31,22 @@ const reducer= (state:EventsState,action:Action):EventsState=>{
 const initialState: EventsState = {
     events: [],
 };
-export const useEventHook=() => {
-    const [state, dispatch] = useReducer(reducer,initialState);
 
+
+
+export const useEvent=() => {
+    const [state, dispatch] = useReducer(reducer,initialState);
     const addEvent = useCallback(async(event:Event)=>{
         const result = await EventService.addEvent(event);
         if (result.status==='Success'){
             dispatch({ type: 'AddEvent', payload: event });
         }
         return result;
-        },[]);
+    },[dispatch]);
 
     const getEvent = useCallback(async(eventId:string)=>{
         return await EventService.getEvent(eventId);
-    }, []);
+    },[]);
 
     const getAllEvents = useCallback(async()=>{
         const result = await EventService.getAllEvents();
@@ -52,7 +54,7 @@ export const useEventHook=() => {
             dispatch({type:'SetEvents',payload:result.payload});
         }
         return result;
-    },[]);
+    },[dispatch]);
 
     const deleteEvent = useCallback(async(eventId:string)=>{
         const result = await EventService.deleteEvent(eventId);
@@ -60,7 +62,7 @@ export const useEventHook=() => {
             dispatch({type:'DeleteEvent',payload:`${eventId}`})
         }
         return result;
-    },[]);
+    },[dispatch]);
 
     const updateEvent = useCallback(async(event:Event)=>{
         const result = await EventService.updateEvent(event);
@@ -68,7 +70,10 @@ export const useEventHook=() => {
             dispatch({type:'SetEvent',payload:event});
         }
         return result;
-    },[]);
+    },[dispatch]);
+    useEffect(() => {
+        getAllEvents();
+    }, []);
     return {
         events: state.events,
         addEvent,

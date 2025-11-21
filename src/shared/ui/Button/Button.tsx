@@ -6,11 +6,12 @@ interface ButtonProps extends PropsWithChildren {
     type ?: ButtonType
     className?: string
     onClick?: () => void
+    disabled?: boolean
 }
 
-export const Button: FC<ButtonProps> = ({type, onClick, className, children }) => {
+export const Button: FC<ButtonProps> = ({type, onClick, className, children, disabled}) => {
     return (
-        <button type={type} className={cn(styles.button, className)} onClick={onClick}>
+        <button type={type} className={cn(styles.button, className)} onClick={onClick} disabled={disabled}>
             {children}
         </button>
     )
