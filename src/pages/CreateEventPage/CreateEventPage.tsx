@@ -1,13 +1,12 @@
 import React, {type FC, useCallback, useState} from "react";
 import {Header} from "../../widgets/Header/Header";
 import {TextBlock} from "../../shared/blocks/TextBlock/TextBlock";
-import {Input} from "../../shared/ui/Input/Input";
-import {TextArea} from "../../shared/ui/TextArea/TextArea";
 import {Button} from "../../shared/ui/Button/Button";
 import { useNavigate } from 'react-router-dom';
 import styles from './CreateEventPage.css';
 import {useEvent} from "../../hooks/UseEvent";
 import {Event} from '../../shared/eventServiceTypes/EventServiceTypesAndInterfaces';
+import {EventForm} from "../../widgets/EventForm/EventForm";
 
 export const CreateEventPage: FC = () => {
 
@@ -101,32 +100,10 @@ export const CreateEventPage: FC = () => {
             <Header button1={()=>nav(-1)} button2={()=>nav('/personalAccount')}/>
             <div className={styles.board}>
                 <TextBlock className={styles.createPageTextBlock}>Создание мероприятия</TextBlock>
-                <div className={styles.editBlock}>
-                    <div className={styles.nameAndDescription}>
-                        <Input
-                            className={styles.createPageInput}
-                            placeholder="Название мероприятия"
-                            onChange = {(e) => handleInputChange("name", e.target.value)}
-                        />
-                        <TextArea
-                            className={styles.createPageTextArea}
-                            placeholder="Описание мероприятия"
-                            onChange = {(e) => handleTextAreaChange("promotext", e.target.value)}
-                        />
-                    </div>
-                    <div className={styles.timeAndPlace}>
-                        <Input
-                            className={styles.createPageInput}
-                            placeholder="Место проведения"
-                            onChange = {(e) => handleInputChange("location", e.target.value)}
-                        />
-                        <Input
-                            className={styles.createPageInput}
-                            placeholder="Дата"
-                            onChange = {(e) => handleInputChange("datetime", e.target.value)}
-                        />
-                    </div>
-                </div>
+                {
+                    isLoading? <div>Загрузка...</div> :
+                        <EventForm eventData={eventData} InputChange={handleInputChange} TextAreaChange={handleTextAreaChange}/>
+                }
                 <div className={styles.buttonsBlock}>
                     <Button
                         className={styles.cancelButton}

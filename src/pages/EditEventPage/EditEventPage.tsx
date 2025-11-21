@@ -1,13 +1,12 @@
 import React, {type FC, useCallback, useState,useEffect} from "react";
 import {Header} from "../../widgets/Header/Header";
 import {TextBlock} from "../../shared/blocks/TextBlock/TextBlock";
-import {Input} from "../../shared/ui/Input/Input";
-import {TextArea} from "../../shared/ui/TextArea/TextArea";
 import {Button} from "../../shared/ui/Button/Button";
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './EditEventPage.css';
 import {useEvent} from "../../hooks/UseEvent";
 import {Event} from "../../shared/eventServiceTypes/EventServiceTypesAndInterfaces";
+import {EventForm} from "../../widgets/EventForm/EventForm";
 
 export const EditEventPage: FC = () => {
     const nav=useNavigate();
@@ -139,36 +138,10 @@ export const EditEventPage: FC = () => {
             <Header button1={()=>nav(-1)} button2={()=>nav('/personalAccount')}/>
             <div className={styles.board}>
                 <TextBlock className={styles.editPageTextBlock}>Редактирование мероприятия</TextBlock>
-                <div className={styles.editBlock}>
-                    <div className={styles.nameAndDescription}>
-                        <Input
-                            className={styles.editPageInput}
-                            placeholder="Название мероприятия"
-                            value={eventData.name}
-                            onChange = {(e) => handleInputChange("name", e.target.value)}
-                        />
-                        <TextArea
-                            className={styles.editPageTextArea}
-                            placeholder="Описание мероприятия"
-                            value={eventData.content[0].payload.join(' ')}
-                            onChange = {(e) => handleTextAreaChange("promotext", e.target.value)}
-                        />
-                    </div>
-                    <div className={styles.timeAndPlace}>
-                        <Input
-                            className={styles.editPageInput}
-                            placeholder="Место проведения"
-                            value={eventData.metadata.location}
-                            onChange = {(e) => handleInputChange("location", e.target.value)}
-                        />
-                        <Input
-                            className={styles.editPageInput}
-                            placeholder="Дата"
-                            value={eventData.metadata.datetime}
-                            onChange = {(e) => handleInputChange("datetime", e.target.value)}
-                        />
-                    </div>
-                </div>
+                {
+                    isLoading? <div>Загрузка...</div> :
+                    <EventForm eventData={eventData} InputChange={handleInputChange} TextAreaChange={handleTextAreaChange}/>
+                }
                 <div className={styles.buttonsBlock}>
                     <Button
                         className={styles.cancelButton}
@@ -178,12 +151,12 @@ export const EditEventPage: FC = () => {
                     <Button
                         className={styles.deleteButton}
                         onClick={handleDeleteEvent}>
-                        Удалить
+                        {isLoading ? 'Отправка...' : 'Удалить'}
                     </Button>
                     <Button
                         className={styles.saveButton}
                         onClick={handleUpdateEvent}>
-                        Сохранить
+                        {isLoading ? 'Отправка...' : 'Сохранить'}
                     </Button>
                 </div>
             </div>
