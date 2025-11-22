@@ -13,24 +13,17 @@ import {Event} from '../../shared/eventServiceTypes/EventServiceTypesAndInterfac
 export const EventsListPage: FC = () => {
 
     const nav=useNavigate();
-    const {events, getAllEvents, deleteEvent} = useEvent();
-    const [isLoading, setIsLoading] = useState(false);
+    const {events, getAllEvents, deleteEvent, isLoading} = useEvent();
 
     const handleUpdateEventList = useCallback(async ()=>{
-        setIsLoading(true);
-        try{
-            const result = await getAllEvents();
-            if(result.status==="Success"){
-                console.log("Events list updated");
-            }
-            else{
-                console.log(`Error ${result.payload}`);
-            }
+        const result = await getAllEvents();
+        if(result.status==="Success"){
+            console.log("Events list updated");
         }
-        finally{
-            setIsLoading(false);
+        else{
+            console.log(`Error ${result.payload}`);
         }
-    },[])
+    },[getAllEvents])
 
     const handleDeleteEvent= useCallback(async(eventId:string)=>{
         const result = await deleteEvent(eventId);
@@ -41,11 +34,7 @@ export const EventsListPage: FC = () => {
             console.log(`Error ${result.payload}`);
         }
         await handleUpdateEventList();
-    },[]);
-
-    useEffect(() => {
-        handleUpdateEventList();
-    }, []);
+    },[deleteEvent, handleUpdateEventList]);
 
     const handleEditEvent = (eventId:string)=>{
         nav(`/editEvent/${eventId}`);

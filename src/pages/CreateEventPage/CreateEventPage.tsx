@@ -5,95 +5,28 @@ import {Button} from "../../shared/ui/Button/Button";
 import { useNavigate } from 'react-router-dom';
 import styles from './CreateEventPage.css';
 import {useEvent} from "../../hooks/UseEvent";
-import {Event} from '../../shared/eventServiceTypes/EventServiceTypesAndInterfaces';
 import {EventForm} from "../../widgets/EventForm/EventForm";
+import {useEventData} from "../../hooks/UseEventData";
 
 export const CreateEventPage: FC = () => {
 
     const nav=useNavigate();
-    const [isLoading, setIsLoading] = useState(false);
-    const {addEvent} = useEvent();
-
-    const [eventData, setEventData] = useState<Event>({
-            id: "",
-            name: "",
-            metadata: {
-                datetime: "",
-                location: ""
-            },
-            content: [
-                {
-                    block: "promotext",
-                    payload: []
-                }
-            ]
-    });
+    const {addEvent, isLoading} = useEvent();
+    const {eventData, handleTextAreaChange, handleInputChange}=useEventData();
 
     const handleAddEvent = useCallback(async ()=>{
-        setIsLoading(true);
-        try{
-            const resp = await addEvent(eventData);
-            if (resp.status === "Success") {
-                nav('/eventsList');
-            }
-            else{
-                console.log(`${resp.status} | ${resp.payload}`);
-            }
+        const resp = await addEvent(eventData);
+        if (resp.status === "Success") {
+            nav('/eventsList');
         }
-        finally{
-            setIsLoading(false);
+        else{
+            console.log(`${resp.status} | ${resp.payload}`);
         }
-    },[])
+    },[addEvent, eventData,nav])
 
-    const handleCancel = useCallback(()=>{
+    const handleCancel = useCallback(() => {
         nav('/eventsList');
-    },[]);
-
-    const handleInputChange = (paramName:string, payload:string)=>{
-        switch(paramName){
-            case "name":{
-                setEventData(prev =>({
-                    ...prev,
-                    name:payload
-                }))
-                break;
-            }
-            case "datetime":{
-                setEventData(prev =>({
-                    ...prev,
-                    metadata:{
-                        ...prev.metadata,
-                        datetime:payload
-                    }
-                }))
-                break;
-            }
-            case "location":{
-                setEventData(prev =>({
-                    ...prev,
-                    metadata:{
-                        ...prev.metadata,
-                        location:payload
-                    }
-                }))
-                break;
-            }
-        }
-    };
-
-    const handleTextAreaChange = (paramName:string, payload:string)=>{
-        switch(paramName){
-            case("promotext"):{
-                setEventData(prev =>({
-                    ...prev,
-                    content: [
-                        ...prev.content.map(contentBlock=> contentBlock.block===paramName ? {...contentBlock, payload:[payload]} : contentBlock)
-                    ]
-                }));
-                break;
-            }
-        }
-    };
+    }, [nav]);
 
     return (
         <div className={styles.createEventPage}>

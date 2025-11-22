@@ -12,6 +12,7 @@ interface EventFormProps{
 
 
 export const EventForm: FC<EventFormProps> = ({eventData, InputChange, TextAreaChange}) => {
+
     return(
         <div className={styles.editBlock}>
             <div className={styles.nameAndDescription}>

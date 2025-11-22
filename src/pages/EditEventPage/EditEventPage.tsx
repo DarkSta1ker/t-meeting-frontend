@@ -1,85 +1,25 @@
-import React, {type FC, useCallback, useState,useEffect} from "react";
+import React, {type FC, useCallback, useEffect} from "react";
 import {Header} from "../../widgets/Header/Header";
 import {TextBlock} from "../../shared/blocks/TextBlock/TextBlock";
 import {Button} from "../../shared/ui/Button/Button";
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './EditEventPage.css';
 import {useEvent} from "../../hooks/UseEvent";
-import {Event} from "../../shared/eventServiceTypes/EventServiceTypesAndInterfaces";
 import {EventForm} from "../../widgets/EventForm/EventForm";
+import {useEventData} from "../../hooks/UseEventData";
 
 export const EditEventPage: FC = () => {
     const nav=useNavigate();
     const { eventId } = useParams<{ eventId: string }>();
-    const [isLoading, setIsLoading] = useState(false);
-    const {getEvent, updateEvent, deleteEvent} = useEvent();
-    const [eventData, setEventData] = useState<Event>({
-        id: "",
-        name: "",
-        metadata: {
-            datetime: "",
-            location: ""
-        },
-        content: [
-            {
-                block: "promotext",
-                payload: []
-            }
-        ]
-    });
+    const {getEvent, updateEvent, deleteEvent, isLoading} = useEvent();
+    const {eventData, handleTextAreaChange, handleInputChange, setEventData}=useEventData();
 
-    const handleInputChange = (paramName:string, payload:string)=>{
-        switch(paramName){
-            case "name":{
-                setEventData(prev =>({
-                    ...prev,
-                    name:payload
-                }))
-                break;
+    useEffect(()=>{
+        const loadEvent = async()=>{
+            if (!eventId){
+                console.log("No eventId found");
+                return;
             }
-            case "datetime":{
-                setEventData(prev =>({
-                    ...prev,
-                    metadata:{
-                        ...prev.metadata,
-                        datetime:payload
-                    }
-                }))
-                break;
-            }
-            case "location":{
-                setEventData(prev =>({
-                    ...prev,
-                    metadata:{
-                        ...prev.metadata,
-                        location:payload
-                    }
-                }))
-                break;
-            }
-        }
-    };
-
-    const handleTextAreaChange = (paramName:string, payload:string)=>{
-        switch(paramName){
-            case("promotext"):{
-                setEventData(prev =>({
-                    ...prev,
-                    content: [
-                        ...prev.content.map(contentBlock=> contentBlock.block===paramName ? {...contentBlock, payload:[payload]} : contentBlock)
-                    ]
-                }));
-                break;
-            }
-        }
-    };
-    const handleGetEvent = useCallback(async ()=>{
-        if (!eventId){
-            console.log("No eventId found");
-            return;
-        }
-        setIsLoading(true);
-        try{
             const result = await getEvent(eventId);
             if(result.status==="Success"){
                 console.log("Event loaded");
@@ -89,26 +29,19 @@ export const EditEventPage: FC = () => {
                 console.log(`Error ${result.payload}`);
             }
         }
-        finally{
-            setIsLoading(false);
-        }
-    },[]);
+        loadEvent();
+    },[getEvent, eventId, setEventData]);
 
     const handleUpdateEvent = useCallback(async ()=>{
-        setIsLoading(true);
-        try{
-            const result = await updateEvent(eventData);
-            if(result.status==="Success"){
-                console.log("Event updated");
-            }
-            else{
-                console.log(`Error ${result.payload}`);
-            }
+        const result = await updateEvent(eventData);
+        if(result.status==="Success"){
+            console.log("Event updated");
+            nav('/eventsList');
         }
-        finally{
-            setIsLoading(false);
+        else{
+            console.log(`Error ${result.payload}`);
         }
-    },[])
+    },[updateEvent, eventData,nav]);
 
     const handleDeleteEvent= useCallback(async()=>{
         if (!eventId){
@@ -118,20 +51,16 @@ export const EditEventPage: FC = () => {
         const result = await deleteEvent(eventId);
         if(result.status==="Success"){
             console.log("Event deleted");
+            nav('/eventsList');
         }
         else{
             console.log(`Error ${result.payload}`);
         }
-    },[]);
+    },[deleteEvent, eventId, nav]);
 
-    const handleCancel = useCallback(()=>{
+    const handleCancel = useCallback(() => {
         nav('/eventsList');
-    },[]);
-
-    useEffect(()=>{
-        handleGetEvent();
-    },[]);
-
+    }, [nav]);
 
     return (
         <div className={styles.editEventPage}>
