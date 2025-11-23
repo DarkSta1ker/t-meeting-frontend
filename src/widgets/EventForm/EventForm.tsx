@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import styles from "../../pages/EditEventPage/EditEventPage.css";
+import styles from "./EventForm.module.css";
 import {Input} from "../../shared/ui/Input/Input";
 import {TextArea} from "../../shared/ui/TextArea/TextArea";
 import {Event} from "../../shared/eventServiceTypes/EventServiceTypesAndInterfaces";

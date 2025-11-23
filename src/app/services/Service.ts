@@ -36,7 +36,7 @@ export const EventService = {
     async addEvent(eventPayload: Event){
         try{
             const apiData:ApiData<Event>={
-                url : "/event",
+                url : "/api/event",
                 method : "POST",
                 payload : eventPayload
             }
@@ -53,7 +53,7 @@ export const EventService = {
     async getEvent(eventId: string){
         try{
             const apiData:ApiData={
-                url : `/event/${eventId}`,
+                url : `/api/event/${eventId}`,
                 method : "GET",
             }
             const response = await requestApi(apiData);
@@ -70,7 +70,7 @@ export const EventService = {
     async getAllEvents(){
         try{
             const apiData:ApiData={
-                url : "/events",
+                url : "/api/events",
                 method : "GET",
             }
             const response = await requestApi(apiData);
@@ -87,7 +87,7 @@ export const EventService = {
     async deleteEvent(eventId: string){
         try{
             const apiData:ApiData={
-                url : `/event/${eventId}`,
+                url : `/api/event/${eventId}`,
                 method : "DELETE",
             }
             const response = await requestApi(apiData);
@@ -103,7 +103,7 @@ export const EventService = {
     async updateEvent(eventPayload: Event){
         try{
             const apiData:ApiData<Event>={
-                url : `/event/${eventPayload.id}`,
+                url : `/api/event/${eventPayload.id}`,
                 method : "PUT",
                 payload : eventPayload
             }

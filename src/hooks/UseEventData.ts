@@ -1,6 +1,6 @@
 import React, {useState, useCallback} from 'react';
 import {Event} from "../shared/eventServiceTypes/EventServiceTypesAndInterfaces";
-import styles from "../pages/EditEventPage/EditEventPage.css";
+import styles from "../pages/EditEventPage/EditEventPage.module.css";
 import {Input} from "../shared/ui/Input/Input";
 import {TextArea} from "../shared/ui/TextArea/TextArea";
 

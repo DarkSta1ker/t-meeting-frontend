@@ -8,7 +8,7 @@ import {PersonalAccount} from "../pages/PersonalAccount/PersonalAccount";
 function App() {
 
     return (
-    <div className={styles.app}>
+    <div>
         <Routes>
             <Route path="/" element={<Navigate to="/eventsList" replace/>} />
             <Route path="/eventsList" element={<EventsListPage />} />

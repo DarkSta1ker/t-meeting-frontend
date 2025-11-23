@@ -3,7 +3,7 @@ import {Header} from "../../widgets/Header/Header";
 import {TextBlock} from "../../shared/blocks/TextBlock/TextBlock";
 import {Button} from "../../shared/ui/Button/Button";
 import { useNavigate, useParams } from 'react-router-dom';
-import styles from './EditEventPage.css';
+import styles from './EditEventPage.module.css';
 import {useEvent} from "../../hooks/UseEvent";
 import {EventForm} from "../../widgets/EventForm/EventForm";
 import {useEventData} from "../../hooks/UseEventData";

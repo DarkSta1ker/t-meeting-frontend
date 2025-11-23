@@ -1,11 +1,11 @@
-import React, {type FC, useCallback, useEffect, useState} from "react";
+import React, {type FC, useCallback} from "react";
 import {Header} from "../../widgets/Header/Header";
 import {TextBlock} from "../../shared/blocks/TextBlock/TextBlock";
 import {Button} from "../../shared/ui/Button/Button";
 import { useNavigate } from 'react-router-dom';
 import {EllipsisVertical, Calendar, MapPinIcon, CirclePlus} from 'lucide-react';
 import { DropdownMenu } from "radix-ui";
-import styles from './EventsListPage.css';
+import styles from './EventsListPage.module.css';
 import {useEvent} from "../../hooks/UseEvent";
 import {Event} from '../../shared/eventServiceTypes/EventServiceTypesAndInterfaces';
 
