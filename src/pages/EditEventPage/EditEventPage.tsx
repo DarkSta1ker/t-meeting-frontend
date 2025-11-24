@@ -1,18 +1,17 @@
 import React, {type FC, useCallback, useEffect} from "react";
-import {Header} from "../../widgets/Header/Header";
 import {TextBlock} from "../../shared/blocks/TextBlock/TextBlock";
 import {Button} from "../../shared/ui/Button/Button";
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './EditEventPage.module.css';
-import {useEvent} from "../../hooks/UseEvent";
+import {useEvent} from "../../hooks/useEvent";
 import {EventForm} from "../../widgets/EventForm/EventForm";
-import {useEventData} from "../../hooks/UseEventData";
+import {useEventForm} from "../../hooks/useEventForm";
 
 export const EditEventPage: FC = () => {
     const nav=useNavigate();
     const { eventId } = useParams<{ eventId: string }>();
     const {getEvent, updateEvent, deleteEvent, isLoading} = useEvent();
-    const {eventData, handleTextAreaChange, handleInputChange, setEventData}=useEventData();
+    const {eventData, handleTextAreaChange, handleMetadataFieldChange, handleBaseFieldChange, setEventData}=useEventForm();
 
     useEffect(()=>{
         const loadEvent = async()=>{
@@ -64,30 +63,36 @@ export const EditEventPage: FC = () => {
 
     return (
         <div className={styles.editEventPage}>
-            <Header button1={()=>nav(-1)} button2={()=>nav('/personalAccount')}/>
             <div className={styles.board}>
                 <TextBlock className={styles.editPageTextBlock}>Редактирование мероприятия</TextBlock>
                 {
                     isLoading? <div>Загрузка...</div> :
-                    <EventForm eventData={eventData} InputChange={handleInputChange} TextAreaChange={handleTextAreaChange}/>
+                    <>
+                        <EventForm
+                            eventData={eventData}
+                            handleMetadataFieldChange={handleMetadataFieldChange}
+                            handleBaseFieldChange={handleBaseFieldChange}
+                            TextAreaChange={handleTextAreaChange}
+                        />
+                        <div className={styles.buttonsBlock}>
+                            <Button
+                                className={styles.cancelButton}
+                                onClick={handleCancel}>
+                                Отмена
+                            </Button>
+                            <Button
+                                className={styles.deleteButton}
+                                onClick={handleDeleteEvent}>
+                                Удалить
+                            </Button>
+                            <Button
+                                className={styles.saveButton}
+                                onClick={handleUpdateEvent}>
+                                Сохранить
+                            </Button>
+                        </div>
+                    </>
                 }
-                <div className={styles.buttonsBlock}>
-                    <Button
-                        className={styles.cancelButton}
-                        onClick={handleCancel}>
-                        Отмена
-                    </Button>
-                    <Button
-                        className={styles.deleteButton}
-                        onClick={handleDeleteEvent}>
-                        {isLoading ? 'Отправка...' : 'Удалить'}
-                    </Button>
-                    <Button
-                        className={styles.saveButton}
-                        onClick={handleUpdateEvent}>
-                        {isLoading ? 'Отправка...' : 'Сохранить'}
-                    </Button>
-                </div>
             </div>
         </div>
     )

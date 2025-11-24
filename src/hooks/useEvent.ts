@@ -1,5 +1,7 @@
 import {useReducer, useCallback, useEffect, useState} from 'react';
-import {Action, EventsState, Event} from "../shared/eventServiceTypes/EventServiceTypesAndInterfaces";
+import {Event} from "../shared/types/event";
+import {Action} from "../shared/types/actions";
+import {EventsState} from "../shared/types/event";
 import {EventService} from "../app/services/Service";
 
 const reducer= (state:EventsState,action:Action):EventsState=>{

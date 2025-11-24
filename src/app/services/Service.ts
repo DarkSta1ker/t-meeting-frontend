@@ -1,36 +1,8 @@
-import {
-    Event,
-    ApiData,
-    ResultSuccess,
-    ResultError,
-} from '../../shared/eventServiceTypes/EventServiceTypesAndInterfaces';
-
-const requestApi= async <T = Record<string, unknown>>(data:ApiData<T>): Promise<Response> => {
-    const fetchOptions:RequestInit = {
-        method:data.method,
-        headers:{"Content-Type":"application/json"},
-        body: data.payload? JSON.stringify(data.payload) : undefined
-    }
-    const response = await fetch(data.url,fetchOptions);
-    if (!response.ok) {
-        throw new Error(response.statusText);
-    }
-    return response;
-}
-
-const createResultSuccess = <T>(payload: T):ResultSuccess<T> => {
-    return{
-        status: 'Success',
-        payload: payload
-    }
-}
-
-const createResultError = (error: unknown):ResultError => {
-    return{
-        status: 'Error',
-        payload: error
-    }
-}
+import {Event} from "../../shared/types/event";
+import {requestApi} from "../../shared/api/requestApi";
+import {createResultError} from "./lib/createResultError";
+import {createResultSuccess} from "./lib/createResultSuccess";
+import {ApiData} from "../../shared/types/api";
 
 export const EventService = {
     async addEvent(eventPayload: Event){

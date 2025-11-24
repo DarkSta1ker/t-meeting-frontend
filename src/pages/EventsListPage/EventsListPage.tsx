@@ -1,13 +1,12 @@
 import React, {type FC, useCallback} from "react";
-import {Header} from "../../widgets/Header/Header";
 import {TextBlock} from "../../shared/blocks/TextBlock/TextBlock";
 import {Button} from "../../shared/ui/Button/Button";
 import { useNavigate } from 'react-router-dom';
 import {EllipsisVertical, Calendar, MapPinIcon, CirclePlus} from 'lucide-react';
 import { DropdownMenu } from "radix-ui";
 import styles from './EventsListPage.module.css';
-import {useEvent} from "../../hooks/UseEvent";
-import {Event} from '../../shared/eventServiceTypes/EventServiceTypesAndInterfaces';
+import {useEvent} from "../../hooks/useEvent";
+import {Event} from "../../shared/types/event";
 
 
 export const EventsListPage: FC = () => {
@@ -42,7 +41,6 @@ export const EventsListPage: FC = () => {
 
     return (
         <div className={styles.eventsListPage}>
-            <Header  button1={()=>nav(-1)} button2={()=>nav('/personalAccount')}/>
             <div className={styles.board}>
                 <TextBlock className={styles.eventsListTextBlock}>Список мероприятий</TextBlock>
                 <div className={styles.eventsListBlock}>
