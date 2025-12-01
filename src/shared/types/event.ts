@@ -5,6 +5,7 @@ export interface Event{
         datetime: string,
         location: string
     },
+    status: string,
     content: EventContentBlock[]
 }
 

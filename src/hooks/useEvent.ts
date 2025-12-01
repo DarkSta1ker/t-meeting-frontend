@@ -3,6 +3,8 @@ import {Event} from "../shared/types/event";
 import {Action} from "../shared/types/actions";
 import {EventsState} from "../shared/types/event";
 import {EventService} from "../app/services/Service";
+import {createResultError} from "../app/services/lib/createResultError";
+import {createResultSuccess} from "../app/services/lib/createResultSuccess";
 
 const reducer= (state:EventsState,action:Action):EventsState=>{
     switch(action.type){
@@ -86,6 +88,22 @@ export const useEvent=() => {
         return result;
     },[dispatch]);
 
+    const changeStatus = useCallback(async(eventId:string)=>{
+        setIsLoading(true);
+        const currentEvent = state.events.find(event=>event.id===eventId);
+        if (!currentEvent) {
+            setIsLoading(false);
+            return createResultError(new Error(`Error: can't find event with id ${eventId} to change status`));
+        }
+        currentEvent.status = currentEvent.status==='closed'? 'opened' : 'closed';
+        const result = await EventService.updateEvent(currentEvent);
+        if (result.status==='Success'){
+            dispatch({type:'SetEvent',payload:currentEvent});
+        }
+        setIsLoading(false);
+        return result;
+    },[dispatch, state.events]);
+
     useEffect(() => {
         getAllEvents();
     }, []);
@@ -97,6 +115,7 @@ export const useEvent=() => {
         deleteEvent,
         updateEvent,
         getAllEvents,
+        changeStatus,
         isLoading
     }
 }

@@ -10,6 +10,7 @@ export const useEventForm = (initialEvent?:Event) => {
             datetime: "",
             location: ""
         },
+        status: "closed",
         content: [
             {
                 block: "promotext",
@@ -19,13 +20,13 @@ export const useEventForm = (initialEvent?:Event) => {
     }
     const [eventData, setEventData] = useState<Event>(initialEvent||defaultEvent);
 
-
     const handleBaseFieldChange = useCallback((field: EventBaseField, value: string) => {
         setEventData(prev => ({
             ...prev,
             [field]: value
         }));
     }, [setEventData]);
+
     const handleMetadataFieldChange = useCallback((field: EventMetadataField, value: string) => {
         setEventData(prev =>({
             ...prev,
@@ -35,7 +36,6 @@ export const useEventForm = (initialEvent?:Event) => {
             }
         }))
     }, [setEventData]);
-
 
     const handleTextAreaChange =useCallback((field:string, value:string)=>{
         switch(field){
