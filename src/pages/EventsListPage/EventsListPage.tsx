@@ -39,6 +39,10 @@ export const EventsListPage: FC = () => {
         nav(`/editEvent/${eventId}`);
     }
 
+    const handleEventPage = (eventId:string)=>{
+        nav(`/event/${eventId}`);
+    }
+
     return (
         <div className={styles.eventsListPage}>
             <div className={styles.board}>
@@ -72,11 +76,14 @@ export const EventsListPage: FC = () => {
 
                                         <DropdownMenu.Portal>
                                             <DropdownMenu.Content className={styles.dropdownMenuContent} side="left" sideOffset={5}>
-                                                <DropdownMenu.Item className={styles.dropdownMenuItem} onSelect={()=>handleEditEvent(event.id)}>
-                                                    Редактировать
+                                                <DropdownMenu.Item className={styles.dropdownMenuItem} onSelect={()=>handleEventPage(event.id)}>
+                                                    Страница мероприятия
                                                 </DropdownMenu.Item>
                                                 <DropdownMenu.Item className={styles.dropdownMenuItem}>
                                                     Отметить активным
+                                                </DropdownMenu.Item>
+                                                <DropdownMenu.Item className={styles.dropdownMenuItem} onSelect={()=>handleEditEvent(event.id)}>
+                                                    Редактировать
                                                 </DropdownMenu.Item>
                                                 <DropdownMenu.Item className={styles.dropdownMenuItem} onSelect={()=>handleDeleteEvent(event.id)}>
                                                     Удалить

@@ -67,31 +67,31 @@ export const EditEventPage: FC = () => {
                 <TextBlock className={styles.editPageTextBlock}>Редактирование мероприятия</TextBlock>
                 {
                     isLoading? <div>Загрузка...</div> :
-                    <>
-                        <EventForm
-                            eventData={eventData}
-                            handleMetadataFieldChange={handleMetadataFieldChange}
-                            handleBaseFieldChange={handleBaseFieldChange}
-                            TextAreaChange={handleTextAreaChange}
-                        />
-                        <div className={styles.buttonsBlock}>
-                            <Button
-                                className={styles.cancelButton}
-                                onClick={handleCancel}>
-                                Отмена
-                            </Button>
-                            <Button
-                                className={styles.deleteButton}
-                                onClick={handleDeleteEvent}>
-                                Удалить
-                            </Button>
-                            <Button
-                                className={styles.saveButton}
-                                onClick={handleUpdateEvent}>
-                                Сохранить
-                            </Button>
-                        </div>
-                    </>
+                        <>
+                            <EventForm
+                                eventData={eventData}
+                                handleMetadataFieldChange={handleMetadataFieldChange}
+                                handleBaseFieldChange={handleBaseFieldChange}
+                                TextAreaChange={handleTextAreaChange}
+                            />
+                            <div className={styles.buttonsBlock}>
+                                <Button
+                                    className={styles.cancelButton}
+                                    onClick={handleCancel}>
+                                    Отмена
+                                </Button>
+                                <Button
+                                    className={styles.deleteButton}
+                                    onClick={handleDeleteEvent}>
+                                    Удалить
+                                </Button>
+                                <Button
+                                    className={styles.saveButton}
+                                    onClick={handleUpdateEvent}>
+                                    Сохранить
+                                </Button>
+                            </div>
+                        </>
                 }
             </div>
         </div>

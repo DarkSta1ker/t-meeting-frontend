@@ -28,7 +28,7 @@
     width: 1232px;
     height: 730px;
     display: flex;
-    justify-content: space-between;
+    gap:40px;
     align-items: center;
     background-color: #E2E2E2;
     padding: 40px 60px;
