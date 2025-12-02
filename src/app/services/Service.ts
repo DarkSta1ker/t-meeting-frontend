@@ -1,13 +1,13 @@
-import {Event} from "../../shared/types/event";
+import {Event, NewEvent} from "../../shared/types/event";
 import {requestApi} from "../../shared/api/requestApi";
 import {createResultError} from "./lib/createResultError";
 import {createResultSuccess} from "./lib/createResultSuccess";
 import {ApiData} from "../../shared/types/api";
 
 export const EventService = {
-    async addEvent(eventPayload: Event){
+    async addEvent(eventPayload: NewEvent){
         try{
-            const apiData:ApiData<Event>={
+            const apiData:ApiData<NewEvent>={
                 url : "/api/event",
                 method : "POST",
                 payload : eventPayload

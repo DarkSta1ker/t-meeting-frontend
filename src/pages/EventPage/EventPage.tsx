@@ -5,13 +5,15 @@ import {Calendar, MapPinIcon} from "lucide-react";
 import {useParams} from "react-router-dom";
 import {useEvent} from "../../hooks/useEvent";
 import {useEventForm} from "../../hooks/useEventForm";
+import {defaultEvent} from "../../shared/types/event";
+import {Event} from "../../shared/types/event";
 import cn from "classnames";
 
 
 export const EventPage: FC = () => {
     const { eventId } = useParams<{ eventId: string }>();
     const {getEvent, isLoading} = useEvent();
-    const {eventData, setEventData} = useEventForm();
+    const {eventData, setEventData} = useEventForm<Event>(defaultEvent);
     useEffect(()=>{
         const loadEvent = async()=>{
             if (!eventId){

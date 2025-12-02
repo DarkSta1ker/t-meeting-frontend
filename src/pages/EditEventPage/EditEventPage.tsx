@@ -6,12 +6,14 @@ import styles from './EditEventPage.module.css';
 import {useEvent} from "../../hooks/useEvent";
 import {EventForm} from "../../widgets/EventForm/EventForm";
 import {useEventForm} from "../../hooks/useEventForm";
+import {Event} from "../../shared/types/event";
+import {defaultEvent} from "../../shared/types/event";
 
 export const EditEventPage: FC = () => {
     const nav=useNavigate();
     const { eventId } = useParams<{ eventId: string }>();
     const {getEvent, updateEvent, deleteEvent, isLoading} = useEvent();
-    const {eventData, handleTextAreaChange, handleMetadataFieldChange, handleBaseFieldChange, setEventData}=useEventForm();
+    const {eventData, handleTextAreaChange, handleMetadataFieldChange, handleBaseFieldChange, setEventData}=useEventForm<Event>(defaultEvent);
 
     useEffect(()=>{
         const loadEvent = async()=>{
