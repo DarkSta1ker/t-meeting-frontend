@@ -1,24 +1,13 @@
 import {useState, useCallback} from 'react';
-import {Event} from "../shared/types/event";
+import {Event, NewEvent} from "../shared/types/event";
 import {EventBaseField, EventMetadataField} from "../shared/types/event";
 
-export const useEventForm = (initialEvent?:Event) => {
-    const defaultEvent:Event = {
-        id: "",
-        name: "",
-        metadata: {
-            datetime: "",
-            location: ""
-        },
-        status: "closed",
-        content: [
-            {
-                block: "promotext",
-                payload: []
-            }
-        ]
-    }
-    const [eventData, setEventData] = useState<Event>(initialEvent||defaultEvent);
+export const useEventForm = <T extends Event | NewEvent>(
+    defaultEvent: T,
+    initialData?: T
+) => {
+
+    const [eventData, setEventData] = useState<T>(initialData||defaultEvent);
 
     const handleBaseFieldChange = useCallback((field: EventBaseField, value: string) => {
         setEventData(prev => ({
@@ -38,17 +27,12 @@ export const useEventForm = (initialEvent?:Event) => {
     }, [setEventData]);
 
     const handleTextAreaChange =useCallback((field:string, value:string)=>{
-        switch(field){
-            case("promotext"):{
-                setEventData(prev =>({
-                    ...prev,
-                    content: [
-                        ...prev.content.map(contentBlock=> contentBlock.block===field ? {...contentBlock, payload:[value]} : contentBlock)
-                    ]
-                }));
-                break;
-            }
-        }
+        setEventData(prev =>({
+            ...prev,
+            content: [
+                ...prev.content.map(contentBlock=> contentBlock.block===field ? {...contentBlock, payload:[value]} : contentBlock)
+            ]
+        }));
     },[setEventData]);
 
     const resetForm = useCallback(() => {

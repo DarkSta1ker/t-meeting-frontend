@@ -1,5 +1,5 @@
 import {useReducer, useCallback, useEffect, useState} from 'react';
-import {Event} from "../shared/types/event";
+import {Event,NewEvent} from "../shared/types/event";
 import {Action} from "../shared/types/actions";
 import {EventsState} from "../shared/types/event";
 import {EventService} from "../app/services/Service";
@@ -8,11 +8,11 @@ import {createResultSuccess} from "../app/services/lib/createResultSuccess";
 
 const reducer= (state:EventsState,action:Action):EventsState=>{
     switch(action.type){
-        case 'AddEvent':
-            return{
-                ...state,
-                events: [...state.events, action.payload]
-            }
+        // case 'AddEvent':
+        //     return{
+        //         ...state,
+        //         events: [...state.events, action.payload]
+        //     }
         case 'SetEvent':
             return{
                 ...state,
@@ -41,12 +41,12 @@ const initialState: EventsState = {
 export const useEvent=() => {
     const [state, dispatch] = useReducer(reducer,initialState);
     const [isLoading, setIsLoading] = useState(false);
-    const addEvent = useCallback(async(event:Event)=>{
+    const addEvent = useCallback(async(event:NewEvent)=>{
         setIsLoading(true);
         const result = await EventService.addEvent(event);
-        if (result.status==='Success'){
-            dispatch({ type: 'AddEvent', payload: event });
-        }
+        // if (result.status==='Success'){
+        //     dispatch({ type: 'AddEvent', payload: event });
+        // }
         setIsLoading(false);
         return result;
     },[dispatch]);
