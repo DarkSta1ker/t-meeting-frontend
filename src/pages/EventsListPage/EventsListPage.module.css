@@ -184,3 +184,8 @@
     border-color: #AFAFAF;
     background-color: #AFAFAF;
 }
+.noEventsBlock{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

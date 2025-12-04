@@ -6,14 +6,12 @@ import styles from './CreateEventPage.module.css';
 import {useEvent} from "../../hooks/useEvent";
 import {EventForm} from "../../widgets/EventForm/EventForm";
 import {useEventForm} from "../../hooks/useEventForm";
-import {NewEvent} from "../../shared/types/event";
-import {defaultNewEvent} from "../../shared/types/event";
 
 export const CreateEventPage: FC = () => {
 
     const nav=useNavigate();
     const {addEvent, isLoading} = useEvent();
-    const {eventData, handleTextAreaChange, handleMetadataFieldChange, handleBaseFieldChange}=useEventForm<NewEvent>(defaultNewEvent);
+    const {eventData, handleTextAreaChange, handleMetadataFieldChange, handleBaseFieldChange}=useEventForm();
 
     const handleAddEvent = useCallback(async ()=>{
         const resp = await addEvent(eventData);
@@ -34,7 +32,8 @@ export const CreateEventPage: FC = () => {
             <div className={styles.board}>
                 <TextBlock className={styles.createPageTextBlock}>Создание мероприятия</TextBlock>
                 {
-                    isLoading? <div>Загрузка...</div> :
+                    isLoading? <div>Загрузка...</div>
+                        :
                         <>
                             <EventForm
                                 eventData={eventData}

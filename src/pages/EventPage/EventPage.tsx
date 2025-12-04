@@ -5,9 +5,8 @@ import {Calendar, MapPinIcon} from "lucide-react";
 import {useParams} from "react-router-dom";
 import {useEvent} from "../../hooks/useEvent";
 import {useEventForm} from "../../hooks/useEventForm";
-import {defaultEvent} from "../../shared/types/event";
+import {defaultEvent} from "../../shared/constants/constants";
 import {Event} from "../../shared/types/event";
-import cn from "classnames";
 
 
 export const EventPage: FC = () => {

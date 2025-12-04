@@ -7,21 +7,16 @@ import {useEvent} from "../../hooks/useEvent";
 import {EventForm} from "../../widgets/EventForm/EventForm";
 import {useEventForm} from "../../hooks/useEventForm";
 import {Event} from "../../shared/types/event";
-import {defaultEvent} from "../../shared/types/event";
 
 export const EditEventPage: FC = () => {
     const nav=useNavigate();
     const { eventId } = useParams<{ eventId: string }>();
     const {getEvent, updateEvent, deleteEvent, isLoading} = useEvent();
-    const {eventData, handleTextAreaChange, handleMetadataFieldChange, handleBaseFieldChange, setEventData}=useEventForm<Event>(defaultEvent);
+    const {eventData, handleTextAreaChange, handleMetadataFieldChange, handleBaseFieldChange, setEventData}=useEventForm(eventId);
 
     useEffect(()=>{
         const loadEvent = async()=>{
-            if (!eventId){
-                console.log("No eventId found");
-                return;
-            }
-            const result = await getEvent(eventId);
+            const result = await getEvent(eventId as string);
             if(result.status==="Success"){
                 console.log("Event loaded");
                 setEventData(result.payload);
@@ -34,7 +29,7 @@ export const EditEventPage: FC = () => {
     },[getEvent, eventId, setEventData]);
 
     const handleUpdateEvent = useCallback(async ()=>{
-        const result = await updateEvent(eventData);
+        const result = await updateEvent(eventData as Event);
         if(result.status==="Success"){
             console.log("Event updated");
             nav('/eventsList');
@@ -45,11 +40,7 @@ export const EditEventPage: FC = () => {
     },[updateEvent, eventData,nav]);
 
     const handleDeleteEvent= useCallback(async()=>{
-        if (!eventId){
-            console.log("No eventId found");
-            return;
-        }
-        const result = await deleteEvent(eventId);
+        const result = await deleteEvent(eventId as string);
         if(result.status==="Success"){
             console.log("Event deleted");
             nav('/eventsList');

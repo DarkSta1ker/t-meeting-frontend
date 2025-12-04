@@ -8,11 +8,6 @@ import {createResultSuccess} from "../app/services/lib/createResultSuccess";
 
 const reducer= (state:EventsState,action:Action):EventsState=>{
     switch(action.type){
-        // case 'AddEvent':
-        //     return{
-        //         ...state,
-        //         events: [...state.events, action.payload]
-        //     }
         case 'SetEvent':
             return{
                 ...state,
@@ -44,9 +39,6 @@ export const useEvent=() => {
     const addEvent = useCallback(async(event:NewEvent)=>{
         setIsLoading(true);
         const result = await EventService.addEvent(event);
-        // if (result.status==='Success'){
-        //     dispatch({ type: 'AddEvent', payload: event });
-        // }
         setIsLoading(false);
         return result;
     },[dispatch]);

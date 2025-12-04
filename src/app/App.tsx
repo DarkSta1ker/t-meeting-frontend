@@ -13,16 +13,14 @@ function App() {
     <div>
         <div className={styles.container}>
             <Header />
-            <div className={styles.content}>
-                <Routes>
-                    <Route path="/" element={<Navigate to="/eventsList" replace/>} />
-                    <Route path="/eventsList" element={<EventsListPage />} />
-                    <Route path="/createEvent" element={<CreateEventPage />} />
-                    <Route path="/editEvent/:eventId" element={<EditEventPage />} />
-                    <Route path="/personalAccount" element={<PersonalAccount />} />
-                    <Route path="/event/:eventId" element={<EventPage />} />
-                </Routes>
-            </div>
+            <Routes>
+                <Route path="/" element={<Navigate to="/eventsList" replace/>} />
+                <Route path="/eventsList" element={<EventsListPage />} />
+                <Route path="/createEvent" element={<CreateEventPage />} />
+                <Route path="/editEvent/:eventId" element={<EditEventPage />} />
+                <Route path="/personalAccount" element={<PersonalAccount />} />
+                <Route path="/event/:eventId" element={<EventPage />} />
+            </Routes>
         </div>
     </div>
   );
