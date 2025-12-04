@@ -1,25 +1,23 @@
 import React , {type FC} from "react";
 import { ArrowLeft , User} from 'lucide-react';
 import {Button} from "../../shared/ui/Button/Button";
-import './Header.css';
-interface HeaderProps {
-    button1?: ()=> void
-    button2?: ()=> void
-}
-export const Header: FC<HeaderProps>=({button1, button2})=>{
+import styles from './Header.module.css';
+import { useNavigate } from 'react-router-dom';
+export const Header: FC=()=>{
+    const nav=useNavigate();
     return(
-        <div className="header">
-            <div className="headerElements">
+        <div className={styles.header}>
+            <div className={styles.headerElements}>
                 <Button
                     children={<ArrowLeft size={36}/>}
-                    className="returnButton"
-                    onClick={button1}
+                    className={styles.returnButton}
+                    onClick={()=>nav(-1)}
                 ></Button>
-                <p className="headerText">T-meeting</p>
+                <p className={styles.headerText}>T-meeting</p>
                 <Button
                     children={<User size={36}/>}
-                    className="avatarButton"
-                    onClick={button2}
+                    className={styles.returnButton}
+                    onClick={()=>nav('/personalAccount')}
                 ></Button>
             </div>
         </div>

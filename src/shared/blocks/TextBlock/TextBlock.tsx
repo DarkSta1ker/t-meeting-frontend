@@ -1,6 +1,6 @@
 import React, {type FC, type PropsWithChildren} from "react";
 import cn from 'classnames'
-import styles from './TextBlock.css';
+import styles from './TextBlock.module.css';
 interface TextBlockProps extends PropsWithChildren {
     className?: string
 }

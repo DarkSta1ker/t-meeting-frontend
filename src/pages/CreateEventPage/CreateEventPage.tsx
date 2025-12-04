@@ -1,59 +1,63 @@
-import React, {type FC} from "react";
-import {Header} from "../../widgets/Header/Header";
+import React, {type FC, useCallback} from "react";
 import {TextBlock} from "../../shared/blocks/TextBlock/TextBlock";
-import {Input} from "../../shared/ui/Input/Input";
-import {TextArea} from "../../shared/ui/TextArea/TextArea";
 import {Button} from "../../shared/ui/Button/Button";
 import { useNavigate } from 'react-router-dom';
-import styles from './CreateEventPage.css';
+import styles from './CreateEventPage.module.css';
+import {useEvent} from "../../hooks/useEvent";
+import {EventForm} from "../../widgets/EventForm/EventForm";
+import {useEventForm} from "../../hooks/useEventForm";
+import {NewEvent} from "../../shared/types/event";
+import {defaultNewEvent} from "../../shared/types/event";
+
 export const CreateEventPage: FC = () => {
+
     const nav=useNavigate();
+    const {addEvent, isLoading} = useEvent();
+    const {eventData, handleTextAreaChange, handleMetadataFieldChange, handleBaseFieldChange}=useEventForm<NewEvent>(defaultNewEvent);
+
+    const handleAddEvent = useCallback(async ()=>{
+        const resp = await addEvent(eventData);
+        if (resp.status === "Success") {
+            nav('/eventsList');
+        }
+        else{
+            console.log(`${resp.status} | ${resp.payload}`);
+        }
+    },[addEvent, eventData,nav])
+
+    const handleCancel = useCallback(() => {
+        nav('/eventsList');
+    }, [nav]);
+
     return (
         <div className={styles.createEventPage}>
-            <Header button1={()=>nav(-1)} button2={()=>nav('/personalAccount')}/>
             <div className={styles.board}>
                 <TextBlock className={styles.createPageTextBlock}>Создание мероприятия</TextBlock>
-                <div className={styles.editBlock}>
-                    <div className={styles.nameAndDescription}>
-                        <Input
-                            className={styles.createPageInput}
-                            placeholder="Название мероприятия"
-                        />
-                        <TextArea
-                            className={styles.createPageTextArea}
-                            placeholder="Описание мероприятия"
-                        />
-                    </div>
-                    <div className={styles.timeAndPlace}>
-                        <Input
-                            className={styles.createPageInput}
-                            placeholder="Время начала"
-                        />
-                        <Input
-                            className={styles.createPageInput}
-                            placeholder="Время конца"
-                        />
-                        <Input
-                            className={styles.createPageInput}
-                            placeholder="Место проведения"
-                        />
-                        <Input
-                            className={styles.createPageInput}
-                            placeholder="Дата"
-                        />
-                    </div>
-                </div>
-                <div className={styles.buttonsBlock}>
-                    <Button
-                        className={styles.cancelButton}
-                        onClick={()=>nav('/eventsList')}>
-                        Отмена
-                    </Button>
-                    <Button
-                        className={styles.saveButton}>
-                        Отправить
-                    </Button>
-                </div>
+                {
+                    isLoading? <div>Загрузка...</div> :
+                        <>
+                            <EventForm
+                                eventData={eventData}
+                                handleMetadataFieldChange={handleMetadataFieldChange}
+                                handleBaseFieldChange={handleBaseFieldChange}
+                                TextAreaChange={handleTextAreaChange}
+                            />
+                            <div className={styles.buttonsBlock}>
+                                <Button
+                                    className={styles.cancelButton}
+                                    onClick={handleCancel}>
+                                    Отмена
+                                </Button>
+                                <Button
+                                    className={styles.saveButton}
+                                    disabled={isLoading}
+                                    onClick={handleAddEvent}>
+                                    Отправить
+                                </Button>
+                            </div>
+                        </>
+                }
+
             </div>
         </div>
     )
