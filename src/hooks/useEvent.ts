@@ -2,9 +2,8 @@ import {useReducer, useCallback, useEffect, useState} from 'react';
 import {Event,NewEvent} from "../shared/types/event";
 import {Action} from "../shared/types/actions";
 import {EventsState} from "../shared/types/event";
-import {EventService} from "../app/services/Service";
+import {EventService} from "../app/services/EventService";
 import {createResultError} from "../app/services/lib/createResultError";
-import {createResultSuccess} from "../app/services/lib/createResultSuccess";
 
 const reducer= (state:EventsState,action:Action):EventsState=>{
     switch(action.type){
