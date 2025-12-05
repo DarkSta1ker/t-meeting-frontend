@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, {createContext, useContext, useState, useCallback, useEffect} from 'react';
 import { AuthService } from '../app/services/AuthService';
 import { AuthData } from '../shared/types/auth';
 import {UserData, AuthContextType, AuthProviderProps} from "../shared/types/auth";
@@ -10,6 +10,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [isLoadingAuth, setIsLoadingAuth] = useState(false);
     const [userData, setUserData] = useState<UserData | null>(null);
 
+    const checkAuth =useCallback(()=>{
+        const token = localStorage.getItem('token');
+        const role = localStorage.getItem('role');
+        if(token&&role){
+            setUserData({
+                token: token,
+                role: role,
+            })
+            setIsAuth(true);
+        }
+    },[])
+
+    useEffect(() => {
+        checkAuth()
+    }, [checkAuth]);
+
     const loginUser = useCallback(async (authData: AuthData) => {
         setIsLoadingAuth(true);
         try {
@@ -20,12 +36,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                     token: result.payload.token,
                     role: result.payload.role
                 });
+                localStorage.removeItem('token');
+                localStorage.removeItem('role');
+                localStorage.setItem('token', result.payload.token);
+                localStorage.setItem('role', result.payload.role);
             }
             return result;
         } finally {
             setIsLoadingAuth(false);
         }
     }, []);
+
+    const logoutUser = useCallback(()=>{
+        setIsLoadingAuth(true);
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        setIsAuth(false);
+        setIsLoadingAuth(false);
+    },[])
 
 
     return (
@@ -34,6 +62,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             isLoadingAuth,
             userData,
             loginUser,
+            logoutUser,
         }}>
             {children}
         </AuthContext.Provider>

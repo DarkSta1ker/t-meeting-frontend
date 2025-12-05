@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from "react";
+import React, {FC, useCallback, useEffect} from "react";
 import Button from "@mui/material/Button";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../contexts/AuthContext";
@@ -8,7 +8,7 @@ import {AuthForm} from "../../widgets/AuthForm/AuthForm";
 export const AuthPage: FC = ()=>{
     const nav = useNavigate();
     const {authData, handlePasswordFieldChange, handleLoginFieldChange} = useAuthForm();
-    const {loginUser} = useAuth();
+    const {loginUser, isAuth} = useAuth();
     const handleLogin = useCallback(async()=>{
         const result = await loginUser(authData);
         if(result.status==="Success"){
@@ -19,6 +19,13 @@ export const AuthPage: FC = ()=>{
             console.log(`Ошибка ${result.payload}`);
         }
     },[authData, loginUser]);
+
+    useEffect(() => {
+        if(isAuth){
+            nav('/eventsList');
+        }
+    }, [isAuth, nav]);
+
     return(
         <div>
             <AuthForm

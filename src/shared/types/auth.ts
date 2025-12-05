@@ -21,6 +21,7 @@ export interface AuthContextType {
     isLoadingAuth: boolean;
     userData: UserData | null;
     loginUser: (authData: AuthData) => Promise<any>;
+    logoutUser: () => void;
 }
 
 export interface AuthProviderProps {
