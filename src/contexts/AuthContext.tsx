@@ -12,12 +12,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const checkAuth =useCallback(()=>{
         const token = localStorage.getItem('token');
-        const role = localStorage.getItem('role');
         const email = localStorage.getItem('email');
-        if(token&&role&&email){
+        if(token&&email){
             setUserData({
                 token: token,
-                role: role,
                 email: email
             })
             setIsAuth(true);
@@ -37,14 +35,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 setIsAuth(true);
                 setUserData({
                     token: result.payload.token,
-                    role: result.payload.role,
                     email: result.payload.email
                 });
                 localStorage.removeItem('token');
                 localStorage.removeItem('role');
                 localStorage.removeItem('email');
                 localStorage.setItem('token', result.payload.token);
-                localStorage.setItem('role', result.payload.role);
                 localStorage.setItem('email', result.payload.email);
             }
             return result;
