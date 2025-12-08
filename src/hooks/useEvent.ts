@@ -1,5 +1,5 @@
 import {useReducer, useCallback, useEffect, useState} from 'react';
-import {Event,NewEvent} from "../shared/types/event";
+import {Event} from "../shared/types/event";
 import {Action} from "../shared/types/actions";
 import {EventsState} from "../shared/types/event";
 import {EventService} from "../app/services/EventService";
@@ -35,7 +35,7 @@ const initialState: EventsState = {
 export const useEvent=() => {
     const [state, dispatch] = useReducer(reducer,initialState);
     const [isLoading, setIsLoading] = useState(false);
-    const addEvent = useCallback(async(event:NewEvent)=>{
+    const addEvent = useCallback(async(event:Event)=>{
         setIsLoading(true);
         const result = await EventService.addEvent(event);
         setIsLoading(false);

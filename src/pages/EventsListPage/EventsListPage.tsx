@@ -24,33 +24,44 @@ export const EventsListPage: FC = () => {
         }
     },[getAllEvents])
 
-    const handleDeleteEvent= useCallback(async(eventId:string)=>{
-        const result = await deleteEvent(eventId);
-        if(result.status==="Success"){
-            console.log("Event deleted");
+    const handleDeleteEvent= useCallback(async(eventId:string|undefined)=>{
+        if(eventId){
+            const result = await deleteEvent(eventId);
+            if(result.status==="Success"){
+                console.log("Event deleted");
+            }
+            else{
+                console.log(`Error ${result.payload}`);
+            }
+            await handleUpdateEventList();
         }
         else{
-            console.log(`Error ${result.payload}`);
+            console.log(`Ошибка id:${eventId}`);
         }
-        await handleUpdateEventList();
+
     },[deleteEvent, handleUpdateEventList]);
 
-    const handleChangeStatus = useCallback(async(eventId:string)=>{
-        const result = await changeStatus(eventId);
-        if(result.status==="Success"){
-            console.log("Event deleted");
+    const handleChangeStatus = useCallback(async(eventId:string|undefined)=>{
+        if(eventId){
+            const result = await changeStatus(eventId);
+            if(result.status==="Success"){
+                console.log("Event deleted");
+            }
+            else{
+                console.log(`Error ${result.payload}`);
+            }
+            await handleUpdateEventList();
         }
         else{
-            console.log(`Error ${result.payload}`);
+            console.log(`Ошибка id:${eventId}`);
         }
-        await handleUpdateEventList();
     },[])
 
-    const handleEditEvent = (eventId:string)=>{
+    const handleEditEvent = (eventId:string|undefined)=>{
         nav(`/editEvent/${eventId}`);
     }
 
-    const handleEventPage = (eventId:string)=>{
+    const handleEventPage = (eventId:string|undefined)=>{
         nav(`/event/${eventId}`);
     }
 
@@ -64,7 +75,7 @@ export const EventsListPage: FC = () => {
                         <>
                         {
                             events?
-                                events.map((event:Event)=>(
+                                events.map((event:Event)=> (
                                     <div key={event.id} className={styles.eventBlock}>
                                         <div className={styles.nameAndDescriptionListPage}>
                                             <TextBlock className={styles.eventName}>{event.name}</TextBlock>

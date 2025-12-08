@@ -1,14 +1,5 @@
 export interface Event{
-    id: string,
-    name: string,
-    metadata: {
-        datetime: string,
-        location: string
-    },
-    status: string,
-    content: EventContentBlock[]
-}
-export interface NewEvent{
+    id?: string,
     name: string,
     metadata: {
         datetime: string,

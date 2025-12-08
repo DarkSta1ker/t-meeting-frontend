@@ -1,4 +1,4 @@
-import {Event, NewEvent} from "../types/event";
+import {Event} from "../types/event";
 import {AuthData} from "../types/auth";
 
 export const defaultEvent:Event = {
@@ -17,7 +17,7 @@ export const defaultEvent:Event = {
     ]
 }
 
-export const defaultNewEvent:NewEvent = {
+export const defaultNewEvent:Event = {
     name: "",
     metadata: {
         datetime: "",

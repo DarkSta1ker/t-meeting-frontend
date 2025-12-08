@@ -1,18 +1,9 @@
 import {useState, useCallback} from 'react';
-import {Event, NewEvent} from "../shared/types/event";
 import {EventBaseField, EventMetadataField} from "../shared/types/event";
 import {defaultEvent, defaultNewEvent} from "../shared/constants/constants";
 
 export const useEventForm = (eventId?: string) => {
-    let defaultFormNeeded:Event|NewEvent;
-    if (eventId){
-        defaultFormNeeded = defaultEvent;
-
-    }
-    else{
-        defaultFormNeeded = defaultNewEvent;
-    }
-    const [eventData, setEventData] = useState(defaultFormNeeded);
+    const [eventData, setEventData] = useState(eventId? defaultEvent:defaultNewEvent);
     const handleBaseFieldChange = useCallback((field: EventBaseField, value: string) => {
         setEventData(prev => ({
             ...prev,

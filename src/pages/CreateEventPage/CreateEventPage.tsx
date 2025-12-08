@@ -56,7 +56,6 @@ export const CreateEventPage: FC = () => {
                             </div>
                         </>
                 }
-
             </div>
         </div>
     )
