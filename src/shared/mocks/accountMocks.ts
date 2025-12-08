@@ -6,14 +6,14 @@ import {AccountData} from "../types/account";
 
 
 const usersInDB = [
-    {login: "login1", password: "password", token: "token1", email: "email1", role:"user", avatar:""},
-    {login: "login2", password: "password", token: "token2", email: "email2", role:"admin", avatar:""},
+    {login: "login1", password: "password", token: "token1", email: "email1", role:"user", avatar:"/images/AdminAvatar.jpg"},
+    {login: "login2", password: "password", token: "token2", email: "email2", role:"admin", avatar:"/images/UserAvatar.jpg"},
     {login: "login3", password: "password", token: "token3", email: "email3", role:"user"},
 ]
 
 type accountMockResult = ResultSuccess<AccountData>|ResultError;
 
-export const getAccountData = (email:string, token:string): Promise<accountMockResult> =>{
+export const mockAccountData = (email:string, token:string): Promise<accountMockResult> =>{
     return new Promise((resolve) => {
         setTimeout(() => {
             for(const person of usersInDB) {

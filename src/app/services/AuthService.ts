@@ -1,6 +1,7 @@
 import {createResultError} from "./lib/createResultError";
 import {mockLoginUser} from "../../shared/mocks/authMocks";
 import {AuthData} from "../../shared/types/auth";
+import {createResultSuccess} from "./lib/createResultSuccess";
 
 
 export const AuthService = {
@@ -10,7 +11,7 @@ export const AuthService = {
             if (response.status === 'Error') {
                 return createResultError(response.payload);
             }
-            return response;
+            return createResultSuccess(response.payload);
         } catch (error) {
             return createResultError(error);
         }
