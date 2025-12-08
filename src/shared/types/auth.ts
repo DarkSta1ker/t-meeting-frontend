@@ -14,6 +14,7 @@ export interface AuthFormProps {
 export interface UserData {
     token: string;
     role: string;
+    email: string;
 }
 
 export interface AuthContextType {
@@ -26,4 +27,9 @@ export interface AuthContextType {
 
 export interface AuthProviderProps {
     children: ReactNode;
+}
+export interface LoginSuccessPayload {
+    role: string;
+    token: string;
+    email: string;
 }

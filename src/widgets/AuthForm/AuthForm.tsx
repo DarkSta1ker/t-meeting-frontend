@@ -1,11 +1,11 @@
 import TextField from '@mui/material/TextField';
 import React, {FC} from 'react';
 import {AuthFormProps} from "../../shared/types/auth";
-
+import styles from "./AuthForm.module.css";
 
 export const AuthForm: FC<AuthFormProps> = ({authData,handlePasswordFieldChange, handleLoginFieldChange})=>{
     return (
-        <div>
+        <div className={styles.authForm}>
             <TextField
                 id="outlined-basic"
                 label="Логин"

@@ -4,6 +4,7 @@ import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../contexts/AuthContext";
 import {useAuthForm} from "../../hooks/useAuthForm";
 import {AuthForm} from "../../widgets/AuthForm/AuthForm";
+import styles from "./AuthPage.module.css"
 
 export const AuthPage: FC = ()=>{
     const nav = useNavigate();
@@ -27,7 +28,7 @@ export const AuthPage: FC = ()=>{
     }, [isAuth, nav]);
 
     return(
-        <div>
+        <div className={styles.formAndButtonBox}>
             <AuthForm
                 authData={authData}
                 handlePasswordFieldChange={handlePasswordFieldChange}
@@ -35,7 +36,7 @@ export const AuthPage: FC = ()=>{
             <Button
                 variant="outlined"
                 onClick={handleLogin}>
-                Отправить
+                Войти
             </Button>
         </div>
     )
