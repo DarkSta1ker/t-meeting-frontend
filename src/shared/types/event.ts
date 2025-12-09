@@ -6,7 +6,9 @@ export interface Event{
         location: string
     },
     status: string,
-    content: EventContentBlock[]
+    content: EventContentBlock[],
+    createdAt?: string,
+    updatedAt?: string,
 }
 export interface PromoTextBlock {
     block: "promotext";
