@@ -6,7 +6,6 @@ import {EllipsisVertical, Calendar, MapPinIcon, CirclePlus, Circle} from 'lucide
 import { DropdownMenu } from "radix-ui";
 import styles from './EventsListPage.module.css';
 import {useEvent} from "../../hooks/useEvent";
-import {Event} from "../../shared/types/event";
 
 
 export const EventsListPage: FC = () => {
@@ -24,44 +23,33 @@ export const EventsListPage: FC = () => {
         }
     },[getAllEvents])
 
-    const handleDeleteEvent= useCallback(async(eventId:string|undefined)=>{
-        if(eventId){
-            const result = await deleteEvent(eventId);
-            if(result.status==="Success"){
-                console.log("Event deleted");
-            }
-            else{
-                console.log(`Error ${result.payload}`);
-            }
-            await handleUpdateEventList();
+    const handleDeleteEvent= useCallback(async(eventId:string)=>{
+        const result = await deleteEvent(eventId);
+        if(result.status==="Success"){
+            console.log("Event deleted");
         }
         else{
-            console.log(`Ошибка id:${eventId}`);
+            console.log(`Error ${result.payload}`);
         }
-
+        await handleUpdateEventList();
     },[deleteEvent, handleUpdateEventList]);
 
-    const handleChangeStatus = useCallback(async(eventId:string|undefined)=>{
-        if(eventId){
-            const result = await changeStatus(eventId);
-            if(result.status==="Success"){
-                console.log("Event deleted");
-            }
-            else{
-                console.log(`Error ${result.payload}`);
-            }
-            await handleUpdateEventList();
+    const handleChangeStatus = useCallback(async(eventId:string)=>{
+        const result = await changeStatus(eventId);
+        if(result.status==="Success"){
+            console.log("Event deleted");
         }
         else{
-            console.log(`Ошибка id:${eventId}`);
+            console.log(`Error ${result.payload}`);
         }
+        await handleUpdateEventList();
     },[])
 
-    const handleEditEvent = (eventId:string|undefined)=>{
+    const handleEditEvent = (eventId:string)=>{
         nav(`/editEvent/${eventId}`);
     }
 
-    const handleEventPage = (eventId:string|undefined)=>{
+    const handleEventPage = (eventId:string)=>{
         nav(`/event/${eventId}`);
     }
 
@@ -75,7 +63,7 @@ export const EventsListPage: FC = () => {
                         <>
                         {
                             events?
-                                events.map((event:Event)=> (
+                                events.map((event)=> (
                                     <div key={event.id} className={styles.eventBlock}>
                                         <div className={styles.nameAndDescriptionListPage}>
                                             <TextBlock className={styles.eventName}>{event.name}</TextBlock>
@@ -120,7 +108,7 @@ export const EventsListPage: FC = () => {
                                                 </DropdownMenu.Portal>
                                             </DropdownMenu.Root>
                                             {
-                                                event.status==="opened"?
+                                                event.status==="published"?
                                                     <div className={styles.openedFlag}>
                                                         <Circle size={8} fill="#34c658" color="#34c658" />
                                                     </div>

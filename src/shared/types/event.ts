@@ -1,5 +1,4 @@
-export interface Event{
-    id?: string,
+export interface EventBase{
     name: string,
     metadata: {
         datetime: string,
@@ -10,17 +9,33 @@ export interface Event{
     createdAt?: string,
     updatedAt?: string,
 }
+type EventNew = EventBase;
+export interface EventListItem extends EventBase {
+    id: string,
+    name: string,
+    metadata: {
+        datetime: string,
+        location: string
+    },
+    status: string,
+    content: EventContentBlock[],
+    createdAt?: string,
+    updatedAt?: string,
+}
+
+
 export interface PromoTextBlock {
     block: "promotext";
     payload: string[];
 }
 
 export interface EventsState{
-    events: Event[];
+    events: EventListItem[];
 }
+
 
 export type EventContentBlock = | PromoTextBlock
 
 export type EventBaseField = 'name';
-export type EventMetadataField = keyof Event['metadata'];
+export type EventMetadataField = keyof EventBase['metadata'];
 

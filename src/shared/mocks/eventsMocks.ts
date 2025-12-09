@@ -1,5 +1,5 @@
 import { ApiData } from "../types/api";
-import { Event } from "../types/event";
+import {EventListItem} from "../types/event";
 
 const mockEventsDB = [
     {
@@ -224,7 +224,7 @@ export const mockRequestApi = async <T = Record<string, unknown>>(data: ApiData<
         }
 
         if (data.method === 'POST' && url === '/api/event') {
-            const newEvent = data.payload as Event;
+            const newEvent = data.payload as EventListItem;
 
             const eventToAdd = {
                 ...newEvent,

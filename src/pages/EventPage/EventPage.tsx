@@ -10,7 +10,7 @@ import {useEventForm} from "../../hooks/useEventForm";
 export const EventPage: FC = () => {
     const { eventId } = useParams<{ eventId: string }>();
     const {getEvent, isLoading} = useEvent();
-    const {eventData, setEventData} = useEventForm(eventId);
+    const {eventData, setEventData} = useEventForm();
     useEffect(()=>{
         const loadEvent = async()=>{
             if (!eventId){

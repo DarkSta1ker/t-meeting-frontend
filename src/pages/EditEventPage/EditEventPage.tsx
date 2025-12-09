@@ -6,13 +6,13 @@ import styles from './EditEventPage.module.css';
 import {useEvent} from "../../hooks/useEvent";
 import {EventForm} from "../../widgets/EventForm/EventForm";
 import {useEventForm} from "../../hooks/useEventForm";
-import {Event} from "../../shared/types/event";
+import {EventListItem} from "../../shared/types/event";
 
 export const EditEventPage: FC = () => {
     const nav=useNavigate();
     const { eventId } = useParams<{ eventId: string }>();
     const {getEvent, updateEvent, deleteEvent, isLoading} = useEvent();
-    const {eventData, handleTextAreaChange, handleMetadataFieldChange, handleBaseFieldChange, setEventData}=useEventForm(eventId);
+    const {eventData, handleTextAreaChange, handleMetadataFieldChange, handleBaseFieldChange, setEventData}=useEventForm();
 
     useEffect(()=>{
         const loadEvent = async()=>{
@@ -29,7 +29,7 @@ export const EditEventPage: FC = () => {
     },[getEvent, eventId, setEventData]);
 
     const handleUpdateEvent = useCallback(async ()=>{
-        const result = await updateEvent(eventData as Event);
+        const result = await updateEvent(eventData as EventListItem);
         if(result.status==="Success"){
             console.log("Event updated");
             nav('/eventsList');

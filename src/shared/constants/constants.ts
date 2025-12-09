@@ -1,24 +1,9 @@
-import {Event} from "../types/event";
 import {AuthData} from "../types/auth";
 import {AccountData} from "../types/account";
+import {EventListItem} from "../types/event";
 
-export const defaultEvent:Event = {
+export const defaultEvent:EventListItem = {
     id: "",
-    name: "",
-    metadata: {
-        datetime: "",
-        location: ""
-    },
-    status: "draft",
-    content: [
-        {
-            block: "promotext",
-            payload: []
-        }
-    ]
-}
-
-export const defaultNewEvent:Event = {
     name: "",
     metadata: {
         datetime: "",
