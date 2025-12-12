@@ -1,20 +1,10 @@
-import React, {type FC, useCallback} from "react";
-import {User, LogOut, House} from 'lucide-react';
-import {Button} from "../../shared/ui/Button/Button";
+import React, {type FC} from "react";
 import styles from './Header.module.css';
-import { useNavigate, useLocation } from 'react-router-dom';
 import {useAuth} from "../../contexts/AuthContext";
 import {HeaderButtons} from "./headerButtons";
 
 export const Header: FC=()=>{
-    const nav = useNavigate();
-    const {logoutUser, isAuth, userData} = useAuth();
-    const location = useLocation();
-    const path = location.pathname;
-    const handleLogout = useCallback(()=>{
-        logoutUser();
-        nav('/');
-    },[])
+    const {isAuth} = useAuth();
 
     return(
         <div className={styles.header}>
@@ -26,7 +16,6 @@ export const Header: FC=()=>{
                         : null
                 }
             </div>
-
         </div>
     )
 }
