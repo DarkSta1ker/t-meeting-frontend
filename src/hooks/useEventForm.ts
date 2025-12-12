@@ -1,12 +1,11 @@
 import {useState, useCallback, useEffect} from 'react';
-import {EventBaseField, EventListItem, EventMetadataField, EventNew} from "../shared/types/event";
+import {EventBaseField, EventMetadataField, } from "../shared/types/event";
 import {defaultEvent} from "../shared/constants/constants";
-import {EventService} from "../app/services/EventService";
 import {useEvent} from './useEvent'
 
 export const useEventForm = (eventId?:string) => {
     const {getEvent} = useEvent();
-    const [eventData, setEventData] = useState<EventListItem|EventNew>(defaultEvent);
+    const [eventData, setEventData] = useState(defaultEvent);
 
     useEffect(() => {
         if(!eventId){

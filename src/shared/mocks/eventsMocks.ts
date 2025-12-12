@@ -6,8 +6,8 @@ const mockEventsDB = [
         "id": "5378afbf-e87b-411f-95df-b1aeeb5b770f",
         "name": "Новогодний корпоратив",
         "metadata": {
-            "datetime": "2025-12-25T19:00:0.0Z",
-            "location": "БЦ Кронос 12 этаж"
+            "datetime": "2025-12-25",
+            "location": "БЦ Кронос"
         },
         "content": [
             {
@@ -54,8 +54,8 @@ const mockEventsDB = [
         "id": "5378afbf-e87b-411f-95df-b1aeeb5b770a",
         "name": "Вечер настольных игр",
         "metadata": {
-            "datetime": "2025-12-10T18:00:0.0Z",
-            "location": "ТЦ Академгородка 2 этаж"
+            "datetime": "2025-12-10",
+            "location": "ТЦ Академгородка"
         },
         "content": [
             {
@@ -116,8 +116,8 @@ const mockEventsDB = [
         "id": "5378afbf-e87b-411f-95df-b1aeeb5b770b",
         "name": "Сбор книжного клуба",
         "metadata": {
-            "datetime": "2025-12-12T12:00:0.0Z",
-            "location": "БЦ Кронос 14 этаж"
+            "datetime": "2025-12-12",
+            "location": "БЦ Кронос"
         },
         "content": [
             {

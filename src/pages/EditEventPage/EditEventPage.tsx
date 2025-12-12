@@ -1,4 +1,4 @@
-import React, {type FC, useCallback, useEffect} from "react";
+import React, {type FC, useCallback} from "react";
 import {TextBlock} from "../../shared/blocks/TextBlock/TextBlock";
 import {Button} from "../../shared/ui/Button/Button";
 import { useNavigate, useParams } from 'react-router-dom';
@@ -6,30 +6,14 @@ import styles from './EditEventPage.module.css';
 import {useEvent} from "../../hooks/useEvent";
 import {EventForm} from "../../widgets/EventForm/EventForm";
 import {useEventForm} from "../../hooks/useEventForm";
-import {EventListItem} from "../../shared/types/event";
 
 export const EditEventPage: FC = () => {
     const nav=useNavigate();
     const { eventId } = useParams<{ eventId: string }>();
-    const {getEvent, updateEvent, deleteEvent, isLoading} = useEvent();
-    const {eventData, handleTextAreaChange, handleMetadataFieldChange, handleBaseFieldChange, setEventData}=useEventForm();
-
-    useEffect(()=>{
-        const loadEvent = async()=>{
-            const result = await getEvent(eventId as string);
-            if(result.status==="Success"){
-                console.log("Event loaded");
-                setEventData(result.payload);
-            }
-            else{
-                console.log(`Error ${result.payload}`);
-            }
-        }
-        loadEvent();
-    },[getEvent, eventId, setEventData]);
-
+    const {updateEvent, deleteEvent, isLoading} = useEvent();
+    const {eventData, handleTextAreaChange, handleMetadataFieldChange, handleBaseFieldChange}=useEventForm(eventId);
     const handleUpdateEvent = useCallback(async ()=>{
-        const result = await updateEvent(eventData as EventListItem);
+        const result = await updateEvent(eventData);
         if(result.status==="Success"){
             console.log("Event updated");
             nav('/eventsList');
@@ -40,15 +24,20 @@ export const EditEventPage: FC = () => {
     },[updateEvent, eventData,nav]);
 
     const handleDeleteEvent= useCallback(async()=>{
-        const result = await deleteEvent(eventId as string);
-        if(result.status==="Success"){
-            console.log("Event deleted");
-            nav('/eventsList');
+        if(eventId) {
+            const result = await deleteEvent(eventId);
+            if (result.status === "Success") {
+                console.log("Event deleted");
+                nav('/eventsList');
+            } else {
+                console.log(`Error ${result.payload}`);
+            }
         }
         else{
-            console.log(`Error ${result.payload}`);
+            console.log('Ошибка! Нет id')
         }
     },[deleteEvent, eventId, nav]);
+
 
     const handleCancel = useCallback(() => {
         nav('/eventsList');

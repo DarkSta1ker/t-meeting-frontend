@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react';
+import {useCallback} from 'react';
 import { EventNew, EventListItem} from "../shared/types/event";
 import {EventService} from "../app/services/EventService";
 import {useEvents} from "./useEvents";
