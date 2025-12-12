@@ -1,24 +1,20 @@
-import React , {type FC} from "react";
-import { ArrowLeft , User} from 'lucide-react';
-import {Button} from "../../shared/ui/Button/Button";
+import React, {type FC} from "react";
 import styles from './Header.module.css';
-import { useNavigate } from 'react-router-dom';
+import {useAuth} from "../../contexts/AuthContext";
+import {HeaderButtons} from "./headerButtons";
+
 export const Header: FC=()=>{
-    const nav=useNavigate();
+    const {isAuth} = useAuth();
+
     return(
         <div className={styles.header}>
-            <div className={styles.headerElements}>
-                <Button
-                    children={<ArrowLeft size={36}/>}
-                    className={styles.returnButton}
-                    onClick={()=>nav(-1)}
-                ></Button>
+            <div className={styles.headerElementsBlock}>
                 <p className={styles.headerText}>T-meeting</p>
-                <Button
-                    children={<User size={36}/>}
-                    className={styles.returnButton}
-                    onClick={()=>nav('/personalAccount')}
-                ></Button>
+                {
+                    isAuth?
+                        <HeaderButtons/>
+                        : null
+                }
             </div>
         </div>
     )

@@ -1,4 +1,16 @@
-export interface Event{
+export interface EventBase{
+    name: string,
+    metadata: {
+        datetime: string,
+        location: string
+    },
+    status: string,
+    content: EventContentBlock[],
+    createdAt?: string,
+    updatedAt?: string,
+}
+export type EventNew = EventBase;
+export interface EventListItem extends EventBase {
     id: string,
     name: string,
     metadata: {
@@ -6,17 +18,11 @@ export interface Event{
         location: string
     },
     status: string,
-    content: EventContentBlock[]
+    content: EventContentBlock[],
+    createdAt?: string,
+    updatedAt?: string,
 }
-export interface NewEvent{
-    name: string,
-    metadata: {
-        datetime: string,
-        location: string
-    },
-    status: string,
-    content: EventContentBlock[]
-}
+
 
 export interface PromoTextBlock {
     block: "promotext";
@@ -24,41 +30,12 @@ export interface PromoTextBlock {
 }
 
 export interface EventsState{
-    events: Event[];
+    events: EventListItem[];
 }
+
 
 export type EventContentBlock = | PromoTextBlock
 
 export type EventBaseField = 'name';
-export type EventMetadataField = keyof Event['metadata'];
+export type EventMetadataField = keyof EventBase['metadata'];
 
-export const defaultEvent:Event = {
-    id: "",
-    name: "",
-    metadata: {
-        datetime: "",
-        location: ""
-    },
-    status: "draft",
-    content: [
-        {
-            block: "promotext",
-            payload: []
-        }
-    ]
-}
-
-export const defaultNewEvent:NewEvent = {
-    name: "",
-    metadata: {
-        datetime: "",
-        location: ""
-    },
-    status: "draft",
-    content: [
-        {
-            block: "promotext",
-            payload: []
-        }
-    ]
-}

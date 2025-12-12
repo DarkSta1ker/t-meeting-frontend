@@ -3,28 +3,31 @@ import React from 'react';
 import {CreateEventPage} from "../pages/CreateEventPage/CreateEventPage";
 import {EditEventPage} from "../pages/EditEventPage/EditEventPage";
 import {EventsListPage} from "../pages/EventsListPage/EventsListPage";
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route} from 'react-router-dom';
 import {PersonalAccount} from "../pages/PersonalAccount/PersonalAccount";
 import {Header} from "../widgets/Header/Header";
 import {EventPage} from "../pages/EventPage/EventPage";
-function App() {
+import {AuthPage} from "../pages/AuthPage/AuthPage";
+import {PrivateRoute} from "./routing/PrivateRourte";
 
+function App() {
     return (
-    <div>
         <div className={styles.container}>
             <Header />
-            <div className={styles.content}>
-                <Routes>
-                    <Route path="/" element={<Navigate to="/eventsList" replace/>} />
+            <Routes>
+                <Route path="/" element={<AuthPage/>} />
+
+                <Route element={<PrivateRoute/>}>
+
                     <Route path="/eventsList" element={<EventsListPage />} />
                     <Route path="/createEvent" element={<CreateEventPage />} />
                     <Route path="/editEvent/:eventId" element={<EditEventPage />} />
                     <Route path="/personalAccount" element={<PersonalAccount />} />
                     <Route path="/event/:eventId" element={<EventPage />} />
-                </Routes>
-            </div>
+                </Route>
+
+            </Routes>
         </div>
-    </div>
   );
 }
 

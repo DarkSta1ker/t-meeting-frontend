@@ -49,8 +49,9 @@
     max-width: 1200px;
     display:flex;
     align-items: center;
-    text-align : center;
+
     font-weight: 400;
+    white-space: pre-line;
 }
 .dataAndPlaceBlock{
     display:flex;
