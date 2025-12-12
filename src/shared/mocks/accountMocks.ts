@@ -6,8 +6,8 @@ import {AccountData} from "../types/account";
 
 
 const usersInDB = [
-    {login: "login1", password: "password", token: "token1", email: "email1", role:"user", avatar:"/images/AdminAvatar.jpg"},
-    {login: "login2", password: "password", token: "token2", email: "email2", role:"admin", avatar:"/images/UserAvatar.jpg"},
+    {login: "login1", password: "password", token: "token1", email: "email1", role:"user", avatar: process.env.PUBLIC_URL + "/images/AdminAvatar.jpg"},
+    {login: "login2", password: "password", token: "token2", email: "email2", role:"admin", avatar: process.env.PUBLIC_URL + "/images/UserAvatar.jpg"},
     {login: "login3", password: "password", token: "token3", email: "email3", role:"user"},
 ]
 

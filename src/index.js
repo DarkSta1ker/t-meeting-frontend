@@ -7,9 +7,10 @@ import reportWebVitals from './app/reportWebVitals';
 import {AuthProvider} from "./contexts/AuthContext";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+const basename = process.env.PUBLIC_URL || '';
 root.render(
     <React.StrictMode>
-        <BrowserRouter>
+        <BrowserRouter basename={basename}>
             <AuthProvider>
                 <App />
             </AuthProvider>

@@ -27,6 +27,6 @@ export const defaultAccountData:AccountData = {
     login: "",
     email: "",
     role: "",
-    avatarPhoto: "/images/BaseAvatar.jpg"
+    avatarPhoto: process.env.PUBLIC_URL + "/images/BaseAvatar.jpg"
 }
 
