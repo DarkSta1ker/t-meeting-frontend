@@ -4,6 +4,7 @@ import {Button} from "../../shared/ui/Button/Button";
 import styles from './Header.module.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {useAuth} from "../../contexts/AuthContext";
+import {HeaderButtons} from "./headerButtons";
 
 export const Header: FC=()=>{
     const nav = useNavigate();
@@ -21,32 +22,7 @@ export const Header: FC=()=>{
                 <p className={styles.headerText}>T-meeting</p>
                 {
                     isAuth?
-                        <div className={styles.headerElements}>
-                            <Button
-                                children={<House size={36}/>}
-                                className={styles.iconButton}
-                                onClick={()=>nav('/eventsList')}
-                            ></Button>
-                            {
-                                (path==='/personalAccount')?
-                                    <Button
-                                        children={<LogOut size={36}/>}
-                                        className={styles.avatarButton}
-                                        onClick={handleLogout}
-                                    />
-                                    :
-                                    <Button
-                                        className={styles.avatarButton}
-                                        onClick={()=>nav('/personalAccount')}
-                                    >
-                                        <div className={styles.accountButtonChildrenBox}>
-                                            <p className={styles.email}>{userData?.email}</p>
-                                            <User size={36}/>
-                                        </div>
-                                    </Button>
-                            }
-
-                        </div>
+                        <HeaderButtons/>
                         : null
                 }
             </div>
