@@ -1,9 +1,32 @@
-import {useState, useCallback} from 'react';
-import {EventBaseField, EventMetadataField} from "../shared/types/event";
+import {useState, useCallback, useEffect} from 'react';
+import {EventBaseField, EventListItem, EventMetadataField, EventNew} from "../shared/types/event";
 import {defaultEvent} from "../shared/constants/constants";
+import {EventService} from "../app/services/EventService";
+import {useEvent} from './useEvent'
 
-export const useEventForm = () => {
-    const [eventData, setEventData] = useState(defaultEvent);
+export const useEventForm = (eventId?:string) => {
+    const {getEvent} = useEvent();
+    const [eventData, setEventData] = useState<EventListItem|EventNew>(defaultEvent);
+
+    useEffect(() => {
+        if(!eventId){
+            setEventData(defaultEvent)
+            return;
+        }
+        const loadEvent = async()=>{
+            const result = await getEvent(eventId);
+            if(result.status==="Success"){
+                console.log("Event loaded");
+                setEventData(result.payload);
+            }
+            else{
+                console.log(`Error ${result.payload}`);
+            }
+        }
+        loadEvent();
+    },[eventId, getEvent])
+
+
     const handleBaseFieldChange = useCallback((field: EventBaseField, value: string) => {
         setEventData(prev => ({
             ...prev,

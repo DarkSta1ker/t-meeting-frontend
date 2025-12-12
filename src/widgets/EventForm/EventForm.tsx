@@ -2,10 +2,10 @@ import React, {FC} from "react";
 import styles from "./EventForm.module.css";
 import {Input} from "../../shared/ui/Input/Input";
 import {TextArea} from "../../shared/ui/TextArea/TextArea";
-import {EventMetadataField, EventBaseField, EventListItem} from "../../shared/types/event";
+import {EventMetadataField, EventBaseField, EventListItem, EventNew} from "../../shared/types/event";
 
 interface EventFormProps{
-    eventData:EventListItem,
+    eventData:EventListItem|EventNew,
     handleBaseFieldChange:(paramName:EventBaseField, payload:string)=>void,
     handleMetadataFieldChange:(paramName:EventMetadataField, payload:string)=>void,
     TextAreaChange: (paramName:string, payload:string)=>void,

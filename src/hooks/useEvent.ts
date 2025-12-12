@@ -1,111 +1,70 @@
-import {useReducer, useCallback, useEffect, useState} from 'react';
-import { EventBase, EventListItem} from "../shared/types/event";
-import {Action} from "../shared/types/actions";
-import {EventsState} from "../shared/types/event";
+import {useCallback, useState} from 'react';
+import { EventNew, EventListItem} from "../shared/types/event";
 import {EventService} from "../app/services/EventService";
-import {createResultError} from "../app/services/lib/createResultError";
-
-const reducer= (state:EventsState,action:Action):EventsState=>{
-    switch(action.type){
-        case 'SetEvent':
-            return{
-                ...state,
-                events: state.events.map(event=>
-                    (event.id===action.payload.id)? action.payload : event
-                )
-            }
-        case 'SetEvents':
-            return{
-                events: action.payload
-            }
-        case 'DeleteEvent':
-            return{
-                ...state,
-                events: state.events.filter(event=> event.id!==action.payload)
-            }
-
-    }
-}
-const initialState: EventsState = {
-    events: [],
-};
-
-
+import {useEvents} from "./useEvents";
 
 export const useEvent=() => {
-    const [state, dispatch] = useReducer(reducer,initialState);
-    const [isLoading, setIsLoading] = useState(false);
-    const addEvent = useCallback(async(event:EventBase)=>{
+    const {isLoading, setIsLoading} = useEvents();
+    const addEvent = useCallback(async(event:EventNew)=>{
         setIsLoading(true);
-        const result = await EventService.addEvent(event);
+        const response = await EventService.addEvent(event);
         setIsLoading(false);
-        return result;
-    },[dispatch]);
+        return response;
+    },[setIsLoading]);
 
     const getEvent = useCallback(async(eventId:string)=>{
         setIsLoading(true);
-        const result = await EventService.getEvent(eventId);
+        const response = await EventService.getEvent(eventId);
         setIsLoading(false);
-        return result;
-    },[]);
+        return response;
+    },[setIsLoading]);
 
-    const getAllEvents = useCallback(async()=>{
-        setIsLoading(true);
-        const result = await EventService.getAllEvents();
-        if (result.status==='Success'){
-            dispatch({type:'SetEvents',payload:result.payload});
-        }
-        setIsLoading(false);
-        return result;
-    },[dispatch]);
 
     const deleteEvent = useCallback(async(eventId:string)=>{
         setIsLoading(true);
-        const result = await EventService.deleteEvent(eventId);
-        if (result.status==='Success'){
-            dispatch({type:'DeleteEvent',payload:`${eventId}`})
-        }
+        const response = await EventService.deleteEvent(eventId);
         setIsLoading(false);
-        return result;
-    },[dispatch]);
+        return response;
+    },[setIsLoading]);
 
     const updateEvent = useCallback(async(event:EventListItem)=>{
         setIsLoading(true);
-        const result = await EventService.updateEvent(event);
-        if (result.status==='Success'){
-            dispatch({type:'SetEvent',payload:event});
-        }
+        const response = await EventService.updateEvent(event);
         setIsLoading(false);
-        return result;
-    },[dispatch]);
+        return response;
+    },[setIsLoading]);
 
     const changeStatus = useCallback(async(eventId:string)=>{
         setIsLoading(true);
-        const currentEvent = state.events.find(event=>event.id===eventId);
-        if (!currentEvent) {
-            setIsLoading(false);
-            return createResultError(new Error(`Error: can't find event with id ${eventId} to change status`));
+        const eventFromResponse = await getEvent(eventId);
+        if(eventFromResponse.status==='Success'){
+            const event = eventFromResponse.payload
+            event.status = event.status==='draft'? 'published':'draft';
+            try{
+                const response=await updateEvent(event);
+                if(response.status==='Success'){
+                    console.log('Статус мероприятия обновлен');
+                }
+                else{
+                    console.log(`Произошла ошибка ${response.payload}`);
+                }
+            }
+            catch(err){
+                console.log('Произошла ошибка при попытке обновления мероприятия')
+            }
         }
-        currentEvent.status = currentEvent.status==='published'? 'draft' : 'published';
-        const result = await EventService.updateEvent(currentEvent);
-        if (result.status==='Success'){
-            dispatch({type:'SetEvent',payload:currentEvent});
+        else{
+            console.log('Произошла ошибка при попытке запросить мероприятие')
         }
         setIsLoading(false);
-        return result;
-    },[dispatch, state.events]);
 
-    useEffect(() => {
-        getAllEvents();
-    }, []);
+    },[setIsLoading, getEvent, updateEvent]);
 
     return {
-        events: state.events,
         addEvent,
         getEvent,
         deleteEvent,
         updateEvent,
-        getAllEvents,
         changeStatus,
         isLoading
     }

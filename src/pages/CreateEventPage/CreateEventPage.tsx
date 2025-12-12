@@ -15,7 +15,7 @@ export const CreateEventPage: FC = () => {
 
     const handleAddEvent = useCallback(async ()=>{
         const resp = await addEvent(eventData);
-        if (resp.status === "Success") {
+        if (resp.status=== "Success") {
             nav('/eventsList');
         }
         else{

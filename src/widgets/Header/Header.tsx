@@ -35,17 +35,15 @@ export const Header: FC=()=>{
                                         onClick={handleLogout}
                                     />
                                     :
-                                    <>
-                                        <Button
-                                            className={styles.avatarButton}
-                                            onClick={()=>nav('/personalAccount')}
-                                        >
-                                            <div className={styles.accountButtonChildrenBox}>
-                                                <p className={styles.email}>{userData?.email}</p>
-                                                <User size={36}/>
-                                            </div>
-                                        </Button>
-                                    </>
+                                    <Button
+                                        className={styles.avatarButton}
+                                        onClick={()=>nav('/personalAccount')}
+                                    >
+                                        <div className={styles.accountButtonChildrenBox}>
+                                            <p className={styles.email}>{userData?.email}</p>
+                                            <User size={36}/>
+                                        </div>
+                                    </Button>
                             }
 
                         </div>

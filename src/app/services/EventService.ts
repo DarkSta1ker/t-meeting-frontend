@@ -1,4 +1,4 @@
-import { EventBase, EventListItem} from "../../shared/types/event";
+import { EventNew, EventListItem} from "../../shared/types/event";
 import {requestApi} from "../../shared/api/requestApi";
 import {createResultError} from "./lib/createResultError";
 import {createResultSuccess} from "./lib/createResultSuccess";
@@ -6,9 +6,9 @@ import {ApiData} from "../../shared/types/api";
 import {mockRequestApi} from "../../shared/mocks/eventsMocks";
 
 export const EventService = {
-    async addEvent(eventPayload: EventBase){
+    async addEvent(eventPayload: EventNew){
         try{
-            const apiData:ApiData<EventBase>={
+            const apiData:ApiData<EventNew>={
                 url : "/api/event",
                 method : "POST",
                 payload : eventPayload

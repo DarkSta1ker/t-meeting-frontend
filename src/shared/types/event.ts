@@ -9,7 +9,7 @@ export interface EventBase{
     createdAt?: string,
     updatedAt?: string,
 }
-type EventNew = EventBase;
+export type EventNew = EventBase;
 export interface EventListItem extends EventBase {
     id: string,
     name: string,

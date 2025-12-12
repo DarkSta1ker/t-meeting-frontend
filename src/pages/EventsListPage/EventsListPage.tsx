@@ -1,4 +1,4 @@
-import React, {type FC, useCallback} from "react";
+import React, {type FC, useCallback, useEffect} from "react";
 import {TextBlock} from "../../shared/blocks/TextBlock/TextBlock";
 import {Button} from "../../shared/ui/Button/Button";
 import { useNavigate } from 'react-router-dom';
@@ -6,12 +6,18 @@ import {EllipsisVertical, Calendar, MapPinIcon, CirclePlus, Circle} from 'lucide
 import { DropdownMenu } from "radix-ui";
 import styles from './EventsListPage.module.css';
 import {useEvent} from "../../hooks/useEvent";
-
+import {useEvents} from "../../hooks/useEvents";
 
 export const EventsListPage: FC = () => {
 
     const nav=useNavigate();
-    const {events, getAllEvents, deleteEvent, changeStatus, isLoading} = useEvent();
+    const { deleteEvent, changeStatus} = useEvent();
+    const {events, getAllEvents, isLoading} = useEvents();
+
+    useEffect(()=>{
+        getAllEvents()
+    },[])
+
 
     const handleUpdateEventList = useCallback(async ()=>{
         const result = await getAllEvents();
@@ -35,15 +41,9 @@ export const EventsListPage: FC = () => {
     },[deleteEvent, handleUpdateEventList]);
 
     const handleChangeStatus = useCallback(async(eventId:string)=>{
-        const result = await changeStatus(eventId);
-        if(result.status==="Success"){
-            console.log("Event deleted");
-        }
-        else{
-            console.log(`Error ${result.payload}`);
-        }
+        await changeStatus(eventId);
         await handleUpdateEventList();
-    },[])
+    },[handleUpdateEventList, changeStatus]);
 
     const handleEditEvent = (eventId:string)=>{
         nav(`/editEvent/${eventId}`);
