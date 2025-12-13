@@ -1,5 +1,4 @@
 import React, {type FC, useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
 import styles from "./PersonalAccount.module.css";
 import {TextField} from "@mui/material";
 import {defaultAccountData} from "../../shared/constants/constants";
@@ -8,7 +7,6 @@ import {useAuth} from "../../contexts/AuthContext";
 
 export const PersonalAccount: FC = () => {
     const {userData} = useAuth();
-    const nav = useNavigate();
     const [AccountData, setAccountData] = useState(defaultAccountData);
     const [isLoading, setIsLoading] = useState(true)
     useEffect(() => {
