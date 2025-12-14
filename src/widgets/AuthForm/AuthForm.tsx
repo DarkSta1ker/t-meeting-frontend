@@ -93,6 +93,14 @@ export const AuthForm: FC = ()=>{
                 variant="outlined"
                 onClick={handleLogin}
                 disabled={!!errors?.login || !!errors?.password}
+                sx={{
+                    backgroundColor: "transparent",
+                    borderRadius: '5px',
+                    '&:hover': {
+                        borderRadius: '5px',
+                        backgroundColor: "#cfd0d5",
+                    }
+                }}
             >
                 Войти
             </Button>

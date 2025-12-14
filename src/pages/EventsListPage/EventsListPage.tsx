@@ -1,13 +1,13 @@
 import React, {type FC, useCallback, useEffect} from "react";
 import {TextBlock} from "../../shared/blocks/TextBlock/TextBlock";
-import {Button} from "../../shared/ui/Button/Button";
 import { useNavigate } from 'react-router-dom';
-import {EllipsisVertical, Calendar, MapPinIcon, CirclePlus, Circle} from 'lucide-react';
+import {EllipsisVertical, Calendar, MapPinIcon, CirclePlus, Circle, House} from 'lucide-react';
 import { DropdownMenu } from "radix-ui";
 import styles from './EventsListPage.module.css';
 import {useEvent} from "../../hooks/useEvent";
 import {useEvents} from "../../hooks/useEvents";
-
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
 export const EventsListPage: FC = () => {
 
     const nav=useNavigate();
@@ -56,7 +56,14 @@ export const EventsListPage: FC = () => {
     return (
         <div className={styles.eventsListPage}>
             <div className={styles.board}>
-                <TextBlock className={styles.eventsListTextBlock}>Список мероприятий</TextBlock>
+                <Typography
+                    variant="h6"
+                    sx={{
+                        height:'64px',
+                        display:'flex',
+                        alignItems: 'center',
+                    }}
+                >Список мероприятий</Typography>
                 <div className={styles.eventsListBlock}>
                     {
                         isLoading? <div>Загрузка мероприятий...</div> :
@@ -66,7 +73,13 @@ export const EventsListPage: FC = () => {
                                 events.map((event)=> (
                                     <div key={event.id} className={styles.eventBlock}>
                                         <div className={styles.nameAndDescriptionListPage}>
-                                            <TextBlock className={styles.eventName}>{event.name}</TextBlock>
+                                            <Typography
+                                                variant="h6"
+                                                sx={{
+                                                    display:'flex',
+                                                    alignItems: 'center',
+                                                }}
+                                            >{event.name}</Typography>
                                             <TextBlock className={styles.eventDescription}>{event.content[0].payload.join(' ')}</TextBlock>
                                         </div>
                                         <div className={styles.dataAndPlace}>
@@ -127,11 +140,21 @@ export const EventsListPage: FC = () => {
                         }
                         </>
                     }
-
-
-                    <Button className={styles.addEventButton} onClick={()=>nav('/createEvent')}>
+                    <IconButton onClick={()=>nav('/createEvent')}
+                                sx={{
+                                    position: 'absolute',
+                                    backgroundColor: "transparent",
+                                    color: "#757575",
+                                    bottom: '15px',
+                                    right: '56px',
+                                    '&:hover': {
+                                        borderRadius: '25px',
+                                        backgroundColor: "#cfd0d5",
+                                    }
+                                }}
+                    >
                         <CirclePlus size={30}/>
-                    </Button>
+                    </IconButton>
                 </div>
             </div>
         </div>

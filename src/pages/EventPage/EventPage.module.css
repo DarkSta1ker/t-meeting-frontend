@@ -81,3 +81,41 @@
 .place{
 
 }
+
+.editBlock{
+    width: 1232px;
+    height: 500px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    border:#E2E2E2 1px solid;
+    border-radius: 15px;
+    box-shadow: 2px 2px 8px #E2E2E2;
+    padding: 40px 60px;
+    box-sizing: border-box;
+}
+
+
+.description{
+    width: 700px;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+    flex-direction:column;
+    box-sizing: border-box;
+}
+.timeAndPlace{
+    display:flex;
+    width:250px;
+    flex-direction: column;
+    box-sizing: border-box;
+    height:150px;
+    justify-content: space-between;
+}
+.textFieldWithIcon{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

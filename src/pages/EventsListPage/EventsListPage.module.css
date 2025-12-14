@@ -29,11 +29,15 @@
     display: flex;
     gap:40px;
     align-items: center;
-    background-color: #E2E2E2;
+
     padding: 40px 60px 80px 60px;
     box-sizing: border-box;
     flex-direction: column;
     position: relative;
+    background-color: white;
+    border:#E2E2E2 1px solid;
+    border-radius: 15px;
+    box-shadow: 2px 2px 8px #E2E2E2;
 }
 .eventBlock{
     width: 1112px;
@@ -41,21 +45,26 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #FFFFFF;
+    background-color: #f7f7f9;
     padding: 20px  10px 20px 48px;
     box-sizing: border-box;
-    border-radius: 8px;
+    border: transparent 1px solid;
+    border-radius: 15px;
+    box-shadow: 2px 2px 8px #E2E2E2;
 }
 .nameAndDescriptionListPage{
     width: 700px;
     height: 124px;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     margin:0;
     padding:0;
     box-sizing: border-box;
     flex-direction: column;
+    background-color: white;
+    border: #B3B3B3 1px solid;
+    border-radius: 15px;
 }
 .dataAndPlace{
     width: 260px;
@@ -67,6 +76,9 @@
     margin:0;
     padding:0;
     box-sizing: border-box;
+    background-color: white;
+    border: #B3B3B3 1px solid;
+    border-radius: 15px;
 }
 .dataBlock{
     display: flex;
@@ -111,7 +123,7 @@
 }
 .dropdownMenuContent {
     min-width: 160px;
-    background-color: #F5F5F5;
+    background-color: #E2E2E2;
     border-radius: 6px;
     padding: 5px;
     box-shadow:

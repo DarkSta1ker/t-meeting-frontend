@@ -1,7 +1,14 @@
 .authForm{
     display: flex;
     flex-direction: column;
-    width: 100%;
-    height: 100%;
+    width: 450px;
+    min-height: 300px;
+    max-height: 450px;
     justify-content: space-between;
+    background-color: white;
+    box-sizing: border-box;
+    padding: 30px;
+    border:#E2E2E2 1px solid;
+    border-radius: 15px;
+    box-shadow: 2px 2px 8px #E2E2E2;
 }
