@@ -1,12 +1,12 @@
 import React, {type FC, useCallback} from "react";
 import {TextBlock} from "../../shared/blocks/TextBlock/TextBlock";
-import {Button} from "../../shared/ui/Button/Button";
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './EditEventPage.module.css';
 import {useEvent} from "../../hooks/useEvent";
 import {EventForm} from "../../widgets/EventForm/EventForm";
 import {useEventForm} from "../../hooks/useEventForm";
-
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 export const EditEventPage: FC = () => {
     const nav=useNavigate();
     const { eventId } = useParams<{ eventId: string }>();
@@ -46,7 +46,16 @@ export const EditEventPage: FC = () => {
     return (
         <div className={styles.editEventPage}>
             <div className={styles.board}>
-                <TextBlock className={styles.editPageTextBlock}>Редактирование мероприятия</TextBlock>
+                <Typography
+                    variant="h6"
+                    sx={{
+                        height:'64px',
+                        display:'flex',
+                        alignItems: 'center',
+                    }}
+                >
+                    Редактирование мероприятия
+                </Typography>
                 {
                     isLoading? <div>Загрузка...</div> :
                         <>
@@ -58,18 +67,55 @@ export const EditEventPage: FC = () => {
                             />
                             <div className={styles.buttonsBlock}>
                                 <Button
-                                    className={styles.cancelButton}
-                                    onClick={handleCancel}>
+                                    variant="outlined"
+                                    disabled={isLoading}
+                                    onClick={handleCancel}
+                                    size="large"
+                                    sx={{
+                                        color: "#fecd00",
+                                        borderColor: "#fecd00",
+                                        fontWeight: 'bold',
+                                        border: "2px solid #fecd00",
+                                        '&:hover': {
+                                            backgroundColor: "rgba(255,249,0,0.26)",
+                                        }
+                                    }}
+                                >
                                     Отмена
                                 </Button>
                                 <Button
-                                    className={styles.deleteButton}
-                                    onClick={handleDeleteEvent}>
+                                    variant="outlined"
+                                    disabled={isLoading}
+                                    onClick={handleDeleteEvent}
+                                    size="large"
+                                    sx={{
+                                        color: "#ec231e",
+                                        borderColor: "#ec231e",
+                                        fontWeight: 'bold',
+                                        border: "2px solid #ec231e",
+                                        '&:hover': {
+                                            backgroundColor: "rgba(255,0,13,0.26)",
+                                        }
+                                    }}
+                                >
                                     Удалить
                                 </Button>
                                 <Button
-                                    className={styles.saveButton}
-                                    onClick={handleUpdateEvent}>
+                                    variant="outlined"
+                                    disabled={isLoading}
+                                    onClick={handleUpdateEvent}
+                                    size="large"
+                                    sx={{
+                                        color: "#34c658",
+                                        borderColor: "#34c658",
+                                        fontWeight: 'bold',
+                                        border: "2px solid #34c658",
+                                        '&:hover': {
+                                            backgroundColor: "rgba(28,255,0,0.26)",
+                                        }
+                                    }}
+                                >
+
                                     Сохранить
                                 </Button>
                             </div>

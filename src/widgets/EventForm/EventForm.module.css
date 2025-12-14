@@ -1,16 +1,19 @@
 .editBlock{
     width: 1232px;
-    height: 730px;
+    height: 500px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #E2E2E2;
+    background-color: white;
+    border:#E2E2E2 1px solid;
+    border-radius: 15px;
+    box-shadow: 2px 2px 8px #E2E2E2;
     padding: 40px 60px;
     box-sizing: border-box;
 }
-.nameAndDescription{
+.nameAndTimeAndLocation{
     width: 450px;
-    height: 649px;
+    height: 100%;
     display: flex;
     justify-content: space-between;
     align-items:center;
@@ -32,12 +35,20 @@
     resize: none;
     padding: 14px 16px;
 }
-.timeAndPlace{
+.description{
     width: 450px;
-    height: 649px;
+    height: 100%;
     display: flex;
     justify-content: space-between;
     align-items:center;
     flex-direction:column;
     box-sizing: border-box;
+}
+.timeAndPlace{
+    display:flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    height:150px;
+    width: 100%;
+    justify-content: space-between;
 }

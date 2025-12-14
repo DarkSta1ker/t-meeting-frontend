@@ -1,4 +1,4 @@
-import styles from './App.css';
+import styles from './App.module.css';
 import React from 'react';
 import {CreateEventPage} from "../pages/CreateEventPage/CreateEventPage";
 import {EditEventPage} from "../pages/EditEventPage/EditEventPage";

@@ -1,12 +1,12 @@
 import React, {type FC, useCallback} from "react";
 import {TextBlock} from "../../shared/blocks/TextBlock/TextBlock";
-import {Button} from "../../shared/ui/Button/Button";
 import { useNavigate } from 'react-router-dom';
 import styles from './CreateEventPage.module.css';
 import {useEvent} from "../../hooks/useEvent";
 import {EventForm} from "../../widgets/EventForm/EventForm";
 import {useEventForm} from "../../hooks/useEventForm";
-
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 export const CreateEventPage: FC = () => {
 
     const nav=useNavigate();
@@ -30,7 +30,14 @@ export const CreateEventPage: FC = () => {
     return (
         <div className={styles.createEventPage}>
             <div className={styles.board}>
-                <TextBlock className={styles.createPageTextBlock}>Создание мероприятия</TextBlock>
+                <Typography
+                    variant="h6"
+                    sx={{
+                        height:'64px',
+                        display:'flex',
+                        alignItems: 'center',
+                    }}
+                >Создание мероприятия</Typography>
                 {
                     isLoading? <div>Загрузка...</div>
                         :
@@ -43,14 +50,38 @@ export const CreateEventPage: FC = () => {
                             />
                             <div className={styles.buttonsBlock}>
                                 <Button
-                                    className={styles.cancelButton}
-                                    onClick={handleCancel}>
+                                    variant="outlined"
+                                    onClick={handleCancel}
+                                    size="large"
+                                    disabled={isLoading}
+                                    sx={{
+                                        color: "#fecd00",
+                                        borderColor: "#fecd00",
+                                        fontWeight: 'bold',
+                                        border: "2px solid #fecd00",
+                                        '&:hover': {
+                                            backgroundColor: "rgba(255,249,0,0.26)",
+                                        }
+                                    }}
+                                >
                                     Отмена
                                 </Button>
                                 <Button
-                                    className={styles.saveButton}
+                                    variant="outlined"
                                     disabled={isLoading}
-                                    onClick={handleAddEvent}>
+                                    onClick={handleAddEvent}
+                                    size="large"
+                                    sx={{
+                                        color: "#34c658",
+                                        borderColor: "#34c658",
+                                        fontWeight: 'bold',
+                                        border: "2px solid #34c658",
+                                        '&:hover': {
+                                            backgroundColor: "rgba(28,255,0,0.26)",
+                                        }
+                                    }}
+                                >
+
                                     Отправить
                                 </Button>
                             </div>

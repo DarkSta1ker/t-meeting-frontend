@@ -1,10 +1,10 @@
 import React, {FC, useCallback} from "react";
-import {Button} from "../../shared/ui/Button/Button";
 import {LogOut, User} from "lucide-react";
 import styles from "./Header.module.css";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "../../contexts/AuthContext";
-
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 export const LogButton: FC=() => {
     const nav = useNavigate();
     const location = useLocation();
@@ -26,16 +26,25 @@ export const LogButton: FC=() => {
         return isPersonalAccountPage?
             <LogOut size={36}/>
             :
-            <div className={styles.accountButtonChildrenBox}>
-                <p className={styles.email}>{userData?.email}</p>
+            <>
+                <Typography variant="button">{userData?.email}</Typography>
                 <User size={36}/>
-            </div>
+            </>
+
     }
 
     return (
         <Button
-            className={styles.avatarButton}
             onClick={handleClick}
+            sx={{
+                backgroundColor: "transparent",
+                borderRadius: '25px',
+                color: '#757575',
+                '&:hover': {
+                    borderRadius: '25px',
+                    backgroundColor: "#cfd0d5",
+                }
+            }}
         >
             {getButtonContent()}
         </Button>

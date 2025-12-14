@@ -9,7 +9,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [isAuth, setIsAuth] = useState(false);
     const [isLoadingAuth, setIsLoadingAuth] = useState(true);
     const [userData, setUserData] = useState<UserData | null>(null);
-
     const checkAuth =useCallback(()=>{
         const token = localStorage.getItem('token');
         const email = localStorage.getItem('email');

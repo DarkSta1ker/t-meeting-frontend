@@ -1,8 +1,9 @@
 .formAndButtonBox{
+    margin: auto;
     margin-top: 200px;
+    height: 100%;
+    width: 100%;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    height: 220px;
-    justify-content: space-between;
+    justify-content: center;
 }

@@ -5,6 +5,8 @@ import {Calendar, MapPinIcon} from "lucide-react";
 import {useParams} from "react-router-dom";
 import {useEvent} from "../../hooks/useEvent";
 import {useEventForm} from "../../hooks/useEventForm";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
 
 
 export const EventPage: FC = () => {
@@ -36,19 +38,69 @@ export const EventPage: FC = () => {
                     <>
                         <div className={styles.board}>
                             <div className={styles.eventNameBox}>
-                                <TextBlock className={styles.eventTextBlock}>{eventData.name}</TextBlock>
+                                <Typography
+                                    variant="h4"
+                                    sx={{
+                                        height:'70px',
+                                        display:'flex',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    {eventData.name}
+                                </Typography>
                             </div>
-                            <div className={styles.eventDescriptionBlock}>
-                                <TextBlock className={styles.eventDescription}>{eventData.content[0].payload.join(' ')}</TextBlock>
-                            </div>
-                            <div className={styles.dataAndPlaceBlock}>
-                                <div className={styles.dataBlock}>
-                                    <TextBlock className={styles.data}>{eventData.metadata.datetime}</TextBlock>
-                                    <Calendar/>
+                            <div className={styles.editBlock}>
+                                <div className={styles.description}>
+                                    <TextField
+                                        id="standard-multiline"
+                                        label="Описание мероприятия"
+                                        multiline
+                                        rows={16}
+                                        sx={{
+                                            height: "100%",
+                                            width: "100%",
+                                        }}
+                                        value={eventData.content[0].payload.join(' ')}
+                                        slotProps={{
+                                            input: {
+                                                readOnly: true,
+                                            },
+                                        }}
+                                    />
                                 </div>
-                                <div className={styles.placeBlock}>
-                                    <TextBlock className={styles.place}>{eventData.metadata.location}</TextBlock>
-                                    <MapPinIcon/>
+                                <div className={styles.timeAndPlace}>
+                                    <div className={styles.textFieldWithIcon}>
+                                        <TextField
+                                            id="standard-read-only-input"
+                                            variant="standard"
+                                            label="Дата"
+                                            sx={{
+                                            }}
+                                            value={eventData.metadata.datetime}
+                                            slotProps={{
+                                                input: {
+                                                    readOnly: true,
+                                                },
+                                            }}
+                                        />
+                                        <Calendar/>
+                                    </div>
+                                    <div className={styles.textFieldWithIcon}>
+                                        <TextField
+                                            id="standard-read-only-input"
+                                            label="Место проведения"
+                                            variant="standard"
+                                            sx={{
+                                            }}
+                                            value={eventData.metadata.location}
+                                            slotProps={{
+                                                input: {
+                                                    readOnly: true,
+                                                },
+                                            }}
+                                        />
+                                        <MapPinIcon/>
+                                    </div>
                                 </div>
                             </div>
                         </div>
