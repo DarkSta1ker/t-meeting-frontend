@@ -1,4 +1,4 @@
-import React, {FC, useState, useEffect} from "react";
+import React, {FC, useState, useEffect, useCallback, ChangeEvent} from "react";
 import styles from "./EventForm.module.css";
 import {EventMetadataField, EventBaseField, EventListItem, EventNew} from "../../shared/types/event";
 import TextField from "@mui/material/TextField";
@@ -12,7 +12,9 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-
+import Button from '@mui/material/Button';
+import {useNavigate, useParams} from "react-router-dom";
+import {useEvent} from "../../hooks/useEvent";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -25,6 +27,7 @@ interface EventFormProps{
     handleMetadataFieldChange:(paramName:EventMetadataField, payload:string)=>void,
     TextAreaChange: (paramName:string, payload:string)=>void,
     handleChangeStatus:(paramName:string)=>void,
+    handlePostOrUpdate:()=>void,
 }
 
 export const EventForm: FC<EventFormProps> = ({
@@ -33,6 +36,7 @@ export const EventForm: FC<EventFormProps> = ({
                                                   handleMetadataFieldChange,
                                                   TextAreaChange,
                                                   handleChangeStatus,
+                                                  handlePostOrUpdate,
                                               }) => {
     const [dateTimeValue, setDateTimeValue] = useState<Dayjs | null>(() => {
         if (eventData.metadata.datetime) {
@@ -41,9 +45,32 @@ export const EventForm: FC<EventFormProps> = ({
         }
         return null;
     });
-    const [dateError, setDateError] = useState<string>('');
+    const { eventId } = useParams<{ eventId: string }>();
+    const nav=useNavigate();
+    const {deleteEvent, isLoading} = useEvent();
+    const [dateErrorText, setDateErrorText] = useState<string>('asd');
     const [touched, setTouched] = useState(false);
+    const [nameError, setNameError] = useState(true);
+    const [dateError, setDateError] = useState(true);
 
+    const handleCancel = useCallback(() => {
+        nav('/eventsList');
+    }, [nav]);
+
+    const handleDeleteEvent= useCallback(async()=>{
+        if(eventId) {
+            const result = await deleteEvent(eventId);
+            if (result.status === "Success") {
+                console.log("Event deleted");
+                nav('/eventsList');
+            } else {
+                console.log(`Error ${result.payload}`);
+            }
+        }
+        else{
+            console.log('Ошибка! Нет id')
+        }
+    },[deleteEvent, eventId, nav]);
     useEffect(() => {
         if (eventData.metadata.datetime) {
             const date = dayjs.utc(eventData.metadata.datetime).tz(NSK_TIMEZONE);
@@ -51,7 +78,7 @@ export const EventForm: FC<EventFormProps> = ({
                 setDateTimeValue(date);
                 validateDate(date);
             } else {
-                setDateError('Неверный формат даты');
+                setDateErrorText('Неверный формат даты');
             }
         } else {
             setDateTimeValue(null);
@@ -61,7 +88,7 @@ export const EventForm: FC<EventFormProps> = ({
         const now = dayjs().tz(NSK_TIMEZONE);
         const errors: string[] = [];
         if (!date.isValid()) {
-            setDateError('Неверный формат даты');
+            setDateErrorText('Неверный формат даты');
             return false;
         }
         if (date.isBefore(now, 'day')) {
@@ -73,11 +100,13 @@ export const EventForm: FC<EventFormProps> = ({
         }
 
         if (errors.length > 0) {
-            setDateError(errors.join('. '));
+            setDateErrorText(errors.join('. '));
+            setDateError(true)
             return false;
         }
 
-        setDateError('');
+        setDateErrorText('');
+        setDateError(false)
         return true;
     };
 
@@ -90,9 +119,11 @@ export const EventForm: FC<EventFormProps> = ({
                 try {
                     const isoString = newValue.tz(NSK_TIMEZONE).utc().toISOString();
                     handleMetadataFieldChange("datetime", isoString);
+                    setDateErrorText('');
                 } catch (error) {
                     console.error('Ошибка при конвертации даты:', error);
-                    setDateError('Ошибка сохранения даты');
+                    setDateErrorText('Ошибка сохранения даты');
+                    handleMetadataFieldChange("datetime", "");
                 }
             } else {
                 handleMetadataFieldChange("datetime", "");
@@ -100,12 +131,25 @@ export const EventForm: FC<EventFormProps> = ({
         } else {
             handleMetadataFieldChange("datetime", "");
             if (!newValue) {
-                setDateError('Поле даты должно быть заполнено полностью');
+                setDateErrorText('Поле даты должно быть заполнено полностью');
             } else {
-                setDateError('Неверный формат даты');
+                if (newValue.toString().includes('Invalid Date')) {
+                    setDateErrorText('Неверный формат даты');
+                } else {
+                    validateDate(newValue);
+                }
             }
         }
     };
+    const handleNameChange = (e: ChangeEvent<HTMLInputElement>)=>{
+        if(e.target.value!==''){
+            setNameError(false)
+            handleBaseFieldChange("name", e.target.value)
+        }
+        else{
+            setNameError(true)
+        }
+    }
     const handleStatus = (e: React.ChangeEvent<HTMLInputElement>) =>{
         handleChangeStatus(e.target.value);
     }
@@ -114,20 +158,24 @@ export const EventForm: FC<EventFormProps> = ({
         if (dateTimeValue) {
             validateDate(dateTimeValue);
         } else {
-            setDateError('Поле даты должно быть заполнено полностью');
+            setDateErrorText('Поле даты должно быть заполнено полностью');
         }
     };
 
     return (
+        <>
             <div className={styles.editBlock}>
                 <div className={styles.nameAndTimeAndLocation}>
                     <TextField
                         id="outlined-basic"
                         label="Название мероприятия"
                         variant="outlined"
+                        required
                         sx={{ width: "100%" }}
                         value={eventData.name}
-                        onChange={(e) => handleBaseFieldChange("name", e.target.value)}
+                        error={nameError}
+                        helperText={nameError && "Название мероприятия обязательно"}
+                        onChange={handleNameChange}
                     />
                     <div className={styles.timeAndPlace}>
                         <TextField
@@ -152,8 +200,9 @@ export const EventForm: FC<EventFormProps> = ({
                                 maxDate={dayjs().tz(NSK_TIMEZONE).add(2, 'year')}
                                 slotProps={{
                                     textField: {
-                                        error: !!dateError && touched,
+                                        error: !!dateErrorText && touched,
                                         onBlur: handleBlur,
+
                                     },
                                     actionBar: {
                                         actions: ['accept', 'cancel', 'today', 'clear']
@@ -161,13 +210,13 @@ export const EventForm: FC<EventFormProps> = ({
                                 }}
                             />
 
-                            {dateError && touched && (
+                            {dateErrorText && touched && (
                                 <FormHelperText error sx={{ mt: 0.5 }}>
-                                    {dateError}
+                                    {dateErrorText}
                                 </FormHelperText>
                             )}
 
-                            {dateTimeValue && !dateError && (
+                            {dateTimeValue && !dateErrorText && (
                                 <FormHelperText sx={{ mt: 0.5, color: 'green' }}>
                                     {dateTimeValue.format('dddd, D MMMM YYYY [в] HH:mm')}
                                 </FormHelperText>
@@ -227,5 +276,62 @@ export const EventForm: FC<EventFormProps> = ({
                     />
                 </div>
             </div>
+            <div className={styles.buttonsBlock}>
+                <Button
+                    variant="outlined"
+                    onClick={handleCancel}
+                    size="large"
+                    disabled={isLoading}
+                    sx={{
+                        color: "#fecd00",
+                        borderColor: "#fecd00",
+                        fontWeight: 'bold',
+                        border: "2px solid #fecd00",
+                        '&:hover': {
+                            backgroundColor: "rgba(255,249,0,0.26)",
+                        }
+                    }}
+                >
+                    Отмена
+                </Button>
+                {
+                    eventId&&
+                    <Button
+                        variant="outlined"
+                        disabled={isLoading}
+                        onClick={handleDeleteEvent}
+                        size="large"
+                        sx={{
+                            color: "#ec231e",
+                            borderColor: "#ec231e",
+                            fontWeight: 'bold',
+                            border: "2px solid #ec231e",
+                            '&:hover': {
+                                backgroundColor: "rgba(255,0,13,0.26)",
+                            }
+                        }}
+                    >
+                        Удалить
+                    </Button>
+                }
+                <Button
+                    variant="outlined"
+                    disabled={nameError||dateError}
+                    onClick={handlePostOrUpdate}
+                    size="large"
+                    sx={{
+                        color: "#34c658",
+                        borderColor: "#34c658",
+                        fontWeight: 'bold',
+                        border: "2px solid #34c658",
+                        '&:hover': {
+                            backgroundColor: "rgba(28,255,0,0.26)",
+                        }
+                    }}
+                >
+                    {eventId? "Сохранить":"Отправить"}
+                </Button>
+            </div>
+        </>
     );
 };

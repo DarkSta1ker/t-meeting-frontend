@@ -11,7 +11,6 @@ export const CreateEventPage: FC = () => {
     const nav=useNavigate();
     const {addEvent, isLoading} = useEvent();
     const {eventData, handleTextAreaChange, handleMetadataFieldChange, handleBaseFieldChange, handleChangeStatus}=useEventForm();
-
     const handleAddEvent = useCallback(async ()=>{
         const resp = await addEvent(eventData);
         if (resp.status=== "Success") {
@@ -22,9 +21,6 @@ export const CreateEventPage: FC = () => {
         }
     },[addEvent, eventData,nav])
 
-    const handleCancel = useCallback(() => {
-        nav('/eventsList');
-    }, [nav]);
 
     return (
         <div className={styles.createEventPage}>
@@ -47,44 +43,8 @@ export const CreateEventPage: FC = () => {
                                 handleBaseFieldChange={handleBaseFieldChange}
                                 TextAreaChange={handleTextAreaChange}
                                 handleChangeStatus={handleChangeStatus}
+                                handlePostOrUpdate={handleAddEvent}
                             />
-                            <div className={styles.buttonsBlock}>
-                                <Button
-                                    variant="outlined"
-                                    onClick={handleCancel}
-                                    size="large"
-                                    disabled={isLoading}
-                                    sx={{
-                                        color: "#fecd00",
-                                        borderColor: "#fecd00",
-                                        fontWeight: 'bold',
-                                        border: "2px solid #fecd00",
-                                        '&:hover': {
-                                            backgroundColor: "rgba(255,249,0,0.26)",
-                                        }
-                                    }}
-                                >
-                                    Отмена
-                                </Button>
-                                <Button
-                                    variant="outlined"
-                                    disabled={isLoading}
-                                    onClick={handleAddEvent}
-                                    size="large"
-                                    sx={{
-                                        color: "#34c658",
-                                        borderColor: "#34c658",
-                                        fontWeight: 'bold',
-                                        border: "2px solid #34c658",
-                                        '&:hover': {
-                                            backgroundColor: "rgba(28,255,0,0.26)",
-                                        }
-                                    }}
-                                >
-
-                                    Отправить
-                                </Button>
-                            </div>
                         </>
                 }
             </div>

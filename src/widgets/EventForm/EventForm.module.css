@@ -37,3 +37,12 @@
     width: 100%;
     justify-content: space-between;
 }
+.buttonsBlock{
+    width: 1232px;
+    height: 96px;
+    display: flex;
+    justify-content: right;
+    align-items:center;
+    gap:30px;
+    box-sizing: border-box;
+}

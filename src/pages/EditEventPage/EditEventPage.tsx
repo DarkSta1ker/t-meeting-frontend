@@ -23,26 +23,6 @@ export const EditEventPage: FC = () => {
         }
     },[updateEvent, eventData,nav]);
 
-    const handleDeleteEvent= useCallback(async()=>{
-        if(eventId) {
-            const result = await deleteEvent(eventId);
-            if (result.status === "Success") {
-                console.log("Event deleted");
-                nav('/eventsList');
-            } else {
-                console.log(`Error ${result.payload}`);
-            }
-        }
-        else{
-            console.log('Ошибка! Нет id')
-        }
-    },[deleteEvent, eventId, nav]);
-
-
-    const handleCancel = useCallback(() => {
-        nav('/eventsList');
-    }, [nav]);
-
     return (
         <div className={styles.editEventPage}>
             <div className={styles.board}>
@@ -58,69 +38,14 @@ export const EditEventPage: FC = () => {
                 </Typography>
                 {
                     isLoading? <div>Загрузка...</div> :
-                        <>
-                            <EventForm
-                                eventData={eventData}
-                                handleMetadataFieldChange={handleMetadataFieldChange}
-                                handleBaseFieldChange={handleBaseFieldChange}
-                                TextAreaChange={handleTextAreaChange}
-                                handleChangeStatus={handleChangeStatus}
-                            />
-                            <div className={styles.buttonsBlock}>
-                                <Button
-                                    variant="outlined"
-                                    disabled={isLoading}
-                                    onClick={handleCancel}
-                                    size="large"
-                                    sx={{
-                                        color: "#fecd00",
-                                        borderColor: "#fecd00",
-                                        fontWeight: 'bold',
-                                        border: "2px solid #fecd00",
-                                        '&:hover': {
-                                            backgroundColor: "rgba(255,249,0,0.26)",
-                                        }
-                                    }}
-                                >
-                                    Отмена
-                                </Button>
-                                <Button
-                                    variant="outlined"
-                                    disabled={isLoading}
-                                    onClick={handleDeleteEvent}
-                                    size="large"
-                                    sx={{
-                                        color: "#ec231e",
-                                        borderColor: "#ec231e",
-                                        fontWeight: 'bold',
-                                        border: "2px solid #ec231e",
-                                        '&:hover': {
-                                            backgroundColor: "rgba(255,0,13,0.26)",
-                                        }
-                                    }}
-                                >
-                                    Удалить
-                                </Button>
-                                <Button
-                                    variant="outlined"
-                                    disabled={isLoading}
-                                    onClick={handleUpdateEvent}
-                                    size="large"
-                                    sx={{
-                                        color: "#34c658",
-                                        borderColor: "#34c658",
-                                        fontWeight: 'bold',
-                                        border: "2px solid #34c658",
-                                        '&:hover': {
-                                            backgroundColor: "rgba(28,255,0,0.26)",
-                                        }
-                                    }}
-                                >
-
-                                    Сохранить
-                                </Button>
-                            </div>
-                        </>
+                        <EventForm
+                            eventData={eventData}
+                            handleMetadataFieldChange={handleMetadataFieldChange}
+                            handleBaseFieldChange={handleBaseFieldChange}
+                            TextAreaChange={handleTextAreaChange}
+                            handleChangeStatus={handleChangeStatus}
+                            handlePostOrUpdate={handleUpdateEvent}
+                        />
                 }
             </div>
         </div>
