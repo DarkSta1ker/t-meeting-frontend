@@ -8,6 +8,7 @@ import {useEvent} from "../../hooks/useEvent";
 import {useEvents} from "../../hooks/useEvents";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
+import {EventStatusCircle} from "../../shared/ui/EventStatus/EventStatusCircle";
 export const EventsListPage: FC = () => {
 
     const nav=useNavigate();
@@ -66,79 +67,97 @@ export const EventsListPage: FC = () => {
                 >Список мероприятий</Typography>
                 <div className={styles.eventsListBlock}>
                     {
-                        isLoading? <div>Загрузка мероприятий...</div> :
-                        <>
-                        {
-                            events?
-                                events.map((event)=> (
-                                    <div key={event.id} className={styles.eventBlock}>
-                                        <div className={styles.nameAndDescriptionListPage}>
-                                            <Typography
-                                                variant="h6"
-                                                sx={{
-                                                    display:'flex',
-                                                    alignItems: 'center',
-                                                }}
-                                            >{event.name}</Typography>
-                                            <TextBlock className={styles.eventDescription}>{event.content[0].payload.join(' ')}</TextBlock>
-                                        </div>
-                                        <div className={styles.dataAndPlace}>
-                                            <div className={styles.dataBlock}>
-                                                <TextBlock className={styles.data}>{event.metadata.datetime}</TextBlock>
-                                                <Calendar/>
-                                            </div>
-                                            <div className={styles.placeBlock}>
-                                                <TextBlock className={styles.place}>{event.metadata.location}</TextBlock>
-                                                <MapPinIcon/>
-                                            </div>
-                                        </div>
-
-                                        <div className={styles.dropDownMenu}>
-                                            <DropdownMenu.Root>
-                                                <DropdownMenu.Trigger asChild>
-                                                    <button className={styles.dropDownMenuButton} aria-label="Actions">
-                                                        <EllipsisVertical/>
-                                                    </button>
-                                                </DropdownMenu.Trigger>
-
-                                                <DropdownMenu.Portal>
-                                                    <DropdownMenu.Content className={styles.dropdownMenuContent} side="left" sideOffset={5}>
-                                                        <DropdownMenu.Item className={styles.dropdownMenuItem} onSelect={()=>handleEventPage(event.id)}>
-                                                            Страница мероприятия
-                                                        </DropdownMenu.Item>
-                                                        <DropdownMenu.Item className={styles.dropdownMenuItem} onSelect={()=>handleChangeStatus(event.id)}>
-                                                            Изменить статус
-                                                        </DropdownMenu.Item>
-                                                        <DropdownMenu.Item className={styles.dropdownMenuItem} onSelect={()=>handleEditEvent(event.id)}>
-                                                            Редактировать
-                                                        </DropdownMenu.Item>
-                                                        <DropdownMenu.Item className={styles.dropdownMenuItem} onSelect={()=>handleDeleteEvent(event.id)}>
-                                                            Удалить
-                                                        </DropdownMenu.Item>
-                                                        <DropdownMenu.Arrow className={styles.dropdownMenuArrow} />
-
-                                                    </DropdownMenu.Content>
-                                                </DropdownMenu.Portal>
-                                            </DropdownMenu.Root>
-                                            {
-                                                event.status==="published"?
-                                                    <div className={styles.openedFlag}>
-                                                        <Circle size={8} fill="#34c658" color="#34c658" />
+                        isLoading?
+                            <Typography
+                                variant="h6"
+                                sx={{
+                                    display:'flex',
+                                    alignItems: 'center',
+                                }}
+                            >Загрузка мероприятий...</Typography>
+                            :
+                            <>
+                                {
+                                    events?
+                                        events.map((event)=> (
+                                            <div key={event.id} className={styles.eventBlock}>
+                                                <div  className={styles.eventBlockCardBox}>
+                                                    <div
+                                                        className={styles.eventBlockCard}
+                                                        onClick={()=>handleEventPage(event.id)}
+                                                    >
+                                                        <div className={styles.nameAndDescriptionListPage}>
+                                                            <Typography
+                                                                variant="h6"
+                                                                sx={{
+                                                                    display:'flex',
+                                                                    alignItems: 'center',
+                                                                }}
+                                                            >{event.name}</Typography>
+                                                            <TextBlock className={styles.eventDescription}>{event.content[0].payload.join(' ')}</TextBlock>
+                                                        </div>
+                                                        <div className={styles.dataAndPlace}>
+                                                            <div className={styles.dataBlock}>
+                                                                <TextBlock className={styles.data}>{event.metadata.datetime}</TextBlock>
+                                                                <Calendar/>
+                                                            </div>
+                                                            <div className={styles.placeBlock}>
+                                                                <TextBlock className={styles.place}>{event.metadata.location}</TextBlock>
+                                                                <MapPinIcon/>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    :
-                                                    <div className={styles.openedFlag}>
-                                                        <Circle size={8} fill="#ec231e" color="#ec231e" />
+                                                    <div className={styles.dropDownMenu}>
+                                                        <DropdownMenu.Root>
+                                                            <DropdownMenu.Trigger asChild>
+                                                                <button className={styles.dropDownMenuButton} aria-label="Actions">
+                                                                    <EllipsisVertical/>
+                                                                </button>
+                                                            </DropdownMenu.Trigger>
+
+                                                            <DropdownMenu.Portal>
+                                                                <DropdownMenu.Content className={styles.dropdownMenuContent} side="left" sideOffset={5}>
+                                                                    <DropdownMenu.Item className={styles.dropdownMenuItem} onSelect={()=>handleEventPage(event.id)}>
+                                                                        Страница мероприятия
+                                                                    </DropdownMenu.Item>
+                                                                    <DropdownMenu.Item className={styles.dropdownMenuItem} onSelect={()=>handleChangeStatus(event.id)}>
+                                                                        Изменить статус
+                                                                    </DropdownMenu.Item>
+                                                                    <DropdownMenu.Item className={styles.dropdownMenuItem} onSelect={()=>handleEditEvent(event.id)}>
+                                                                        Редактировать
+                                                                    </DropdownMenu.Item>
+                                                                    <DropdownMenu.Item className={styles.dropdownMenuItem} onSelect={()=>handleDeleteEvent(event.id)}>
+                                                                        Удалить
+                                                                    </DropdownMenu.Item>
+                                                                    <DropdownMenu.Arrow className={styles.dropdownMenuArrow} />
+
+                                                                </DropdownMenu.Content>
+                                                            </DropdownMenu.Portal>
+                                                        </DropdownMenu.Root>
+
+
                                                     </div>
-                                            }
+                                                </div>
+                                                <div className={styles.infoBlock}>
+                                                    <Typography
+                                                        variant="body2"
+                                                    >Создано: {event.createdAt}   Обновлено: {event.updatedAt}</Typography>
+                                                    <div className={styles.status}>
+                                                        <Typography
+                                                            variant="body2"
+                                                        >Cтатус: {event.status}</Typography>
+                                                        <EventStatusCircle status={event.status}/>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        ))
+                                        :
+                                        <div className={styles.noEventsBlock}>
+                                            Пока что тут нет мероприятий, вы можете добавить их с помощью кнопки ниже.
                                         </div>
-                                    </div>
-                                ))
-                                :
-                                <div className={styles.noEventsBlock}>
-                                    Пока что тут нет мероприятий, вы можете добавить их с помощью кнопки ниже.
-                                </div>
-                        }
-                        </>
+                                }
+                            </>
                     }
                     <IconButton onClick={()=>nav('/createEvent')}
                                 sx={{

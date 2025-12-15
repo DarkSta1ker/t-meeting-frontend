@@ -1,7 +1,5 @@
 import React, {FC} from "react";
 import styles from "./EventForm.module.css";
-import {Input} from "../../shared/ui/Input/Input";
-import {TextArea} from "../../shared/ui/TextArea/TextArea";
 import {EventMetadataField, EventBaseField, EventListItem, EventNew} from "../../shared/types/event";
 import TextField from "@mui/material/TextField";
 interface EventFormProps{

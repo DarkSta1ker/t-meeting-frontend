@@ -4,6 +4,7 @@ import {TextField} from "@mui/material";
 import {defaultAccountData} from "../../shared/constants/constants";
 import {AccountService} from "../../app/services/AccountService";
 import {useAuth} from "../../contexts/AuthContext";
+import Typography from "@mui/material/Typography";
 
 export const PersonalAccount: FC = () => {
     const {userData} = useAuth();
@@ -40,7 +41,20 @@ export const PersonalAccount: FC = () => {
     return (
         <div className={styles.personalAccount}>
             {
-                isLoading ? <div>Загрузка...</div> :
+                isLoading ?
+                    <div className={styles.loading}>
+                        <Typography
+                            variant="h4"
+                            sx={{
+                                height:'70px',
+                                display:'flex',
+                                alignItems: 'center',
+                            }}
+                        >
+                            Загрузка...
+                        </Typography>
+                    </div>
+                    :
                     <div className={styles.personalAccountBox}>
                         <div className={styles.avatarImage}>
                             <img src={AccountData.avatarPhoto}/>

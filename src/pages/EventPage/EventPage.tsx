@@ -1,6 +1,5 @@
 import React, {type FC, useEffect} from "react";
 import styles from "./EventPage.module.css";
-import {TextBlock} from "../../shared/blocks/TextBlock/TextBlock";
 import {Calendar, MapPinIcon} from "lucide-react";
 import {useParams} from "react-router-dom";
 import {useEvent} from "../../hooks/useEvent";
@@ -33,10 +32,23 @@ export const EventPage: FC = () => {
 
     return (
         <div className={styles.eventPage}>
-            {
-                isLoading ? <div>Загрузка...</div>:
-                    <>
-                        <div className={styles.board}>
+            <div className={styles.board}>
+                {
+                    isLoading ?
+                        <div className={styles.loading}>
+                            <Typography
+                                variant="h2"
+                                sx={{
+                                    height:'70px',
+                                    display:'flex',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                Загрузка...
+                            </Typography>
+                        </div>
+                        :
+                        <>
                             <div className={styles.eventNameBox}>
                                 <Typography
                                     variant="h4"
@@ -103,9 +115,9 @@ export const EventPage: FC = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </>
-            }
+                        </>
+                }
+            </div>
         </div>
     )
 }

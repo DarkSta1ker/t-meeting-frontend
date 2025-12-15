@@ -13,7 +13,7 @@
     padding-bottom: 40px;
 }
 .eventsListBlock{
-    width: 1232px;
+    width: 100%;
     display: flex;
     gap:40px;
     align-items: center;
@@ -27,21 +27,19 @@
     border-radius: 15px;
     box-shadow: 2px 2px 8px #E2E2E2;
 }
-.eventBlock{
-    width: 1112px;
-    height: 164px;
+.eventBlockCardBox{
+    width: 100%;
+    height: 160px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #f7f7f9;
-    padding: 20px  10px 20px 48px;
+    padding: 20px  10px 20px 20px;
     box-sizing: border-box;
-    border: transparent 1px solid;
-    border-radius: 15px;
-    box-shadow: 2px 2px 8px #E2E2E2;
+
 }
 .nameAndDescriptionListPage{
-    width: 700px;
+    width: 100%;
+    max-width: 700px;
     height: 124px;
     display: flex;
     justify-content: space-around;
@@ -96,10 +94,33 @@
     text-overflow: ellipsis;
     margin: 0;
 }
+.noEventsBlock{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.eventBlockCard{
+    display: flex;
+    width:94%;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+.eventBlock{
+    border: transparent 1px solid;
+    background-color: #f7f7f9;
+    border-radius: 15px;
+    box-shadow: 2px 2px 8px #E2E2E2;
+    width: 100%;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
 .dropDownMenu{
     display: flex;
     flex-direction: column;
-    justify-items: left;
+    align-items: flex-end;
     justify-content: space-between;
     height:100%;
 }
@@ -130,8 +151,7 @@
 .dropDownMenuButton{
     padding: 0;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    width:28px;
     background-color: rgba(255, 255, 255, 0);
     border: 2px solid transparent;
     border-radius: 5px;
@@ -155,13 +175,15 @@
         transform: translateY(0);
     }
 }
-.openedFlag{
+.infoBlock{
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0px 20px 12px 30px;
 }
-.noEventsBlock{
+.status{
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: space-between;
+    width: 130px;
 }
