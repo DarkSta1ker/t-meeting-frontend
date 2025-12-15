@@ -65,6 +65,9 @@ export const PersonalAccount: FC = () => {
                                 label="Login"
                                 value={AccountData.login}
                                 variant="standard"
+                                sx={{
+                                    pointerEvents: 'none',
+                                }}
                                 slotProps={{
                                     input: {
                                         readOnly: true,
@@ -76,6 +79,9 @@ export const PersonalAccount: FC = () => {
                                 label="Email"
                                 value={AccountData.email}
                                 variant="standard"
+                                sx={{
+                                    pointerEvents: 'none',
+                                }}
                                 slotProps={{
                                     input: {
                                         readOnly: true,
@@ -85,6 +91,9 @@ export const PersonalAccount: FC = () => {
                             <TextField
                                 id="multiline-read-only-input"
                                 label="Role"
+                                sx={{
+                                    pointerEvents: 'none',
+                                }}
                                 value={AccountData.role}
                                 variant="standard"
                                 slotProps={{

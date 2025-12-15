@@ -54,7 +54,7 @@ const mockEventsDB = [
         "id": "5378afbf-e87b-411f-95df-b1aeeb5b770a",
         "name": "Вечер настольных игр",
         "metadata": {
-            "datetime": "2025-12-10T12:30:00.000Z",
+            "datetime": "2026-01-10T12:30:00.000Z",
             "location": "ТЦ Академгородка"
         },
         "content": [
@@ -116,7 +116,7 @@ const mockEventsDB = [
         "id": "5378afbf-e87b-411f-95df-b1aeeb5b770b",
         "name": "Сбор книжного клуба",
         "metadata": {
-            "datetime": "2025-12-12T10:00:00.000Z",
+            "datetime": "2026-02-15T10:00:00.000Z",
             "location": "БЦ Кронос"
         },
         "content": [

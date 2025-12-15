@@ -100,7 +100,7 @@ export const EventForm: FC<EventFormProps> = ({
         } else {
             handleMetadataFieldChange("datetime", "");
             if (!newValue) {
-                setDateError('Дата обязательна');
+                setDateError('Поле даты должно быть заполнено полностью');
             } else {
                 setDateError('Неверный формат даты');
             }
@@ -114,7 +114,7 @@ export const EventForm: FC<EventFormProps> = ({
         if (dateTimeValue) {
             validateDate(dateTimeValue);
         } else {
-            setDateError('Дата обязательна');
+            setDateError('Поле даты должно быть заполнено полностью');
         }
     };
 
@@ -128,9 +128,6 @@ export const EventForm: FC<EventFormProps> = ({
                         sx={{ width: "100%" }}
                         value={eventData.name}
                         onChange={(e) => handleBaseFieldChange("name", e.target.value)}
-                        error={!eventData.name && touched}
-                        helperText={!eventData.name && touched ? "Название обязательно" : ""}
-                        onBlur={() => setTouched(true)}
                     />
                     <div className={styles.timeAndPlace}>
                         <TextField
@@ -140,7 +137,6 @@ export const EventForm: FC<EventFormProps> = ({
                             sx={{ width: "100%" }}
                             value={eventData.metadata.location}
                             onChange={(e) => handleMetadataFieldChange("location", e.target.value)}
-                            onBlur={() => setTouched(true)}
                         />
 
                         <div style={{ width: "100%" }}>
@@ -151,7 +147,7 @@ export const EventForm: FC<EventFormProps> = ({
                                 sx={{ width: "100%" }}
                                 ampm={false}
                                 format="DD.MM.YYYY HH:mm"
-                                timeSteps={{ minutes: 30 }}
+                                timeSteps={{ minutes: 5 }}
                                 minDate={dayjs().tz(NSK_TIMEZONE).startOf('day')}
                                 maxDate={dayjs().tz(NSK_TIMEZONE).add(2, 'year')}
                                 slotProps={{
@@ -228,7 +224,6 @@ export const EventForm: FC<EventFormProps> = ({
                         }}
                         value={eventData.content[0].payload.join(' ')}
                         onChange={(e) => TextAreaChange("promotext", e.target.value)}
-                        required
                     />
                 </div>
             </div>

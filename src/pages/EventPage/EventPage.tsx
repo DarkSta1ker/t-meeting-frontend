@@ -4,7 +4,7 @@ import {Calendar, MapPinIcon} from "lucide-react";
 import {useParams} from "react-router-dom";
 import {useEvent} from "../../hooks/useEvent";
 import {useEventForm} from "../../hooks/useEventForm";
-import Typography from "@mui/material/Typography";
+import { Box, Typography, Paper } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -69,31 +69,44 @@ export const EventPage: FC = () => {
                             </div>
                             <div className={styles.editBlock}>
                                 <div className={styles.description}>
-                                    <TextField
-                                        id="standard-multiline"
-                                        label="Описание мероприятия"
-                                        multiline
-                                        rows={16}
-                                        sx={{
-                                            height: "100%",
-                                            width: "100%",
-                                        }}
-                                        value={eventData.content[0].payload.join(' ')}
-                                        slotProps={{
-                                            input: {
-                                                readOnly: true,
-                                            },
-                                        }}
-                                    />
+                                    <Box sx={{ width: '100%', height: '100%' }}>
+                                        <Typography
+                                            variant="h6"
+                                            gutterBottom
+                                        >
+                                            Описание мероприятия
+                                        </Typography>
+
+                                        <Paper
+                                            variant="outlined"
+                                            sx={{
+                                                p: 2,
+                                                height: '400px',
+                                                overflow: 'auto',
+                                                backgroundColor: 'background.paper',
+                                            }}
+                                        >
+                                            <Typography
+                                                variant="body1"
+                                                sx={{
+                                                    whiteSpace: 'pre-wrap',
+                                                    lineHeight: 1.6,
+                                                }}
+                                            >
+                                                {eventData.content[0].payload.join(' ')}
+                                            </Typography>
+                                        </Paper>
+                                    </Box>
                                 </div>
                                 <div className={styles.timeAndPlace}>
                                     <div className={styles.textFieldWithIcon}>
                                         <TextField
                                             id="standard-read-only-input"
                                             variant="standard"
-                                            label="Дата"
                                             sx={{
+                                                pointerEvents: 'none',
                                             }}
+                                            label="Дата"
                                             value={dayjs.utc(eventData.metadata.datetime).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')}
                                             slotProps={{
                                                 input: {
@@ -109,6 +122,7 @@ export const EventPage: FC = () => {
                                             label="Место проведения"
                                             variant="standard"
                                             sx={{
+                                                pointerEvents: 'none',
                                             }}
                                             value={eventData.metadata.location}
                                             slotProps={{
