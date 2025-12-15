@@ -72,6 +72,9 @@ export const EventForm: FC<EventFormProps> = ({
         }
     },[deleteEvent, eventId, nav]);
     useEffect(() => {
+        if (eventData.name){
+            setNameError(false)
+        }
         if (eventData.metadata.datetime) {
             const date = dayjs.utc(eventData.metadata.datetime).tz(NSK_TIMEZONE);
             if (date.isValid()) {
