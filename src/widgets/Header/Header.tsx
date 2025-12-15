@@ -19,7 +19,6 @@ export const Header: FC=()=>{
                                 onClick={()=>nav('/eventsList')}
                                 sx={{
                                     '&:hover': {
-                                        textDecoration: "underline",
                                         cursor:"pointer"
                                     }
                                 }}

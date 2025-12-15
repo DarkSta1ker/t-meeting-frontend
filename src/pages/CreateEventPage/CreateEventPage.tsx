@@ -26,7 +26,7 @@ export const CreateEventPage: FC = () => {
         <div className={styles.createEventPage}>
             <div className={styles.board}>
                 <Typography
-                    variant="h6"
+                    variant="h5"
                     sx={{
                         height:'64px',
                         display:'flex',

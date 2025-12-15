@@ -25,7 +25,7 @@ export interface EventListItem extends EventBase {
 
 
 export interface PromoTextBlock {
-    block: "promotext";
+    block: "promo-text";
     payload: string[];
 }
 

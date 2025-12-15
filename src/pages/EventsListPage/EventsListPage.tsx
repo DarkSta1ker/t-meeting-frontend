@@ -61,11 +61,23 @@ export const EventsListPage: FC = () => {
         nav(`/event/${eventId}`);
     }
 
+    const handleGetRuStatus= (status:string)=>{
+        switch (status){
+            case "draft":
+                return "Редактирование"
+            case "cancelled":
+                return "Отменено"
+            case "archived":
+                return "Архивировано"
+            default:
+                return "Опубликовано"
+        }
+    }
     return (
         <div className={styles.eventsListPage}>
             <div className={styles.board}>
                 <Typography
-                    variant="h6"
+                    variant="h5"
                     sx={{
                         height:'64px',
                         display:'flex',
@@ -91,9 +103,11 @@ export const EventsListPage: FC = () => {
                                                 <div  className={styles.eventBlockCardBox}>
                                                     <div
                                                         className={styles.eventBlockCard}
-                                                        onClick={()=>handleEventPage(event.id)}
                                                     >
-                                                        <div className={styles.nameAndDescriptionListPage}>
+                                                        <div
+                                                            className={styles.nameAndDescriptionListPage}
+                                                            onClick={()=>handleEventPage(event.id)}
+                                                        >
                                                             <Typography
                                                                 variant="h6"
                                                                 sx={{
@@ -103,7 +117,10 @@ export const EventsListPage: FC = () => {
                                                             >{event.name}</Typography>
                                                             <TextBlock className={styles.eventDescription}>{event.content[0].payload.join(' ')}</TextBlock>
                                                         </div>
-                                                        <div className={styles.dataAndPlace}>
+                                                        <div
+                                                            className={styles.dataAndPlace}
+                                                            onClick={()=>handleEventPage(event.id)}
+                                                        >
                                                             <div className={styles.dataBlock}>
                                                                 <TextBlock className={styles.data}>
                                                                     {dayjs.utc(event.metadata.datetime).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')}
@@ -129,9 +146,6 @@ export const EventsListPage: FC = () => {
                                                                     <DropdownMenu.Item className={styles.dropdownMenuItem} onSelect={()=>handleEventPage(event.id)}>
                                                                         Страница мероприятия
                                                                     </DropdownMenu.Item>
-                                                                    <DropdownMenu.Item className={styles.dropdownMenuItem} onSelect={()=>handleChangeStatus(event.id)}>
-                                                                        Опубликовать/Снять с публикации
-                                                                    </DropdownMenu.Item>
                                                                     <DropdownMenu.Item className={styles.dropdownMenuItem} onSelect={()=>handleEditEvent(event.id)}>
                                                                         Редактировать
                                                                     </DropdownMenu.Item>
@@ -154,7 +168,7 @@ export const EventsListPage: FC = () => {
                                                     <div className={styles.status}>
                                                         <Typography
                                                             variant="body2"
-                                                        >Cтатус: {event.status}</Typography>
+                                                        >Cтатус: {handleGetRuStatus(event.status)}</Typography>
                                                         <EventStatusCircle status={event.status}/>
                                                     </div>
                                                 </div>

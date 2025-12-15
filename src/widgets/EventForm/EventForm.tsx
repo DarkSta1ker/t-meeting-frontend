@@ -147,12 +147,13 @@ export const EventForm: FC<EventFormProps> = ({
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>)=>{
         if(e.target.value!==''){
             setNameError(false)
-            handleBaseFieldChange("name", e.target.value)
         }
         else{
             setNameError(true)
         }
+        handleBaseFieldChange("name", e.target.value)
     }
+
     const handleStatus = (e: React.ChangeEvent<HTMLInputElement>) =>{
         handleChangeStatus(e.target.value);
     }
@@ -225,42 +226,47 @@ export const EventForm: FC<EventFormProps> = ({
                                 </FormHelperText>
                             )}
                         </div>
-                        <FormControl>
-                            <FormLabel id="demo-radio-buttons-group-label">Статус мероприятия</FormLabel>
-                            <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                defaultValue="Status"
-                                name="radio-buttons-group"
-                                value={eventData.status}
-                                onChange={handleStatus}
-                            >
-                                <FormControlLabel value="published" control={<Radio
-                                    sx={{
-                                        color: "#34c658",
-                                        '&.Mui-checked': {
-                                            color: "#34c658",
-                                        },
-                                    }}/>} label="Published"/>
-                                <FormControlLabel value="draft" control={<Radio sx={{
-                                    color: "#fecd00",
-                                    '&.Mui-checked': {
-                                        color: "#fecd00",
-                                    },
-                                }}/>} label="Draft" color="#fecd00"/>
-                                <FormControlLabel value="archived" control={<Radio sx={{
-                                    color: "#00c5ff",
-                                    '&.Mui-checked': {
-                                        color: "#00c5ff",
-                                    },
-                                }}/>} label="Archived" color="#00c5ff"/>
-                                <FormControlLabel value="cancelled" control={<Radio sx={{
-                                    color: "#ec231e",
-                                    '&.Mui-checked': {
-                                        color: "#ec231e",
-                                    },
-                                }}/>} label="Cancelled" color="#ec231e"/>
-                            </RadioGroup>
-                        </FormControl>
+                        {
+                            eventId?
+                                <FormControl>
+                                    <FormLabel id="demo-radio-buttons-group-label">Статус мероприятия</FormLabel>
+                                    <RadioGroup
+                                        aria-labelledby="demo-radio-buttons-group-label"
+                                        defaultValue="Status"
+                                        name="radio-buttons-group"
+                                        value={eventData.status}
+                                        onChange={handleStatus}
+                                    >
+                                        <FormControlLabel value="published" control={<Radio
+                                            sx={{
+                                                color: "#34c658",
+                                                '&.Mui-checked': {
+                                                    color: "#34c658",
+                                                },
+                                            }}/>} label="Published"/>
+                                        <FormControlLabel value="draft" control={<Radio sx={{
+                                            color: "#fecd00",
+                                            '&.Mui-checked': {
+                                                color: "#fecd00",
+                                            },
+                                        }}/>} label="Draft" color="#fecd00"/>
+                                        <FormControlLabel value="archived" control={<Radio sx={{
+                                            color: "#00c5ff",
+                                            '&.Mui-checked': {
+                                                color: "#00c5ff",
+                                            },
+                                        }}/>} label="Archived" color="#00c5ff"/>
+                                        <FormControlLabel value="cancelled" control={<Radio sx={{
+                                            color: "#ec231e",
+                                            '&.Mui-checked': {
+                                                color: "#ec231e",
+                                            },
+                                        }}/>} label="Cancelled" color="#ec231e"/>
+                                    </RadioGroup>
+                                </FormControl>
+                                :
+                                null
+                        }
                     </div>
                 </div>
 
@@ -274,8 +280,8 @@ export const EventForm: FC<EventFormProps> = ({
                             height: "100%",
                             width: "100%",
                         }}
-                        value={eventData.content[0].payload.join(' ')}
-                        onChange={(e) => TextAreaChange("promotext", e.target.value)}
+                        value={eventData.content.find(block => block.block === "promo-text")?.payload || ''}
+                        onChange={(e)=>{TextAreaChange("promo-text", e.target.value)}}
                     />
                 </div>
             </div>

@@ -12,7 +12,7 @@ export const defaultEvent:EventListItem = {
     status: "draft",
     content: [
         {
-            block: "promotext",
+            block: "promo-text",
             payload: []
         }
     ]

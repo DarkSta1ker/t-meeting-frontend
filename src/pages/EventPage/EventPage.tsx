@@ -69,11 +69,8 @@ export const EventPage: FC = () => {
                             </div>
                             <div className={styles.editBlock}>
                                 <div className={styles.description}>
-                                    <Box sx={{ width: '100%', height: '100%' }}>
-                                        <Typography
-                                            variant="h6"
-                                            gutterBottom
-                                        >
+                                    <Box sx={{ height: '100%' }}>
+                                        <Typography variant="h6" gutterBottom>
                                             Описание мероприятия
                                         </Typography>
 
@@ -81,9 +78,10 @@ export const EventPage: FC = () => {
                                             variant="outlined"
                                             sx={{
                                                 p: 2,
-                                                height: '400px',
-                                                overflow: 'auto',
+                                                minHeight: '100px', // минимальная высота
+                                                overflow: 'auto', // прокрутка при превышении maxHeight
                                                 backgroundColor: 'background.paper',
+                                                width: '100%', // чтобы растягивалось на всю ширину
                                             }}
                                         >
                                             <Typography
@@ -91,6 +89,7 @@ export const EventPage: FC = () => {
                                                 sx={{
                                                     whiteSpace: 'pre-wrap',
                                                     lineHeight: 1.6,
+                                                    wordBreak: 'break-word', // перенос длинных слов
                                                 }}
                                             >
                                                 {eventData.content[0].payload.join(' ')}

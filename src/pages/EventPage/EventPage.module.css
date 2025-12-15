@@ -21,7 +21,6 @@
 }
 .editBlock{
     width: 1232px;
-    height: 550px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -31,6 +30,7 @@
     box-shadow: 2px 2px 8px #E2E2E2;
     padding: 40px 60px;
     box-sizing: border-box;
+    margin-bottom: 40px;
 }
 .description{
     width: 700px;
