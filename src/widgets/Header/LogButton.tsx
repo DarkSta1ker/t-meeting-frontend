@@ -1,6 +1,5 @@
 import React, {FC, useCallback} from "react";
 import {LogOut, User} from "lucide-react";
-import styles from "./Header.module.css";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "../../contexts/AuthContext";
 import Button from "@mui/material/Button";
@@ -18,7 +17,7 @@ export const LogButton: FC=() => {
         nav('/personalAccount');
     },[])
 
-    const isPersonalAccountPage = location.pathname === '/personalAccount'? true : false;
+    const isPersonalAccountPage = path === '/personalAccount';
 
     const handleClick = isPersonalAccountPage? handleLogout: handleNavigateAccount;
 

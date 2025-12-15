@@ -1,6 +1,5 @@
 import React, {FC} from "react";
 import styles from "./Header.module.css";
-import {Button} from "../../shared/ui/Button/Button";
 import {House} from "lucide-react";
 import {useNavigate} from "react-router-dom";
 import {LogButton} from "./LogButton";

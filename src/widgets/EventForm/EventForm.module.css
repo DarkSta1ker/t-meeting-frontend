@@ -20,21 +20,6 @@
     flex-direction:column;
     box-sizing: border-box;
 }
-.editPageInput{
-    width: 450px;
-    height: 56px;
-    font-size: 24px;
-    box-sizing: border-box;
-    padding : 0 0 0 14px;
-}
-.editPageTextArea{
-    width: 450px;
-    height: 534px;
-    font-size: 22px;
-    box-sizing: border-box;
-    resize: none;
-    padding: 14px 16px;
-}
 .description{
     width: 450px;
     height: 100%;
