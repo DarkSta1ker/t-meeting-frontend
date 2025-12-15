@@ -6,7 +6,7 @@ const mockEventsDB = [
         "id": "5378afbf-e87b-411f-95df-b1aeeb5b770f",
         "name": "Новогодний корпоратив",
         "metadata": {
-            "datetime": "2025-12-25",
+            "datetime": "2025-12-25T12:00:00.000Z",
             "location": "БЦ Кронос"
         },
         "content": [
@@ -47,14 +47,14 @@ const mockEventsDB = [
             }
         ],
         "status": "published",
-        "updatedAt": "",
-        "createdAt": "",
+        "updatedAt": "2025-11-15T07:23:08.794Z",
+        "createdAt": "2025-11-15T07:23:08.794Z",
     },
     {
         "id": "5378afbf-e87b-411f-95df-b1aeeb5b770a",
         "name": "Вечер настольных игр",
         "metadata": {
-            "datetime": "2025-12-10",
+            "datetime": "2025-12-10T12:30:00.000Z",
             "location": "ТЦ Академгородка"
         },
         "content": [
@@ -109,14 +109,14 @@ const mockEventsDB = [
             }
         ],
         "status": "draft",
-        "updatedAt": "",
-        "createdAt": "",
+        "updatedAt": "2025-11-15T07:23:08.794Z",
+        "createdAt": "2025-11-15T07:23:08.794Z",
     },
     {
         "id": "5378afbf-e87b-411f-95df-b1aeeb5b770b",
         "name": "Сбор книжного клуба",
         "metadata": {
-            "datetime": "2025-12-12",
+            "datetime": "2025-12-12T10:00:00.000Z",
             "location": "БЦ Кронос"
         },
         "content": [
@@ -174,8 +174,8 @@ const mockEventsDB = [
             }
         ],
         "status": "draft",
-        "updatedAt": "",
-        "createdAt": "",
+        "updatedAt": "2025-11-15T07:23:08.794Z",
+        "createdAt": "2025-11-15T07:23:08.794Z",
     }
 ]
 

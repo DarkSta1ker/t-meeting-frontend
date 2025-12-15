@@ -6,7 +6,13 @@ import {useEvent} from "../../hooks/useEvent";
 import {useEventForm} from "../../hooks/useEventForm";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault('Asia/Novosibirsk');
+const NSK_TIMEZONE = 'Asia/Novosibirsk';
 
 export const EventPage: FC = () => {
     const { eventId } = useParams<{ eventId: string }>();
@@ -88,7 +94,7 @@ export const EventPage: FC = () => {
                                             label="Дата"
                                             sx={{
                                             }}
-                                            value={eventData.metadata.datetime}
+                                            value={dayjs.utc(eventData.metadata.datetime).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')}
                                             slotProps={{
                                                 input: {
                                                     readOnly: true,

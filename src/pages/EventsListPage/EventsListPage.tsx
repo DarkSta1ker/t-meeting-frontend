@@ -9,6 +9,13 @@ import {useEvents} from "../../hooks/useEvents";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import {EventStatusCircle} from "../../shared/ui/EventStatus/EventStatusCircle";
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault('Asia/Novosibirsk');
+const NSK_TIMEZONE = 'Asia/Novosibirsk';
 export const EventsListPage: FC = () => {
 
     const nav=useNavigate();
@@ -98,7 +105,9 @@ export const EventsListPage: FC = () => {
                                                         </div>
                                                         <div className={styles.dataAndPlace}>
                                                             <div className={styles.dataBlock}>
-                                                                <TextBlock className={styles.data}>{event.metadata.datetime}</TextBlock>
+                                                                <TextBlock className={styles.data}>
+                                                                    {dayjs.utc(event.metadata.datetime).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')}
+                                                                </TextBlock>
                                                                 <Calendar/>
                                                             </div>
                                                             <div className={styles.placeBlock}>
@@ -141,7 +150,7 @@ export const EventsListPage: FC = () => {
                                                 <div className={styles.infoBlock}>
                                                     <Typography
                                                         variant="body2"
-                                                    >Создано: {event.createdAt}   Обновлено: {event.updatedAt}</Typography>
+                                                    >Создано: {dayjs.utc(event.createdAt).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')}   Обновлено: {dayjs.utc(event.updatedAt).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')}</Typography>
                                                     <div className={styles.status}>
                                                         <Typography
                                                             variant="body2"

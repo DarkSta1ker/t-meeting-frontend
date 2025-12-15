@@ -1,5 +1,5 @@
 import TextField from '@mui/material/TextField';
-import React, {FC, useCallback} from 'react';
+import React, {FC, useCallback, FormEvent} from 'react';
 import styles from "./AuthForm.module.css";
 import {Button} from "@mui/material";
 import {useAuth} from "../../contexts/AuthContext";
@@ -38,7 +38,8 @@ export const AuthForm: FC = ()=>{
         setErrors(prev=>({...prev, login:error}));
     }
 
-    const handleLogin = useCallback(async()=>{
+    const handleLogin = useCallback(async(e: FormEvent)=>{
+        e.preventDefault()
         const result = await loginUser(authData);
         if(result.status==="Success"){
             setLoginError(false);
@@ -64,17 +65,30 @@ export const AuthForm: FC = ()=>{
 
     };
     return (
-        <div className={styles.authForm}>
+        <form
+            className={styles.authForm}
+            onSubmit={handleLogin}
+            noValidate
+        >
             <TextField
                 required
                 id="login-input"
                 label="Логин"
                 variant="outlined"
                 value={authData.login}
-                onChange={(e)=>handleLoginChange(e.target.value)}
+                onChange={(e) => handleLoginChange(e.target.value)}
                 onBlur={() => handleBlur('login')}
                 error={touched.login && !!errors?.login}
-                helperText={!!errors?.login && errors?.login}
+                helperText={touched.login && errors?.login}
+                fullWidth
+                margin="normal"
+                autoComplete="username"
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !authData.password) {
+                        e.preventDefault();
+                        document.getElementById('password-input')?.focus();
+                    }
+                }}
             />
             <TextField
                 required
@@ -82,16 +96,18 @@ export const AuthForm: FC = ()=>{
                 label="Пароль"
                 type="password"
                 value={authData.password}
-                onChange={(e)=>handlePasswordChange(e.target.value)}
-                autoComplete="current-password"
+                onChange={(e) => handlePasswordChange(e.target.value)}
                 onBlur={() => handleBlur('password')}
                 error={touched.password && !!errors?.password}
                 helperText={touched.password && errors?.password}
+                fullWidth
+                margin="normal"
+                autoComplete="current-password"
             />
 
             <Button
+                type="submit"
                 variant="outlined"
-                onClick={handleLogin}
                 disabled={!!errors?.login || !!errors?.password}
                 sx={{
                     backgroundColor: "transparent",
@@ -115,7 +131,7 @@ export const AuthForm: FC = ()=>{
                     },
                 }}
             />}
-        </div>
+        </form>
     )
 }
 

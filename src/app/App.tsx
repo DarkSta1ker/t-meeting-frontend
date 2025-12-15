@@ -9,25 +9,32 @@ import {Header} from "../widgets/Header/Header";
 import {EventPage} from "../pages/EventPage/EventPage";
 import {AuthPage} from "../pages/AuthPage/AuthPage";
 import {PrivateRoute} from "./routing/PrivateRourte";
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 function App() {
     return (
-        <div className={styles.container}>
-            <Header />
-            <Routes>
-                <Route path="/" element={<AuthPage/>} />
+        <LocalizationProvider
+            dateAdapter={AdapterDayjs}
+            adapterLocale="ru"
+        >
+            <div className={styles.container}>
+                <Header />
+                <Routes>
+                    <Route path="/" element={<AuthPage/>} />
 
-                <Route element={<PrivateRoute/>}>
+                    <Route element={<PrivateRoute/>}>
 
-                    <Route path="/eventsList" element={<EventsListPage />} />
-                    <Route path="/createEvent" element={<CreateEventPage />} />
-                    <Route path="/editEvent/:eventId" element={<EditEventPage />} />
-                    <Route path="/personalAccount" element={<PersonalAccount />} />
-                    <Route path="/event/:eventId" element={<EventPage />} />
-                </Route>
+                        <Route path="/eventsList" element={<EventsListPage />} />
+                        <Route path="/createEvent" element={<CreateEventPage />} />
+                        <Route path="/editEvent/:eventId" element={<EditEventPage />} />
+                        <Route path="/personalAccount" element={<PersonalAccount />} />
+                        <Route path="/event/:eventId" element={<EventPage />} />
+                    </Route>
 
-            </Routes>
-        </div>
+                </Routes>
+            </div>
+        </LocalizationProvider>
   );
 }
 
