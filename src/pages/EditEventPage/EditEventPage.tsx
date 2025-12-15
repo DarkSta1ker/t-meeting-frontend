@@ -11,7 +11,7 @@ export const EditEventPage: FC = () => {
     const nav=useNavigate();
     const { eventId } = useParams<{ eventId: string }>();
     const {updateEvent, deleteEvent, isLoading} = useEvent();
-    const {eventData, handleTextAreaChange, handleMetadataFieldChange, handleBaseFieldChange}=useEventForm(eventId);
+    const {eventData, handleTextAreaChange, handleMetadataFieldChange, handleBaseFieldChange, handleChangeStatus}=useEventForm(eventId);
     const handleUpdateEvent = useCallback(async ()=>{
         const result = await updateEvent(eventData);
         if(result.status==="Success"){
@@ -64,6 +64,7 @@ export const EditEventPage: FC = () => {
                                 handleMetadataFieldChange={handleMetadataFieldChange}
                                 handleBaseFieldChange={handleBaseFieldChange}
                                 TextAreaChange={handleTextAreaChange}
+                                handleChangeStatus={handleChangeStatus}
                             />
                             <div className={styles.buttonsBlock}>
                                 <Button

@@ -6,7 +6,6 @@ import {useEvent} from './useEvent'
 export const useEventForm = (eventId?:string) => {
     const {getEvent} = useEvent();
     const [eventData, setEventData] = useState(defaultEvent);
-
     useEffect(() => {
         if(!eventId){
             setEventData(defaultEvent)
@@ -56,12 +55,20 @@ export const useEventForm = (eventId?:string) => {
         setEventData(defaultEvent);
     }, []);
 
+    const handleChangeStatus =useCallback((status:string)=>{
+        setEventData(prev =>({
+            ...prev,
+            status: status
+        }));
+    },[setEventData]);
+
     return{
         eventData,
         setEventData,
         handleBaseFieldChange,
         handleMetadataFieldChange,
         handleTextAreaChange,
+        handleChangeStatus,
         resetForm
     }
 }

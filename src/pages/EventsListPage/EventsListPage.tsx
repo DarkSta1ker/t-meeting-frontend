@@ -130,7 +130,7 @@ export const EventsListPage: FC = () => {
                                                                         Страница мероприятия
                                                                     </DropdownMenu.Item>
                                                                     <DropdownMenu.Item className={styles.dropdownMenuItem} onSelect={()=>handleChangeStatus(event.id)}>
-                                                                        Изменить статус
+                                                                        Опубликовать/Снять с публикации
                                                                     </DropdownMenu.Item>
                                                                     <DropdownMenu.Item className={styles.dropdownMenuItem} onSelect={()=>handleEditEvent(event.id)}>
                                                                         Редактировать
@@ -150,7 +150,7 @@ export const EventsListPage: FC = () => {
                                                 <div className={styles.infoBlock}>
                                                     <Typography
                                                         variant="body2"
-                                                    >Создано: {dayjs.utc(event.createdAt).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')}   Обновлено: {dayjs.utc(event.updatedAt).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')}</Typography>
+                                                    >Создано: {dayjs.utc(event.createdAt).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')}  |   Обновлено: {dayjs.utc(event.updatedAt).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')}</Typography>
                                                     <div className={styles.status}>
                                                         <Typography
                                                             variant="body2"

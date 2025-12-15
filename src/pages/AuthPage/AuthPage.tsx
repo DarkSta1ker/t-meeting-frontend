@@ -15,6 +15,14 @@ export const AuthPage: FC = ()=>{
     return(
         <div className={styles.formAndButtonBox}>
             <AuthForm/>
+            <div>
+                <p>
+                    login1 password
+                </p>
+                <p>
+                    login2 password
+                </p>
+            </div>
         </div>
     )
 }

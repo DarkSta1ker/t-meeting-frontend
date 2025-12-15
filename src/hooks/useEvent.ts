@@ -39,7 +39,7 @@ export const useEvent=() => {
         const eventFromResponse = await getEvent(eventId);
         if(eventFromResponse.status==='Success'){
             const event = eventFromResponse.payload
-            event.status = event.status==='draft'? 'published':'draft';
+            event.status = event.status==='published'? 'draft':'published';
             try{
                 const response=await updateEvent(event);
                 if(response.status==='Success'){

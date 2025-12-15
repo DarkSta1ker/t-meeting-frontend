@@ -1,5 +1,4 @@
 import React, {type FC, useCallback} from "react";
-import {TextBlock} from "../../shared/blocks/TextBlock/TextBlock";
 import { useNavigate } from 'react-router-dom';
 import styles from './CreateEventPage.module.css';
 import {useEvent} from "../../hooks/useEvent";
@@ -11,7 +10,7 @@ export const CreateEventPage: FC = () => {
 
     const nav=useNavigate();
     const {addEvent, isLoading} = useEvent();
-    const {eventData, handleTextAreaChange, handleMetadataFieldChange, handleBaseFieldChange}=useEventForm();
+    const {eventData, handleTextAreaChange, handleMetadataFieldChange, handleBaseFieldChange, handleChangeStatus}=useEventForm();
 
     const handleAddEvent = useCallback(async ()=>{
         const resp = await addEvent(eventData);
@@ -47,6 +46,7 @@ export const CreateEventPage: FC = () => {
                                 handleMetadataFieldChange={handleMetadataFieldChange}
                                 handleBaseFieldChange={handleBaseFieldChange}
                                 TextAreaChange={handleTextAreaChange}
+                                handleChangeStatus={handleChangeStatus}
                             />
                             <div className={styles.buttonsBlock}>
                                 <Button

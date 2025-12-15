@@ -7,6 +7,13 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import {DateTimePicker} from "@mui/x-date-pickers/DateTimePicker";
 import { FormHelperText } from "@mui/material";
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+
+
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -17,13 +24,15 @@ interface EventFormProps{
     handleBaseFieldChange:(paramName:EventBaseField, payload:string)=>void,
     handleMetadataFieldChange:(paramName:EventMetadataField, payload:string)=>void,
     TextAreaChange: (paramName:string, payload:string)=>void,
+    handleChangeStatus:(paramName:string)=>void,
 }
 
 export const EventForm: FC<EventFormProps> = ({
                                                   eventData,
                                                   handleBaseFieldChange,
                                                   handleMetadataFieldChange,
-                                                  TextAreaChange
+                                                  TextAreaChange,
+                                                  handleChangeStatus,
                                               }) => {
     const [dateTimeValue, setDateTimeValue] = useState<Dayjs | null>(() => {
         if (eventData.metadata.datetime) {
@@ -97,7 +106,9 @@ export const EventForm: FC<EventFormProps> = ({
             }
         }
     };
-
+    const handleStatus = (e: React.ChangeEvent<HTMLInputElement>) =>{
+        handleChangeStatus(e.target.value);
+    }
     const handleBlur = () => {
         setTouched(true);
         if (dateTimeValue) {
@@ -117,7 +128,6 @@ export const EventForm: FC<EventFormProps> = ({
                         sx={{ width: "100%" }}
                         value={eventData.name}
                         onChange={(e) => handleBaseFieldChange("name", e.target.value)}
-                        required
                         error={!eventData.name && touched}
                         helperText={!eventData.name && touched ? "Название обязательно" : ""}
                         onBlur={() => setTouched(true)}
@@ -130,7 +140,6 @@ export const EventForm: FC<EventFormProps> = ({
                             sx={{ width: "100%" }}
                             value={eventData.metadata.location}
                             onChange={(e) => handleMetadataFieldChange("location", e.target.value)}
-                            required
                             onBlur={() => setTouched(true)}
                         />
 
@@ -148,7 +157,6 @@ export const EventForm: FC<EventFormProps> = ({
                                 slotProps={{
                                     textField: {
                                         error: !!dateError && touched,
-                                        required: true,
                                         onBlur: handleBlur,
                                     },
                                     actionBar: {
@@ -169,6 +177,42 @@ export const EventForm: FC<EventFormProps> = ({
                                 </FormHelperText>
                             )}
                         </div>
+                        <FormControl>
+                            <FormLabel id="demo-radio-buttons-group-label">Статус мероприятия</FormLabel>
+                            <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                defaultValue="Status"
+                                name="radio-buttons-group"
+                                value={eventData.status}
+                                onChange={handleStatus}
+                            >
+                                <FormControlLabel value="published" control={<Radio
+                                    sx={{
+                                        color: "#34c658",
+                                        '&.Mui-checked': {
+                                            color: "#34c658",
+                                        },
+                                    }}/>} label="Published"/>
+                                <FormControlLabel value="draft" control={<Radio sx={{
+                                    color: "#fecd00",
+                                    '&.Mui-checked': {
+                                        color: "#fecd00",
+                                    },
+                                }}/>} label="Draft" color="#fecd00"/>
+                                <FormControlLabel value="archived" control={<Radio sx={{
+                                    color: "#00c5ff",
+                                    '&.Mui-checked': {
+                                        color: "#00c5ff",
+                                    },
+                                }}/>} label="Archived" color="#00c5ff"/>
+                                <FormControlLabel value="cancelled" control={<Radio sx={{
+                                    color: "#ec231e",
+                                    '&.Mui-checked': {
+                                        color: "#ec231e",
+                                    },
+                                }}/>} label="Cancelled" color="#ec231e"/>
+                            </RadioGroup>
+                        </FormControl>
                     </div>
                 </div>
 
