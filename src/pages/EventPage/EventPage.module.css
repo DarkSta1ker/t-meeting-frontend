@@ -18,6 +18,8 @@
     margin: auto;
     align-items: center;
     text-align : center;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 .editBlock{
     width: 1232px;
@@ -65,4 +67,5 @@
     box-shadow: 2px 2px 8px #E2E2E2;
     padding: 40px 60px;
     box-sizing: border-box;
+    margin-top: 70px;
 }
