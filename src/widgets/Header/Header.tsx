@@ -8,6 +8,13 @@ import {LogButtons} from "./LogButtons";
 export const Header: FC=()=>{
     const {isAuth} = useAuth();
     const nav = useNavigate();
+    const handleLogoClick = () => {
+        nav('/eventsList');
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    };
     return(
         <div className={styles.header}>
             <div className={styles.headerElementsBlock}>
@@ -16,7 +23,7 @@ export const Header: FC=()=>{
                         <>
                             <Typography
                                 variant="h5"
-                                onClick={()=>nav('/eventsList')}
+                                onClick={handleLogoClick}
                                 sx={{
                                     '&:hover': {
                                         cursor:"pointer"

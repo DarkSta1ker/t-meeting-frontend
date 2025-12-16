@@ -12,13 +12,13 @@ export const PersonalAccount: FC = () => {
     const [isLoading, setIsLoading] = useState(true)
     useEffect(() => {
         const loadAccountData = async () => {
-            if (!userData?.email || !userData?.token) {
+            if (!userData?.login || !userData?.token) {
                 console.log('Нет данных пользователя');
                 setIsLoading(false)
                 return;
             }
             setIsLoading(true)
-            const result = await AccountService.getAccountInfo(userData.email, userData.token);
+            const result = await AccountService.getAccountInfo(userData.login, userData.token);
             if (result.status === "Success") {
                 console.log("Account Data loaded");
                 if(result.payload.avatarPhoto===undefined){
@@ -62,7 +62,7 @@ export const PersonalAccount: FC = () => {
                         <div className={styles.accountInfo}>
                             <TextField
                                 id="multiline-read-only-input"
-                                label="Login"
+                                label="Логин"
                                 value={AccountData.login}
                                 variant="standard"
                                 sx={{
@@ -76,7 +76,7 @@ export const PersonalAccount: FC = () => {
                             />
                             <TextField
                                 id="multiline-read-only-input"
-                                label="Email"
+                                label="Электронная почта"
                                 value={AccountData.email}
                                 variant="standard"
                                 sx={{
@@ -90,7 +90,7 @@ export const PersonalAccount: FC = () => {
                             />
                             <TextField
                                 id="multiline-read-only-input"
-                                label="Role"
+                                label="Роль"
                                 sx={{
                                     pointerEvents: 'none',
                                 }}

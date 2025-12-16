@@ -52,7 +52,7 @@ export const EventForm: FC<EventFormProps> = ({
     const [touched, setTouched] = useState(false);
     const [nameError, setNameError] = useState(true);
     const [dateError, setDateError] = useState(true);
-
+    const [nameErrorText, setNameErrorText] = useState<string>('');
     const handleCancel = useCallback(() => {
         nav('/eventsList');
     }, [nav]);
@@ -145,11 +145,22 @@ export const EventForm: FC<EventFormProps> = ({
         }
     };
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>)=>{
-        if(e.target.value!==''){
-            setNameError(false)
+        const trimmedValue = e.target.value.trim();
+        if(e.target.value.trim()===''){
+            setNameError(true)
+            setNameErrorText("Поле названия не может быть пустым")
+        }
+        else if (trimmedValue.length > 100){
+            setNameError(true)
+            setNameErrorText("Максимальная длина названия - 100 символов")
+        }
+        else if (trimmedValue.length < 3){
+            setNameError(true)
+            setNameErrorText("Минимальная длина названия - 3 символа")
         }
         else{
-            setNameError(true)
+            setNameError(false)
+            setNameErrorText("")
         }
         handleBaseFieldChange("name", e.target.value)
     }
@@ -178,7 +189,7 @@ export const EventForm: FC<EventFormProps> = ({
                         sx={{ width: "100%" }}
                         value={eventData.name}
                         error={nameError}
-                        helperText={nameError && "Название мероприятия обязательно"}
+                        helperText={nameError && nameErrorText}
                         onChange={handleNameChange}
                     />
                     <div className={styles.timeAndPlace}>
@@ -243,25 +254,25 @@ export const EventForm: FC<EventFormProps> = ({
                                                 '&.Mui-checked': {
                                                     color: "#34c658",
                                                 },
-                                            }}/>} label="Published"/>
+                                            }}/>} label="Опубликовано"/>
                                         <FormControlLabel value="draft" control={<Radio sx={{
                                             color: "#fecd00",
                                             '&.Mui-checked': {
                                                 color: "#fecd00",
                                             },
-                                        }}/>} label="Draft" color="#fecd00"/>
-                                        <FormControlLabel value="archived" control={<Radio sx={{
+                                        }}/>} label="Редактирование" color="#fecd00"/>
+                                        <FormControlLabel value="фrchived" control={<Radio sx={{
                                             color: "#00c5ff",
                                             '&.Mui-checked': {
                                                 color: "#00c5ff",
                                             },
-                                        }}/>} label="Archived" color="#00c5ff"/>
+                                        }}/>} label="Архивировано" color="#00c5ff"/>
                                         <FormControlLabel value="cancelled" control={<Radio sx={{
                                             color: "#ec231e",
                                             '&.Mui-checked': {
                                                 color: "#ec231e",
                                             },
-                                        }}/>} label="Cancelled" color="#ec231e"/>
+                                        }}/>} label="Отменено" color="#ec231e"/>
                                     </RadioGroup>
                                 </FormControl>
                                 :
@@ -280,7 +291,7 @@ export const EventForm: FC<EventFormProps> = ({
                             height: "100%",
                             width: "100%",
                         }}
-                        value={eventData.content.find(block => block.block === "promo-text")?.payload || ''}
+                        value={eventData.content.find(block => block.block === "promo-text")?.payload.join('') || ''}
                         onChange={(e)=>{TextAreaChange("promo-text", e.target.value)}}
                     />
                 </div>

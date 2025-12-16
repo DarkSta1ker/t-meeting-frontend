@@ -18,7 +18,7 @@ export interface AuthFormProps {
 
 export interface UserData {
     token: string;
-    email: string;
+    login: string;
 }
 
 export interface AuthContextType {

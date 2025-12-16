@@ -5,7 +5,7 @@ import {ResultSuccess} from "../types/api";
 
 interface LoginSuccessPayload {
     token: string;
-    email: string;
+    login: string;
 }
 
 const usersInDB = [
@@ -23,12 +23,12 @@ export const mockLoginUser = (login: string, password: string):Promise<LoginResu
                 if(person.login === login && person.password === password) {
                     resolve(createResultSuccess({
                         token: person.token,
-                        email: person.email
+                        login: person.login
                     }));
                     return;
                 }
             }
-            resolve(createResultError(new Error("Invalid login or password")));
+            resolve(createResultError(new Error("Неправильный логин или пароль")));
         }, 2000);
     });
 }

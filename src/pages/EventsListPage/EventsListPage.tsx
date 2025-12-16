@@ -111,24 +111,60 @@ export const EventsListPage: FC = () => {
                                                             <Typography
                                                                 variant="h6"
                                                                 sx={{
-                                                                    display:'flex',
+                                                                    display: 'flex',
                                                                     alignItems: 'center',
+                                                                    overflow: 'hidden',
+                                                                    textOverflow: 'ellipsis',
+                                                                    whiteSpace: 'nowrap',
+                                                                    maxWidth: '90%', // или конкретное значение, например '300px'
                                                                 }}
                                                             >{event.name}</Typography>
-                                                            <TextBlock className={styles.eventDescription}>{event.content[0].payload.join(' ')}</TextBlock>
+                                                            <Typography
+                                                                variant="body1"
+                                                                sx={{
+                                                                    width: "95%",
+                                                                    margin: 0,
+                                                                    // Многострочное обрезание с многоточием
+                                                                    display: '-webkit-box',
+                                                                    WebkitLineClamp: 3,
+                                                                    WebkitBoxOrient: 'vertical',
+                                                                    overflow: 'hidden',
+                                                                    textOverflow: 'ellipsis',
+                                                                    // Fallback для браузеров без поддержки line-clamp
+                                                                    maxHeight: '4.5em', // примерно 3 строки (1.5em * 3)
+                                                                    lineHeight: 1.5,
+                                                                }}
+                                                            >
+                                                                {event.content[0].payload.join(' ')}
+                                                            </Typography>
                                                         </div>
                                                         <div
                                                             className={styles.dataAndPlace}
                                                             onClick={()=>handleEventPage(event.id)}
                                                         >
                                                             <div className={styles.dataBlock}>
-                                                                <TextBlock className={styles.data}>
-                                                                    {dayjs.utc(event.metadata.datetime).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')}
-                                                                </TextBlock>
+                                                                <Typography
+                                                                    variant="body1"
+                                                                    sx={{
+                                                                        display:'flex',
+                                                                        alignItems: 'center',
+                                                                    }}
+                                                                >{dayjs.utc(event.metadata.datetime).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')}</Typography>
+
                                                                 <Calendar/>
                                                             </div>
                                                             <div className={styles.placeBlock}>
-                                                                <TextBlock className={styles.place}>{event.metadata.location}</TextBlock>
+                                                                <Typography
+                                                                    variant="body1"
+                                                                    sx={{
+                                                                        display:'flex',
+                                                                        alignItems: 'center',
+                                                                        overflow: 'hidden',
+                                                                        textOverflow: 'ellipsis',
+                                                                        whiteSpace: 'nowrap',
+                                                                    }}
+                                                                >{event.metadata.location}</Typography>
+
                                                                 <MapPinIcon/>
                                                             </div>
                                                         </div>

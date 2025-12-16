@@ -3,9 +3,9 @@ import {createResultSuccess} from "./lib/createResultSuccess";
 import {createResultError} from "./lib/createResultError";
 
 export const AccountService = {
-    async getAccountInfo(email:string, token:string){
+    async getAccountInfo(login:string, token:string){
         try{
-            const result = await mockAccountData(email, token);
+            const result = await mockAccountData(login, token);
             if (result.status === "Error") {
                 return createResultError(result.payload);
             }

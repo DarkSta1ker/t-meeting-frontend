@@ -11,7 +11,7 @@ import {validateLogin,validatePassword} from "./validationErrors";
 
 export const AuthForm: FC = ()=>{
     const nav = useNavigate();
-    const {loginUser} = useAuth();
+    const {loginUser, isLoadingAuth} = useAuth();
     const [loginError, setLoginError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const {authData, handlePasswordFieldChange, handleLoginFieldChange} = useAuthForm();
@@ -108,7 +108,7 @@ export const AuthForm: FC = ()=>{
             <Button
                 type="submit"
                 variant="outlined"
-                disabled={!!errors?.login || !!errors?.password}
+                disabled={!!errors?.login || !!errors?.password|| isLoadingAuth}
                 sx={{
                     backgroundColor: "transparent",
                     borderRadius: '5px',

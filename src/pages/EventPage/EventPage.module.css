@@ -14,7 +14,7 @@
 }
 .eventNameBox{
     display:flex;
-    height:64px;
+    height: auto;
     margin: auto;
     align-items: center;
     text-align : center;
@@ -34,7 +34,6 @@
 }
 .description{
     width: 700px;
-    height: 100%;
     display: flex;
     justify-content: space-between;
     align-items:center;

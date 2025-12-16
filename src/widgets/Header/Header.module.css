@@ -3,10 +3,13 @@
     margin:0;
     width: 100%;
     display:flex;
+    position:sticky;
+    top: 0;
     justify-content: center;
     border-bottom: 1px solid;
     border-bottom-color: #E2E2E2;
     background-color: white;
+    z-index: 1000;
 }
 .headerElementsBlock{
     box-sizing: border-box;

@@ -59,9 +59,10 @@ export const EventPage: FC = () => {
                                 <Typography
                                     variant="h4"
                                     sx={{
-                                        height:'70px',
                                         display:'flex',
                                         alignItems: 'center',
+                                        wordWrap: 'break-word',
+                                        overflowWrap: 'break-word',
                                     }}
                                 >
                                     {eventData.name}
@@ -78,10 +79,10 @@ export const EventPage: FC = () => {
                                             variant="outlined"
                                             sx={{
                                                 p: 2,
-                                                minHeight: '100px', // минимальная высота
-                                                overflow: 'auto', // прокрутка при превышении maxHeight
+                                                minHeight: '100px',
+                                                overflow: 'auto',
                                                 backgroundColor: 'background.paper',
-                                                width: '100%', // чтобы растягивалось на всю ширину
+                                                width: '100%',
                                             }}
                                         >
                                             <Typography
@@ -89,7 +90,7 @@ export const EventPage: FC = () => {
                                                 sx={{
                                                     whiteSpace: 'pre-wrap',
                                                     lineHeight: 1.6,
-                                                    wordBreak: 'break-word', // перенос длинных слов
+                                                    wordBreak: 'break-word',
                                                 }}
                                             >
                                                 {eventData.content[0].payload.join(' ')}
