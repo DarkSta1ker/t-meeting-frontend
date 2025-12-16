@@ -125,6 +125,16 @@ export const AuthForm: FC = ()=>{
                 id="multiline-read-only-input"
                 value={errorMessage}
                 variant="standard"
+                sx={{
+                    width: '100%',
+                    '& .MuiInputBase-root': {
+                        justifyContent: 'center',
+                        textAlign: 'center',
+                    },
+                    '& .MuiInputBase-input': {
+                        textAlign: 'center',
+                    },
+                }}
                 slotProps={{
                     input: {
                         readOnly: true,

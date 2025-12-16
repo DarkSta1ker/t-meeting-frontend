@@ -28,7 +28,7 @@ export const mockLoginUser = (login: string, password: string):Promise<LoginResu
                     return;
                 }
             }
-            resolve(createResultError(new Error("Неправильный логин или пароль")));
+            resolve(createResultError("Неправильный логин или пароль"));
         }, 2000);
     });
 }
