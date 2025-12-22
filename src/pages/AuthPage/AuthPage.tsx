@@ -1,15 +1,15 @@
-import React, {FC,useEffect} from "react";
-import {useNavigate} from "react-router-dom";
-import {useAuth} from "../../contexts/AuthContext";
-import {AuthForm} from "../../widgets/AuthForm/AuthForm";
-import styles from "./AuthPage.module.css"
+import React, {FC, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {useAuth} from '../../contexts/AuthContext';
+import {AuthForm} from '../../widgets/AuthForm/AuthForm';
+import styles from './AuthPage.module.css';
 
-export const AuthPage: FC = ()=>{
+export const AuthPage: FC = () => {
     const nav = useNavigate();
     const {isAuth} = useAuth();
     useEffect(() => {
-        if(isAuth){
-            nav("/eventsList");
+        if (isAuth) {
+            nav('/eventsList');
         }
     }, [isAuth, nav]);
     return(
@@ -24,5 +24,5 @@ export const AuthPage: FC = ()=>{
                 </p>
             </div>
         </div>
-    )
-}
+    );
+};

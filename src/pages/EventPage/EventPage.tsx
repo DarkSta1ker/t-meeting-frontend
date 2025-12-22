@@ -1,19 +1,19 @@
-import {Box, Paper, Typography} from "@mui/material";
-import TextField from "@mui/material/TextField";
-import dayjs from "dayjs";
-import timezone from "dayjs/plugin/timezone";
-import utc from "dayjs/plugin/utc";
-import {Calendar, MapPinIcon} from "lucide-react";
-import React, {type FC, useEffect} from "react";
-import {useParams} from "react-router-dom";
-import {useEvent} from "../../hooks/useEvent";
-import {useEventForm} from "../../hooks/useEventForm";
-import styles from "./EventPage.module.css";
+import {Box, Paper, Typography} from '@mui/material';
+import TextField from '@mui/material/TextField';
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import {Calendar, MapPinIcon} from 'lucide-react';
+import React, {type FC, useEffect} from 'react';
+import {useParams} from 'react-router-dom';
+import {useEvent} from '../../hooks/useEvent';
+import {useEventForm} from '../../hooks/useEventForm';
+import styles from './EventPage.module.css';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
-dayjs.tz.setDefault("Asia/Novosibirsk");
-const NSK_TIMEZONE = "Asia/Novosibirsk";
+dayjs.tz.setDefault('Asia/Novosibirsk');
+const NSK_TIMEZONE = 'Asia/Novosibirsk';
 
 export const EventPage: FC = () => {
     const {eventId} = useParams<{ eventId: string }>();
@@ -22,12 +22,12 @@ export const EventPage: FC = () => {
     useEffect(() => {
         const loadEvent = async () => {
             if (!eventId) {
-                console.log("No eventId found");
+                console.log('No eventId found');
                 return;
             }
             const result = await getEvent(eventId);
-            if (result.status === "Success") {
-                console.log("Event loaded");
+            if (result.status === 'Success') {
+                console.log('Event loaded');
                 setEventData(result.payload);
             } else {
                 console.log(`Error ${result.payload}`);
@@ -43,11 +43,11 @@ export const EventPage: FC = () => {
                     isLoading ?
                         <div className={styles.loading}>
                             <Typography
-                                variant="h2"
+                                variant='h2'
                                 sx={{
-                                    height: "70px",
-                                    display: "flex",
-                                    alignItems: "center",
+                                    alignItems: 'center',
+                                    display: 'flex',
+                                    height: '70px',
                                 }}
                             >
                                 Загрузка...
@@ -57,12 +57,12 @@ export const EventPage: FC = () => {
                         <>
                             <div className={styles.eventNameBox}>
                                 <Typography
-                                    variant="h4"
+                                    variant='h4'
                                     sx={{
-                                        alignItems: "center",
-                                        display: "flex",
-                                        overflowWrap: "break-word",
-                                        wordWrap: "break-word",
+                                        alignItems: 'center',
+                                        display: 'flex',
+                                        overflowWrap: 'break-word',
+                                        wordWrap: 'break-word',
                                     }}
                                 >
                                     {eventData.name}
@@ -70,30 +70,30 @@ export const EventPage: FC = () => {
                             </div>
                             <div className={styles.editBlock}>
                                 <div className={styles.description}>
-                                    <Box sx={{height: "100%"}}>
-                                        <Typography variant="h6" gutterBottom>
+                                    <Box sx={{height: '100%'}}>
+                                        <Typography variant='h6' gutterBottom>
                                             Описание мероприятия
                                         </Typography>
 
                                         <Paper
-                                            variant="outlined"
+                                            variant='outlined'
                                             sx={{
+                                                backgroundColor: 'background.paper',
+                                                minHeight: '100px',
+                                                overflow: 'auto',
                                                 p: 2,
-                                                minHeight: "100px",
-                                                overflow: "auto",
-                                                backgroundColor: "background.paper",
-                                                width: "100%",
+                                                width: '100%',
                                             }}
                                         >
                                             <Typography
-                                                variant="body1"
+                                                variant='body1'
                                                 sx={{
-                                                    whiteSpace: "pre-wrap",
                                                     lineHeight: 1.6,
-                                                    wordBreak: "break-word",
+                                                    whiteSpace: 'pre-wrap',
+                                                    wordBreak: 'break-word',
                                                 }}
                                             >
-                                                {eventData.content[0].payload.join(" ")}
+                                                {eventData.content[0].payload.join(' ')}
                                             </Typography>
                                         </Paper>
                                     </Box>
@@ -101,13 +101,13 @@ export const EventPage: FC = () => {
                                 <div className={styles.timeAndPlace}>
                                     <div className={styles.textFieldWithIcon}>
                                         <TextField
-                                            id="standard-read-only-input"
-                                            variant="standard"
+                                            id='standard-read-only-input'
+                                            variant='standard'
                                             sx={{
-                                                pointerEvents: "none",
+                                                pointerEvents: 'none',
                                             }}
-                                            label="Дата"
-                                            value={dayjs.utc(eventData.metadata.datetime).tz(NSK_TIMEZONE).format("DD.MM.YYYY HH:mm")}
+                                            label='Дата'
+                                            value={dayjs.utc(eventData.metadata.datetime).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')}
                                             slotProps={{
                                                 input: {
                                                     readOnly: true,
@@ -118,11 +118,11 @@ export const EventPage: FC = () => {
                                     </div>
                                     <div className={styles.textFieldWithIcon}>
                                         <TextField
-                                            id="standard-read-only-input"
-                                            label="Место проведения"
-                                            variant="standard"
+                                            id='standard-read-only-input'
+                                            label='Место проведения'
+                                            variant='standard'
                                             sx={{
-                                                pointerEvents: "none",
+                                                pointerEvents: 'none',
                                             }}
                                             value={eventData.metadata.location}
                                             slotProps={{

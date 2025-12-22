@@ -1,14 +1,14 @@
-import {ApiData} from "../types/api";
+import {ApiData} from '../types/api';
 
 export const requestApi = async <T = Record<string, unknown>>(data: ApiData<T>): Promise<Response> => {
     const fetchOptions: RequestInit = {
-        method: data.method,
-        headers: {"Content-Type": "application/json"},
-        body: data.payload ? JSON.stringify(data.payload) : undefined
-    }
+        body: data.payload ? JSON.stringify(data.payload) : undefined,
+        headers: {'Content-Type': 'application/json'},
+        method: data.method
+    };
     const response = await fetch(data.url, fetchOptions);
     if (!response.ok) {
         throw new Error(response.statusText);
     }
     return response;
-}
+};

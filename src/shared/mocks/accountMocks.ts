@@ -1,28 +1,27 @@
-import {createResultError} from "../../app/services/lib/createResultError";
-import {createResultSuccess} from "../../app/services/lib/createResultSuccess";
-import {ResultError, ResultSuccess} from "../types/api";
-import {AccountData} from "../types/account";
-
+import {createResultError} from '../../app/services/lib/createResultError';
+import {createResultSuccess} from '../../app/services/lib/createResultSuccess';
+import {AccountData} from '../types/account';
+import {ResultError, ResultSuccess} from '../types/api';
 
 const usersInDB = [
     {
-        login: "login1",
-        password: "password",
-        token: "token1",
-        email: "email1",
-        role: "Администратор",
-        avatar: process.env.PUBLIC_URL + "/images/AdminAvatar.jpg"
+        login: 'login1',
+        password: 'password',
+        token: 'token1',
+        email: 'email1',
+        role: 'Администратор',
+        avatar: process.env.PUBLIC_URL + '/images/AdminAvatar.jpg'
     },
     {
-        login: "login2",
-        password: "password",
-        token: "token2",
-        email: "email2",
-        role: "Пользователь",
-        avatar: process.env.PUBLIC_URL + "/images/UserAvatar.jpg"
+        login: 'login2',
+        password: 'password',
+        token: 'token2',
+        email: 'email2',
+        role: 'Пользователь',
+        avatar: process.env.PUBLIC_URL + '/images/UserAvatar.jpg'
     },
-    {login: "login3", password: "password", token: "token3", email: "email3", role: "Неизвестный"},
-]
+    {login: 'login3', password: 'password', token: 'token3', email: 'email3', role: 'Неизвестный'},
+];
 
 type accountMockResult = ResultSuccess<AccountData> | ResultError;
 
@@ -40,7 +39,7 @@ export const mockAccountData = (login: string, token: string): Promise<accountMo
                     return;
                 }
             }
-            resolve(createResultError(new Error("Нет соответствия почты и токена")));
+            resolve(createResultError(new Error('Нет соответствия почты и токена')));
         }, 2000);
     });
-}
+};

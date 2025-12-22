@@ -1,25 +1,25 @@
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import dayjs from "dayjs";
-import timezone from "dayjs/plugin/timezone";
-import utc from "dayjs/plugin/utc";
-import {Calendar, CirclePlus, EllipsisVertical, MapPinIcon} from "lucide-react";
-import {DropdownMenu} from "radix-ui";
-import React, {type FC, useCallback, useEffect} from "react";
-import {useNavigate} from "react-router-dom";
-import {useEvent} from "../../hooks/useEvent";
-import {useEvents} from "../../hooks/useEvents";
-import {EventStatusCircle} from "../../shared/ui/EventStatus/EventStatusCircle";
-import styles from "./EventsListPage.module.css";
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import {Calendar, CirclePlus, EllipsisVertical, MapPinIcon} from 'lucide-react';
+import {DropdownMenu} from 'radix-ui';
+import React, {type FC, useCallback, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {useEvent} from '../../hooks/useEvent';
+import {useEvents} from '../../hooks/useEvents';
+import {EventStatusCircle} from '../../shared/ui/EventStatus/EventStatusCircle';
+import styles from './EventsListPage.module.css';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
-dayjs.tz.setDefault("Asia/Novosibirsk");
-const NSK_TIMEZONE = "Asia/Novosibirsk";
+dayjs.tz.setDefault('Asia/Novosibirsk');
+const NSK_TIMEZONE = 'Asia/Novosibirsk';
 export const EventsListPage: FC = () => {
 
     const nav = useNavigate();
-    const {deleteEvent, changeStatus} = useEvent();
+    const {deleteEvent} = useEvent();
     const {events, getAllEvents, isLoading} = useEvents();
 
     useEffect(() => {
@@ -28,8 +28,8 @@ export const EventsListPage: FC = () => {
 
     const handleUpdateEventList = useCallback(async () => {
         const result = await getAllEvents();
-        if (result.status === "Success") {
-            console.log("Events list updated");
+        if (result.status === 'Success') {
+            console.log('Events list updated');
         } else {
             console.log(`Error ${result.payload}`);
         }
@@ -37,18 +37,13 @@ export const EventsListPage: FC = () => {
 
     const handleDeleteEvent = useCallback(async (eventId: string) => {
         const result = await deleteEvent(eventId);
-        if (result.status === "Success") {
-            console.log("Event deleted");
+        if (result.status === 'Success') {
+            console.log('Event deleted');
         } else {
             console.log(`Error ${result.payload}`);
         }
         await handleUpdateEventList();
     }, [deleteEvent, handleUpdateEventList]);
-
-    const handleChangeStatus = useCallback(async (eventId: string) => {
-        await changeStatus(eventId);
-        await handleUpdateEventList();
-    }, [handleUpdateEventList, changeStatus]);
 
     const handleEditEvent = (eventId: string) => {
         nav(`/editEvent/${eventId}`);
@@ -60,14 +55,14 @@ export const EventsListPage: FC = () => {
 
     const handleGetRuStatus = (status: string) => {
         switch (status) {
-            case "draft":
-                return "Редактирование";
-            case "cancelled":
-                return "Отменено";
-            case "archived":
-                return "Архивировано";
+            case 'draft':
+                return 'Редактирование';
+            case 'cancelled':
+                return 'Отменено';
+            case 'archived':
+                return 'Архивировано';
             default:
-                return "Опубликовано";
+                return 'Опубликовано';
         }
     };
     return (
@@ -76,9 +71,9 @@ export const EventsListPage: FC = () => {
                 <Typography
                     variant="h5"
                     sx={{
-                        alignItems: "center",
-                        display: "flex",
-                        height: "64px",
+                        alignItems: 'center',
+                        display: 'flex',
+                        height: '64px',
                     }}
                 >Список мероприятий</Typography>
                 <div className={styles.eventsListBlock}>
@@ -87,8 +82,8 @@ export const EventsListPage: FC = () => {
                             <Typography
                                 variant="h6"
                                 sx={{
-                                    display: "flex",
-                                    alignItems: "center",
+                                    alignItems: 'center',
+                                    display: 'flex',
                                 }}
                             >Загрузка мероприятий...</Typography>
                             :
@@ -108,29 +103,29 @@ export const EventsListPage: FC = () => {
                                                             <Typography
                                                                 variant="h6"
                                                                 sx={{
-                                                                    display: "flex",
-                                                                    alignItems: "center",
-                                                                    overflow: "hidden",
-                                                                    textOverflow: "ellipsis",
-                                                                    whiteSpace: "nowrap",
-                                                                    maxWidth: "90%",
+                                                                    alignItems: 'center',
+                                                                    display: 'flex',
+                                                                    maxWidth: '90%',
+                                                                    overflow: 'hidden',
+                                                                    textOverflow: 'ellipsis',
+                                                                    whiteSpace: 'nowrap',
                                                                 }}
                                                             >{event.name}</Typography>
                                                             <Typography
                                                                 variant="body1"
                                                                 sx={{
-                                                                    WebkitBoxOrient: "vertical",
+                                                                    WebkitBoxOrient: 'vertical',
                                                                     WebkitLineClamp: 3,
-                                                                    display: "-webkit-box",
+                                                                    display: '-webkit-box',
                                                                     lineHeight: 1.5,
                                                                     margin: 0,
-                                                                    maxHeight: "4.5em",
-                                                                    overflow: "hidden",
-                                                                    textOverflow: "ellipsis",
-                                                                    width: "95%",
+                                                                    maxHeight: '4.5em',
+                                                                    overflow: 'hidden',
+                                                                    textOverflow: 'ellipsis',
+                                                                    width: '95%',
                                                                 }}
                                                             >
-                                                                {event.content[0].payload.join(" ")}
+                                                                {event.content[0].payload.join(' ')}
                                                             </Typography>
                                                         </div>
                                                         <div
@@ -141,11 +136,11 @@ export const EventsListPage: FC = () => {
                                                                 <Typography
                                                                     variant="body1"
                                                                     sx={{
-                                                                        display: "flex",
-                                                                        alignItems: "center",
+                                                                        alignItems: 'center',
+                                                                        display: 'flex',
                                                                     }}
                                                                 >
-                                                                    {dayjs.utc(event.metadata.datetime).tz(NSK_TIMEZONE).format("DD.MM.YYYY HH:mm")}
+                                                                    {dayjs.utc(event.metadata.datetime).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')}
                                                                 </Typography>
                                                                 <Calendar/>
                                                             </div>
@@ -153,11 +148,11 @@ export const EventsListPage: FC = () => {
                                                                 <Typography
                                                                     variant="body1"
                                                                     sx={{
-                                                                        display: "flex",
-                                                                        alignItems: "center",
-                                                                        overflow: "hidden",
-                                                                        textOverflow: "ellipsis",
-                                                                        whiteSpace: "nowrap",
+                                                                        alignItems: 'center',
+                                                                        display: 'flex',
+                                                                        overflow: 'hidden',
+                                                                        textOverflow: 'ellipsis',
+                                                                        whiteSpace: 'nowrap',
                                                                     }}
                                                                 >{event.metadata.location}</Typography>
 
@@ -205,8 +200,8 @@ export const EventsListPage: FC = () => {
                                                 <div className={styles.infoBlock}>
                                                     <Typography
                                                         variant="body2"
-                                                    >Создано: {dayjs.utc(event.createdAt).tz(NSK_TIMEZONE).format("DD.MM.YYYY HH:mm")} |
-                                                        Обновлено: {dayjs.utc(event.updatedAt).tz(NSK_TIMEZONE).format("DD.MM.YYYY HH:mm")}</Typography>
+                                                    >Создано: {dayjs.utc(event.createdAt).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')} |
+                                                        Обновлено: {dayjs.utc(event.updatedAt).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')}</Typography>
                                                     <div className={styles.status}>
                                                         <Typography
                                                             variant="body2"
@@ -224,17 +219,17 @@ export const EventsListPage: FC = () => {
                                 }
                             </>
                     }
-                    <IconButton onClick={() => nav("/createEvent")}
+                    <IconButton onClick={() => nav('/createEvent')}
                                 sx={{
-                                    "&:hover": {
-                                        backgroundColor: "#cfd0d5",
-                                        borderRadius: "25px",
+                                    '&:hover': {
+                                        backgroundColor: '#cfd0d5',
+                                        borderRadius: '25px',
                                     },
-                                    "backgroundColor": "transparent",
-                                    "bottom": "15px",
-                                    "color": "#757575",
-                                    "position": "absolute",
-                                    "right": "56px",
+                                    'backgroundColor': 'transparent',
+                                    'bottom': '15px',
+                                    'color': '#757575',
+                                    'position': 'absolute',
+                                    'right': '56px',
                                 }}
                     >
                         <CirclePlus size={30}/>
@@ -244,4 +239,3 @@ export const EventsListPage: FC = () => {
         </div>
     );
 };
-

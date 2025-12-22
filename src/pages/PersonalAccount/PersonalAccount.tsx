@@ -1,10 +1,10 @@
-import {TextField} from "@mui/material";
-import Typography from "@mui/material/Typography";
-import React, {type FC, useEffect, useState} from "react";
-import {AccountService} from "../../app/services/AccountService";
-import {useAuth} from "../../contexts/AuthContext";
-import {defaultAccountData} from "../../shared/constants/constants";
-import styles from "./PersonalAccount.module.css";
+import {TextField} from '@mui/material';
+import Typography from '@mui/material/Typography';
+import React, {type FC, useEffect, useState} from 'react';
+import {AccountService} from '../../app/services/AccountService';
+import {useAuth} from '../../contexts/AuthContext';
+import {defaultAccountData} from '../../shared/constants/constants';
+import styles from './PersonalAccount.module.css';
 
 export const PersonalAccount: FC = () => {
     const {userData} = useAuth();
@@ -13,14 +13,14 @@ export const PersonalAccount: FC = () => {
     useEffect(() => {
         const loadAccountData = async () => {
             if (!userData?.login || !userData?.token) {
-                console.log("Нет данных пользователя");
-                setIsLoading(false)
+                console.log('Нет данных пользователя');
+                setIsLoading(false);
                 return;
             }
             setIsLoading(true);
             const result = await AccountService.getAccountInfo(userData.login, userData.token);
-            if (result.status === "Success") {
-                console.log("Account Data loaded");
+            if (result.status === 'Success') {
+                console.log('Account Data loaded');
                 if (result.payload.avatarPhoto === undefined) {
                     setAccountData({
                         ...result.payload,
@@ -43,11 +43,11 @@ export const PersonalAccount: FC = () => {
                 isLoading ?
                     <div className={styles.loading}>
                         <Typography
-                            variant="h4"
+                            variant='h4'
                             sx={{
-                                height: "70px",
-                                display: "flex",
-                                alignItems: "center",
+                                alignItems: 'center',
+                                display: 'flex',
+                                height: '70px',
                             }}
                         >
                             Загрузка...
@@ -60,12 +60,12 @@ export const PersonalAccount: FC = () => {
                         </div>
                         <div className={styles.accountInfo}>
                             <TextField
-                                id="multiline-read-only-input"
-                                label="Логин"
+                                id='multiline-read-only-input'
+                                label='Логин'
                                 value={AccountData.login}
-                                variant="standard"
+                                variant='standard'
                                 sx={{
-                                    pointerEvents: "none",
+                                    pointerEvents: 'none',
                                 }}
                                 slotProps={{
                                     input: {
@@ -74,12 +74,12 @@ export const PersonalAccount: FC = () => {
                                 }}
                             />
                             <TextField
-                                id="multiline-read-only-input"
-                                label="Электронная почта"
+                                id='multiline-read-only-input'
+                                label='Электронная почта'
                                 value={AccountData.email}
-                                variant="standard"
+                                variant='standard'
                                 sx={{
-                                    pointerEvents: "none",
+                                    pointerEvents: 'none',
                                 }}
                                 slotProps={{
                                     input: {
@@ -88,13 +88,13 @@ export const PersonalAccount: FC = () => {
                                 }}
                             />
                             <TextField
-                                id="multiline-read-only-input"
-                                label="Роль"
+                                id='multiline-read-only-input'
+                                label='Роль'
                                 sx={{
-                                    pointerEvents: "none",
+                                    pointerEvents: 'none',
                                 }}
                                 value={AccountData.role}
-                                variant="standard"
+                                variant='standard'
                                 slotProps={{
                                     input: {
                                         readOnly: true,

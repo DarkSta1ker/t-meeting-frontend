@@ -27,4 +27,4 @@ export const validatePassword = (password: string) => {
         return 'Пароль не должен содержать пробелы';
     }
     return '';
-}
+};

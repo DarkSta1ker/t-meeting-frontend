@@ -1,15 +1,15 @@
-export type ApiData<T = Record<string, unknown>> = {
+export interface ApiData<T = Record<string, unknown>> {
     url: string;
     method: string;
     payload?: T;
 }
 
-export type ResultSuccess<T> = {
-    status: "Success";
+export interface ResultSuccess<T> {
+    status: 'Success';
     payload: T;
 }
 
-export type ResultError = {
+export interface ResultError {
     status: 'Error';
     payload: unknown;
 }

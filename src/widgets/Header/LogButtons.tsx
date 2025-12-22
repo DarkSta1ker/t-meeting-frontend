@@ -1,10 +1,10 @@
-import React, {FC, useCallback} from "react";
-import {LogOut, User} from "lucide-react";
-import {useLocation, useNavigate} from "react-router-dom";
-import {useAuth} from "../../contexts/AuthContext";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import styles from "./Header.module.css";
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import {LogOut, User} from 'lucide-react';
+import React, {FC, useCallback} from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
+import {useAuth} from '../../contexts/AuthContext';
+import styles from './Header.module.css';
 
 export const LogButtons: FC = () => {
     const nav = useNavigate();
@@ -13,11 +13,11 @@ export const LogButtons: FC = () => {
     const {logoutUser, userData} = useAuth();
     const handleLogout = useCallback(() => {
         logoutUser();
-        nav("/");
-    }, [])
+        nav('/');
+    }, []);
     const handleNavigateAccount = useCallback(() => {
         nav('/personalAccount');
-    }, [])
+    }, []);
 
     const isPersonalAccountPage = path === '/personalAccount';
 
@@ -28,21 +28,20 @@ export const LogButtons: FC = () => {
             <Button
                 onClick={handleNavigateAccount}
                 sx={{
-                    backgroundColor: "transparent",
-                    borderRadius: '25px',
-                    color: '#757575',
+                    'backgroundColor': 'transparent',
+                    'borderRadius': '25px',
+                    'color': '#757575',
                     '&:hover': {
                         borderRadius: '25px',
-                        backgroundColor: "#cfd0d5",
+                        backgroundColor: '#cfd0d5',
                     }
                 }}
             >
-                <Typography variant="button">{userData?.login}</Typography>
+                <Typography variant='button'>{userData?.login}</Typography>
                 <User size={36}/>
-            </Button>
+            </Button>;
 
-    }
-
+    };
 
     return (
         <div className={styles.headerElements}>
@@ -50,17 +49,17 @@ export const LogButtons: FC = () => {
             <Button
                 onClick={handleLogout}
                 sx={{
-                    backgroundColor: "transparent",
-                    borderRadius: '25px',
-                    color: '#757575',
+                    'backgroundColor': 'transparent',
+                    'borderRadius': '25px',
+                    'color': '#757575',
                     '&:hover': {
                         borderRadius: '25px',
-                        backgroundColor: "#cfd0d5",
+                        backgroundColor: '#cfd0d5',
                     }
                 }}
             >
                 <LogOut size={36}/>
             </Button>
         </div>
-    )
-}
+    );
+};

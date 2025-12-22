@@ -1,6 +1,6 @@
-import {createResultError} from "../../app/services/lib/createResultError";
-import {createResultSuccess} from "../../app/services/lib/createResultSuccess";
-import {ResultError, ResultSuccess} from "../types/api";
+import {createResultError} from '../../app/services/lib/createResultError';
+import {createResultSuccess} from '../../app/services/lib/createResultSuccess';
+import {ResultError, ResultSuccess} from '../types/api';
 
 interface LoginSuccessPayload {
     token: string;
@@ -8,10 +8,10 @@ interface LoginSuccessPayload {
 }
 
 const usersInDB = [
-    {login: "login1", password: "password", token: "token1", email: "email1"},
-    {login: "login2", password: "password", token: "token2", email: "email2"},
-    {login: "login3", password: "password", token: "token3", email: "email3"},
-]
+    {login: 'login1', password: 'password', token: 'token1', email: 'email1'},
+    {login: 'login2', password: 'password', token: 'token2', email: 'email2'},
+    {login: 'login3', password: 'password', token: 'token3', email: 'email3'},
+];
 
 type LoginResult = ResultSuccess<LoginSuccessPayload> | ResultError;
 
@@ -27,7 +27,7 @@ export const mockLoginUser = (login: string, password: string): Promise<LoginRes
                     return;
                 }
             }
-            resolve(createResultError("Неправильный логин или пароль"));
+            resolve(createResultError('Неправильный логин или пароль'));
         }, 2000);
     });
-}
+};

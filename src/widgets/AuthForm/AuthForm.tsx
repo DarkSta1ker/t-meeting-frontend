@@ -70,17 +70,17 @@ export const AuthForm: FC = () => {
         >
             <TextField
                 required
-                id="login-input"
-                label="Логин"
-                variant="outlined"
+                id='login-input'
+                label='Логин'
+                variant='outlined'
                 value={authData.login}
                 onChange={(e) => handleLoginChange(e.target.value)}
                 onBlur={() => handleBlur('login')}
                 error={touched.login && !!errors?.login}
                 helperText={touched.login && errors?.login}
                 fullWidth
-                margin="normal"
-                autoComplete="username"
+                margin='normal'
+                autoComplete='username'
                 onKeyDown={(e) => {
                     if (e.key === 'Enter' && !authData.password) {
                         e.preventDefault();
@@ -90,22 +90,22 @@ export const AuthForm: FC = () => {
             />
             <TextField
                 required
-                id="password-input"
-                label="Пароль"
-                type="password"
+                id='password-input'
+                label='Пароль'
+                type='password'
                 value={authData.password}
                 onChange={(e) => handlePasswordChange(e.target.value)}
                 onBlur={() => handleBlur('password')}
                 error={touched.password && !!errors?.password}
                 helperText={touched.password && errors?.password}
                 fullWidth
-                margin="normal"
-                autoComplete="current-password"
+                margin='normal'
+                autoComplete='current-password'
             />
 
             <Button
-                type="submit"
-                variant="outlined"
+                type='submit'
+                variant='outlined'
                 disabled={!!errors?.login || !!errors?.password || isLoadingAuth}
                 sx={{
                     '&:hover': {
@@ -120,9 +120,9 @@ export const AuthForm: FC = () => {
             </Button>
             {loginError && <TextField
                 error
-                id="multiline-read-only-input"
+                id='multiline-read-only-input'
                 value={errorMessage}
-                variant="standard"
+                variant='standard'
                 sx={{
                     'width': '100%',
                     '& .MuiInputBase-root': {
@@ -142,4 +142,3 @@ export const AuthForm: FC = () => {
         </form>
     );
 };
-

@@ -1,15 +1,15 @@
-import React, {type FC, useCallback} from "react";
+import Typography from '@mui/material/Typography';
+import React, {type FC, useCallback} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
+import {useEvent} from '../../hooks/useEvent';
+import {useEventForm} from '../../hooks/useEventForm';
+import {EventForm} from '../../widgets/EventForm/EventForm';
 import styles from './EditEventPage.module.css';
-import {useEvent} from "../../hooks/useEvent";
-import {EventForm} from "../../widgets/EventForm/EventForm";
-import {useEventForm} from "../../hooks/useEventForm";
-import Typography from "@mui/material/Typography";
 
 export const EditEventPage: FC = () => {
     const nav = useNavigate();
     const {eventId} = useParams<{ eventId: string }>();
-    const {updateEvent, deleteEvent, isLoading} = useEvent();
+    const {updateEvent, isLoading} = useEvent();
     const {
         eventData,
         handleTextAreaChange,
@@ -19,9 +19,9 @@ export const EditEventPage: FC = () => {
     } = useEventForm(eventId);
     const handleUpdateEvent = useCallback(async () => {
         const result = await updateEvent(eventData);
-        if (result.status === "Success") {
-            console.log("Event updated");
-            nav("/eventsList");
+        if (result.status === 'Success') {
+            console.log('Event updated');
+            nav('/eventsList');
         } else {
             console.log(`Error ${result.payload}`);
         }
@@ -31,11 +31,11 @@ export const EditEventPage: FC = () => {
         <div className={styles.editEventPage}>
             <div className={styles.board}>
                 <Typography
-                    variant="h5"
+                    variant='h5'
                     sx={{
-                        height: '64px',
-                        display: 'flex',
                         alignItems: 'center',
+                        display: 'flex',
+                        height: '64px',
                     }}
                 >
                     Редактирование мероприятия
@@ -53,6 +53,5 @@ export const EditEventPage: FC = () => {
                 }
             </div>
         </div>
-    )
-}
-
+    );
+};

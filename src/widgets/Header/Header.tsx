@@ -1,9 +1,9 @@
-import React, {type FC} from "react";
+import Typography from '@mui/material/Typography';
+import React, {type FC} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {useAuth} from '../../contexts/AuthContext';
 import styles from './Header.module.css';
-import {useAuth} from "../../contexts/AuthContext";
-import Typography from '@mui/material/Typography'
-import {useNavigate} from "react-router-dom";
-import {LogButtons} from "./LogButtons";
+import {LogButtons} from './LogButtons';
 
 export const Header: FC = () => {
     const {isAuth} = useAuth();
@@ -12,7 +12,7 @@ export const Header: FC = () => {
         nav('/eventsList');
         window.scrollTo({
             top: 0,
-            behavior: "smooth"
+            behavior: 'smooth'
         });
     };
     return (
@@ -22,11 +22,11 @@ export const Header: FC = () => {
                     isAuth ?
                         <>
                             <Typography
-                                variant="h5"
+                                variant='h5'
                                 onClick={handleLogoClick}
                                 sx={{
                                     '&:hover': {
-                                        cursor: "pointer"
+                                        cursor: 'pointer'
                                     }
                                 }}
                             >T-meeting</Typography>
@@ -34,10 +34,10 @@ export const Header: FC = () => {
                         </>
                         :
                         <Typography
-                            variant="h5"
+                            variant='h5'
                         >T-meeting</Typography>
                 }
             </div>
         </div>
-    )
-}
+    );
+};

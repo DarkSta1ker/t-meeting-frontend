@@ -1,4 +1,4 @@
-import {ReactNode} from "react";
+import {ReactNode} from 'react';
 
 export interface AuthData {
     login: string;
@@ -11,8 +11,8 @@ export interface ValidationErrors {
 }
 
 export interface AuthFormProps {
-    authData: AuthData,
-    handlePasswordFieldChange: (payload: string) => void,
+    authData: AuthData;
+    handlePasswordFieldChange: (payload: string) => void;
     handleLoginFieldChange: (payload: string) => void;
 }
 

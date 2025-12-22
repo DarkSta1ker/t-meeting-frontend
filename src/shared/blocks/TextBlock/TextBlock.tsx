@@ -1,9 +1,9 @@
-import React, {type FC, type PropsWithChildren} from "react";
-import cn from 'classnames'
-import styles from "./TextBlock.module.css";
+import cn from 'classnames';
+import React, {type FC, type PropsWithChildren} from 'react';
+import styles from './TextBlock.module.css';
 
 interface TextBlockProps extends PropsWithChildren {
-    className?: string
+    className?: string;
 }
 
 export const TextBlock: FC<TextBlockProps> = ({children, className}) => {
@@ -11,5 +11,5 @@ export const TextBlock: FC<TextBlockProps> = ({children, className}) => {
         <p className={cn(styles.textBlock, className)}>
             {children}
         </p>
-    )
-}
+    );
+};
