@@ -1,18 +1,18 @@
-import {Button} from "@mui/material";
+import {Button} from '@mui/material';
 import TextField from '@mui/material/TextField';
 import React, {FC, FormEvent, useCallback, useState} from 'react';
-import {useNavigate} from "react-router-dom";
-import {useAuth} from "../../contexts/AuthContext";
-import {useAuthForm} from "../../hooks/useAuthForm";
-import {ValidationErrors} from "../../shared/types/auth";
-import styles from "./AuthForm.module.css";
-import {validateLogin, validatePassword} from "./validationErrors";
+import {useNavigate} from 'react-router-dom';
+import {useAuth} from '../../contexts/AuthContext';
+import {useAuthForm} from '../../hooks/useAuthForm';
+import {ValidationErrors} from '../../shared/types/auth';
+import styles from './AuthForm.module.css';
+import {validateLogin, validatePassword} from './validationErrors';
 
 export const AuthForm: FC = () => {
     const nav = useNavigate();
     const {loginUser, isLoadingAuth} = useAuth();
     const [loginError, setLoginError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState('');
     const {authData, handlePasswordFieldChange, handleLoginFieldChange} = useAuthForm();
 
     const [touched, setTouched] = useState({
@@ -22,7 +22,7 @@ export const AuthForm: FC = () => {
 
     const [errors, setErrors] = useState<ValidationErrors>({
         login: '',
-        password: "",
+        password: '',
     });
 
     const handlePasswordChange = (value: string) => {
@@ -34,31 +34,31 @@ export const AuthForm: FC = () => {
     const handleLoginChange = (value: string) => {
         handleLoginFieldChange(value);
         const error = validateLogin(value);
-        setErrors(prev => ({...prev, login: error}));
-    }
+        setErrors((prev) => ({...prev, login: error}));
+    };
 
     const handleLogin = useCallback(async (e: FormEvent) => {
-        e.preventDefault()
+        e.preventDefault();
         const result = await loginUser(authData);
-        if (result.status === "Success") {
+        if (result.status === 'Success') {
             setLoginError(false);
-            console.log("Авторизация успешна");
+            console.log('Авторизация успешна');
             nav('/eventsList');
         } else {
             setLoginError(true);
-            setErrorMessage(result.payload)
+            setErrorMessage(result.payload);
             console.log(`Ошибка ${result.payload}`);
         }
     }, [authData, loginUser, nav]);
     const handleBlur = (field: 'login' | 'password') => {
-        setTouched(prev => ({...prev, [field]: true}));
+        setTouched((prev) => ({...prev, [field]: true}));
         if (field === 'login') {
             const error = validateLogin(authData.login);
-            setErrors(prev => ({...prev, login: error}));
+            setErrors((prev) => ({...prev, login: error}));
 
         } else {
             const error = validatePassword(authData.password);
-            setErrors(prev => ({...prev, password: error}));
+            setErrors((prev) => ({...prev, password: error}));
         }
 
     };
@@ -108,12 +108,12 @@ export const AuthForm: FC = () => {
                 variant="outlined"
                 disabled={!!errors?.login || !!errors?.password || isLoadingAuth}
                 sx={{
-                    backgroundColor: "transparent",
-                    borderRadius: '5px',
                     '&:hover': {
+                        backgroundColor: '#cfd0d5',
                         borderRadius: '5px',
-                        backgroundColor: "#cfd0d5",
-                    }
+                    },
+                    'backgroundColor': 'transparent',
+                    'borderRadius': '5px'
                 }}
             >
                 Войти
@@ -124,7 +124,7 @@ export const AuthForm: FC = () => {
                 value={errorMessage}
                 variant="standard"
                 sx={{
-                    width: '100%',
+                    'width': '100%',
                     '& .MuiInputBase-root': {
                         justifyContent: 'center',
                         textAlign: 'center',
@@ -140,6 +140,6 @@ export const AuthForm: FC = () => {
                 }}
             />}
         </form>
-    )
-}
+    );
+};
 
