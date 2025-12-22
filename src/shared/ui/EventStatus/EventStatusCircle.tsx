@@ -11,7 +11,7 @@ export const EventStatusCircle: FC<EventStatusProps> = ({status}) => {
             case "published":
                 return "#34c658"
             case "draft":
-                return "#fecd00"
+                return "#fecd00";
             case "archived":
                 return "#00c5ff";
             default:

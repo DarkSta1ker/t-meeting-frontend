@@ -46,6 +46,10 @@
     "*.tsx": [
       "tslint --fix",
       "prettier --write"
+    ],
+    "*.{ts,tsx}": [
+      "tslint --fix",
+      "git add"
     ]
   },
   "eslintConfig": {

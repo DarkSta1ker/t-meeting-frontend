@@ -1,11 +1,11 @@
+import cn from "classnames";
 import React, {type FC} from "react";
-import cn from 'classnames'
-import styles from './TextArea.css';
+import styles from "./TextArea.css";
 
 interface TextAreaProps {
-    className?: string
-    placeholder?: string
-    onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
+    className?: string;
+    placeholder?: string;
+    onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
     value?: string;
 }
 
@@ -15,4 +15,4 @@ export const TextArea: FC<TextAreaProps> = ({className, placeholder = "TextArea 
                   value={value}>
         </textarea>
     );
-}
+};
