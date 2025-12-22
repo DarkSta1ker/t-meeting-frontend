@@ -1,40 +1,39 @@
-import React, {type FC, useEffect, useState} from "react";
-import styles from "./PersonalAccount.module.css";
 import {TextField} from "@mui/material";
-import {defaultAccountData} from "../../shared/constants/constants";
+import Typography from "@mui/material/Typography";
+import React, {type FC, useEffect, useState} from "react";
 import {AccountService} from "../../app/services/AccountService";
 import {useAuth} from "../../contexts/AuthContext";
-import Typography from "@mui/material/Typography";
+import {defaultAccountData} from "../../shared/constants/constants";
+import styles from "./PersonalAccount.module.css";
 
 export const PersonalAccount: FC = () => {
     const {userData} = useAuth();
     const [AccountData, setAccountData] = useState(defaultAccountData);
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         const loadAccountData = async () => {
             if (!userData?.login || !userData?.token) {
-                console.log('Нет данных пользователя');
-                setIsLoading(false)
+                console.log("Нет данных пользователя");
+                setIsLoading(false);
                 return;
             }
-            setIsLoading(true)
+            setIsLoading(true);
             const result = await AccountService.getAccountInfo(userData.login, userData.token);
             if (result.status === "Success") {
                 console.log("Account Data loaded");
-                if(result.payload.avatarPhoto===undefined){
+                if (result.payload.avatarPhoto === undefined) {
                     setAccountData({
                         ...result.payload,
                         avatarPhoto: defaultAccountData.avatarPhoto,
-                    })
-                }
-                else{
+                    });
+                } else {
                     setAccountData(result.payload);
                 }
             } else {
                 console.log(`Error ${result.payload}`);
             }
-            setIsLoading(false)
-        }
+            setIsLoading(false);
+        };
         loadAccountData();
     }, []);
 
@@ -46,9 +45,9 @@ export const PersonalAccount: FC = () => {
                         <Typography
                             variant="h4"
                             sx={{
-                                height:'70px',
-                                display:'flex',
-                                alignItems: 'center',
+                                height: "70px",
+                                display: "flex",
+                                alignItems: "center",
                             }}
                         >
                             Загрузка...
@@ -66,7 +65,7 @@ export const PersonalAccount: FC = () => {
                                 value={AccountData.login}
                                 variant="standard"
                                 sx={{
-                                    pointerEvents: 'none',
+                                    pointerEvents: "none",
                                 }}
                                 slotProps={{
                                     input: {
@@ -80,7 +79,7 @@ export const PersonalAccount: FC = () => {
                                 value={AccountData.email}
                                 variant="standard"
                                 sx={{
-                                    pointerEvents: 'none',
+                                    pointerEvents: "none",
                                 }}
                                 slotProps={{
                                     input: {
@@ -92,7 +91,7 @@ export const PersonalAccount: FC = () => {
                                 id="multiline-read-only-input"
                                 label="Роль"
                                 sx={{
-                                    pointerEvents: 'none',
+                                    pointerEvents: "none",
                                 }}
                                 value={AccountData.role}
                                 variant="standard"
@@ -106,5 +105,5 @@ export const PersonalAccount: FC = () => {
                     </div>
             }
         </div>
-    )
-}
+    );
+};

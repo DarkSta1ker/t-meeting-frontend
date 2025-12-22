@@ -1,12 +1,12 @@
-import React, {FC, useState, useEffect, useCallback, ChangeEvent} from "react";
+import React, {ChangeEvent, FC, useCallback, useEffect, useState} from "react";
 import styles from "./EventForm.module.css";
-import {EventMetadataField, EventBaseField, EventListItem, EventNew} from "../../shared/types/event";
+import {EventBaseField, EventListItem, EventMetadataField, EventNew} from "../../shared/types/event";
 import TextField from "@mui/material/TextField";
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs, {Dayjs} from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import {DateTimePicker} from "@mui/x-date-pickers/DateTimePicker";
-import { FormHelperText } from "@mui/material";
+import {FormHelperText} from "@mui/material";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -21,13 +21,13 @@ dayjs.extend(timezone);
 
 const NSK_TIMEZONE = 'Asia/Novosibirsk';
 
-interface EventFormProps{
-    eventData:EventListItem|EventNew,
-    handleBaseFieldChange:(paramName:EventBaseField, payload:string)=>void,
-    handleMetadataFieldChange:(paramName:EventMetadataField, payload:string)=>void,
-    TextAreaChange: (paramName:string, payload:string)=>void,
-    handleChangeStatus:(paramName:string)=>void,
-    handlePostOrUpdate:()=>void,
+interface EventFormProps {
+    eventData: EventListItem | EventNew;
+    handleBaseFieldChange: (paramName: EventBaseField, payload: string) => void;
+    handleMetadataFieldChange: (paramName: EventMetadataField, payload: string) => void;
+    TextAreaChange: (paramName: string, payload: string) => void,
+    handleChangeStatus: (paramName: string) => void,
+    handlePostOrUpdate: () => void,
 }
 
 export const EventForm: FC<EventFormProps> = ({
@@ -45,8 +45,8 @@ export const EventForm: FC<EventFormProps> = ({
         }
         return null;
     });
-    const { eventId } = useParams<{ eventId: string }>();
-    const nav=useNavigate();
+    const {eventId} = useParams<{ eventId: string }>();
+    const nav = useNavigate();
     const {deleteEvent, isLoading} = useEvent();
     const [dateErrorText, setDateErrorText] = useState<string>('asd');
     const [touched, setTouched] = useState(false);
@@ -57,8 +57,8 @@ export const EventForm: FC<EventFormProps> = ({
         nav('/eventsList');
     }, [nav]);
 
-    const handleDeleteEvent= useCallback(async()=>{
-        if(eventId) {
+    const handleDeleteEvent = useCallback(async () => {
+        if (eventId) {
             const result = await deleteEvent(eventId);
             if (result.status === "Success") {
                 console.log("Event deleted");
@@ -66,13 +66,12 @@ export const EventForm: FC<EventFormProps> = ({
             } else {
                 console.log(`Error ${result.payload}`);
             }
-        }
-        else{
+        } else {
             console.log('Ошибка! Нет id')
         }
-    },[deleteEvent, eventId, nav]);
+    }, [deleteEvent, eventId, nav]);
     useEffect(() => {
-        if (eventData.name){
+        if (eventData.name) {
             setNameError(false)
         }
         if (eventData.metadata.datetime) {
@@ -144,28 +143,26 @@ export const EventForm: FC<EventFormProps> = ({
             }
         }
     };
-    const handleNameChange = (e: ChangeEvent<HTMLInputElement>)=>{
+
+    const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         const trimmedValue = e.target.value.trim();
-        if(e.target.value.trim()===''){
+        if (e.target.value.trim() === '') {
             setNameError(true)
             setNameErrorText("Поле названия не может быть пустым")
-        }
-        else if (trimmedValue.length > 100){
+        } else if (trimmedValue.length > 100) {
             setNameError(true)
             setNameErrorText("Максимальная длина названия - 100 символов")
-        }
-        else if (trimmedValue.length < 3){
+        } else if (trimmedValue.length < 3) {
             setNameError(true)
             setNameErrorText("Минимальная длина названия - 3 символа")
-        }
-        else{
+        } else {
             setNameError(false)
             setNameErrorText("")
         }
         handleBaseFieldChange("name", e.target.value)
     }
 
-    const handleStatus = (e: React.ChangeEvent<HTMLInputElement>) =>{
+    const handleStatus = (e: React.ChangeEvent<HTMLInputElement>) => {
         handleChangeStatus(e.target.value);
     }
     const handleBlur = () => {
@@ -186,7 +183,7 @@ export const EventForm: FC<EventFormProps> = ({
                         label="Название мероприятия"
                         variant="outlined"
                         required
-                        sx={{ width: "100%" }}
+                        sx={{width: "100%"}}
                         value={eventData.name}
                         error={nameError}
                         helperText={nameError && nameErrorText}
@@ -197,20 +194,20 @@ export const EventForm: FC<EventFormProps> = ({
                             id="location-input"
                             label="Место проведения"
                             variant="outlined"
-                            sx={{ width: "100%" }}
+                            sx={{width: "100%"}}
                             value={eventData.metadata.location}
                             onChange={(e) => handleMetadataFieldChange("location", e.target.value)}
                         />
 
-                        <div style={{ width: "100%" }}>
+                        <div style={{width: "100%"}}>
                             <DateTimePicker
                                 label="Дата и время проведения (НСК)"
                                 value={dateTimeValue}
                                 onChange={handleDateTimeChange}
-                                sx={{ width: "100%" }}
+                                sx={{width: "100%"}}
                                 ampm={false}
                                 format="DD.MM.YYYY HH:mm"
-                                timeSteps={{ minutes: 5 }}
+                                timeSteps={{minutes: 5}}
                                 minDate={dayjs().tz(NSK_TIMEZONE).startOf('day')}
                                 maxDate={dayjs().tz(NSK_TIMEZONE).add(2, 'year')}
                                 slotProps={{
@@ -226,19 +223,19 @@ export const EventForm: FC<EventFormProps> = ({
                             />
 
                             {dateErrorText && touched && (
-                                <FormHelperText error sx={{ mt: 0.5 }}>
+                                <FormHelperText error sx={{mt: 0.5}}>
                                     {dateErrorText}
                                 </FormHelperText>
                             )}
 
                             {dateTimeValue && !dateErrorText && (
-                                <FormHelperText sx={{ mt: 0.5, color: 'green' }}>
+                                <FormHelperText sx={{mt: 0.5, color: 'green'}}>
                                     {dateTimeValue.format('dddd, D MMMM YYYY [в] HH:mm')}
                                 </FormHelperText>
                             )}
                         </div>
                         {
-                            eventId?
+                            eventId ?
                                 <FormControl>
                                     <FormLabel id="demo-radio-buttons-group-label">Статус мероприятия</FormLabel>
                                     <RadioGroup
@@ -292,7 +289,9 @@ export const EventForm: FC<EventFormProps> = ({
                             width: "100%",
                         }}
                         value={eventData.content.find(block => block.block === "promo-text")?.payload.join('') || ''}
-                        onChange={(e)=>{TextAreaChange("promo-text", e.target.value)}}
+                        onChange={(e) => {
+                            TextAreaChange("promo-text", e.target.value)
+                        }}
                     />
                 </div>
             </div>
@@ -315,7 +314,7 @@ export const EventForm: FC<EventFormProps> = ({
                     Отмена
                 </Button>
                 {
-                    eventId&&
+                    eventId &&
                     <Button
                         variant="outlined"
                         disabled={isLoading}
@@ -336,7 +335,7 @@ export const EventForm: FC<EventFormProps> = ({
                 }
                 <Button
                     variant="outlined"
-                    disabled={nameError||dateError}
+                    disabled={nameError || dateError}
                     onClick={handlePostOrUpdate}
                     size="large"
                     sx={{
@@ -349,7 +348,7 @@ export const EventForm: FC<EventFormProps> = ({
                         }
                     }}
                 >
-                    {eventId? "Сохранить":"Отправить"}
+                    {eventId ? "Сохранить" : "Отправить"}
                 </Button>
             </div>
         </>
