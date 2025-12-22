@@ -1,4 +1,4 @@
-export interface EventBase{
+export interface EventBase {
     name: string,
     metadata: {
         datetime: string,
@@ -9,7 +9,9 @@ export interface EventBase{
     createdAt?: string,
     updatedAt?: string,
 }
+
 export type EventNew = EventBase;
+
 export interface EventListItem extends EventBase {
     id: string,
     name: string,
@@ -29,13 +31,13 @@ export interface PromoTextBlock {
     payload: string[];
 }
 
-export interface EventsState{
+export interface EventsState {
     events: EventListItem[];
 }
 
 
 export type EventContentBlock = | PromoTextBlock
 
-export type EventBaseField = 'name';
+export type EventBaseField = "name";
 export type EventMetadataField = keyof EventBase['metadata'];
 

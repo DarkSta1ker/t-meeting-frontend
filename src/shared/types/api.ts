@@ -5,7 +5,7 @@ export type ApiData<T = Record<string, unknown>> = {
 }
 
 export type ResultSuccess<T> = {
-    status: 'Success';
+    status: "Success";
     payload: T;
 }
 

@@ -5,23 +5,24 @@ import {useAuth} from "../../contexts/AuthContext";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import styles from "./Header.module.css";
-export const LogButtons: FC=() => {
+
+export const LogButtons: FC = () => {
     const nav = useNavigate();
     const location = useLocation();
-    const path= location.pathname;
+    const path = location.pathname;
     const {logoutUser, userData} = useAuth();
-    const handleLogout = useCallback(()=>{
+    const handleLogout = useCallback(() => {
         logoutUser();
-        nav('/');
-    },[])
-    const handleNavigateAccount = useCallback(()=>{
+        nav("/");
+    }, [])
+    const handleNavigateAccount = useCallback(() => {
         nav('/personalAccount');
-    },[])
+    }, [])
 
     const isPersonalAccountPage = path === '/personalAccount';
 
-    const getContent= ()=>{
-        return isPersonalAccountPage?
+    const getContent = () => {
+        return isPersonalAccountPage ?
             null
             :
             <Button

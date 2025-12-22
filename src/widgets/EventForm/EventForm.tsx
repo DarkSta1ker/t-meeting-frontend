@@ -19,7 +19,7 @@ import {useEvent} from "../../hooks/useEvent";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const NSK_TIMEZONE = 'Asia/Novosibirsk';
+const NSK_TIMEZONE = "Asia/Novosibirsk";
 
 interface EventFormProps {
     eventData: EventListItem | EventNew;

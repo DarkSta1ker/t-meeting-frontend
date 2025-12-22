@@ -1,4 +1,4 @@
-export interface AccountData{
+export interface AccountData {
     login: string;
     email: string;
     role: string;

@@ -1,26 +1,23 @@
-import React, {type FC, useCallback} from "react";
-import { useNavigate } from 'react-router-dom';
-import styles from './CreateEventPage.module.css';
-import {useEvent} from "../../hooks/useEvent";
-import {EventForm} from "../../widgets/EventForm/EventForm";
-import {useEventForm} from "../../hooks/useEventForm";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import React, {type FC, useCallback} from "react";
+import { useNavigate } from "react-router-dom";
+import {useEvent} from "../../hooks/useEvent";
+import {useEventForm} from "../../hooks/useEventForm";
+import {EventForm} from "../../widgets/EventForm/EventForm";
+import styles from "./CreateEventPage.module.css";
 export const CreateEventPage: FC = () => {
 
-    const nav=useNavigate();
+    const nav = useNavigate();
     const {addEvent, isLoading} = useEvent();
-    const {eventData, handleTextAreaChange, handleMetadataFieldChange, handleBaseFieldChange, handleChangeStatus}=useEventForm();
-    const handleAddEvent = useCallback(async ()=>{
+    const {eventData, handleTextAreaChange, handleMetadataFieldChange, handleBaseFieldChange, handleChangeStatus} = useEventForm();
+    const handleAddEvent = useCallback(async () => {
         const resp = await addEvent(eventData);
-        if (resp.status=== "Success") {
-            nav('/eventsList');
-        }
-        else{
+        if (resp.status === "Success") {
+            nav("/eventsList");
+        } else {
             console.log(`${resp.status} | ${resp.payload}`);
         }
-    },[addEvent, eventData,nav])
-
+    }, [addEvent, eventData, nav]);
 
     return (
         <div className={styles.createEventPage}>
@@ -28,13 +25,13 @@ export const CreateEventPage: FC = () => {
                 <Typography
                     variant="h5"
                     sx={{
-                        height:'64px',
-                        display:'flex',
-                        alignItems: 'center',
+                        height: "64px",
+                        display: "flex",
+                        alignItems: "center",
                     }}
                 >Создание мероприятия</Typography>
                 {
-                    isLoading? <div>Загрузка...</div>
+                    isLoading ? <div>Загрузка...</div>
                         :
                         <>
                             <EventForm
@@ -49,6 +46,6 @@ export const CreateEventPage: FC = () => {
                 }
             </div>
         </div>
-    )
-}
-
+    );
+};
+

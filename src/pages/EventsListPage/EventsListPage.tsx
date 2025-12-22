@@ -119,15 +119,15 @@ export const EventsListPage: FC = () => {
                                                             <Typography
                                                                 variant="body1"
                                                                 sx={{
-                                                                    width: "95%",
-                                                                    margin: 0,
-                                                                    display: "-webkit-box",
-                                                                    WebkitLineClamp: 3,
                                                                     WebkitBoxOrient: "vertical",
+                                                                    WebkitLineClamp: 3,
+                                                                    display: "-webkit-box",
+                                                                    lineHeight: 1.5,
+                                                                    margin: 0,
+                                                                    maxHeight: "4.5em",
                                                                     overflow: "hidden",
                                                                     textOverflow: "ellipsis",
-                                                                    maxHeight: "4.5em",
-                                                                    lineHeight: 1.5,
+                                                                    width: "95%",
                                                                 }}
                                                             >
                                                                 {event.content[0].payload.join(" ")}

@@ -14,7 +14,7 @@ export const PersonalAccount: FC = () => {
         const loadAccountData = async () => {
             if (!userData?.login || !userData?.token) {
                 console.log("Нет данных пользователя");
-                setIsLoading(false);
+                setIsLoading(false)
                 return;
             }
             setIsLoading(true);

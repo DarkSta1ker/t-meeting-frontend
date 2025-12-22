@@ -2,7 +2,7 @@ import {AuthData} from "../types/auth";
 import {AccountData} from "../types/account";
 import {EventListItem} from "../types/event";
 
-export const defaultEvent:EventListItem = {
+export const defaultEvent: EventListItem = {
     id: "",
     name: "",
     metadata: {
@@ -13,17 +13,17 @@ export const defaultEvent:EventListItem = {
     content: [
         {
             block: "promo-text",
-            payload: []
+            payload: [],
         }
     ]
 }
 
-export const defaultAuthData:AuthData = {
-    login:"",
-    password:"",
+export const defaultAuthData: AuthData = {
+    login: "",
+    password: "",
 }
 
-export const defaultAccountData:AccountData = {
+export const defaultAccountData: AccountData = {
     login: "",
     email: "",
     role: "",

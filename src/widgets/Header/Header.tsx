@@ -5,28 +5,28 @@ import Typography from '@mui/material/Typography'
 import {useNavigate} from "react-router-dom";
 import {LogButtons} from "./LogButtons";
 
-export const Header: FC=()=>{
+export const Header: FC = () => {
     const {isAuth} = useAuth();
     const nav = useNavigate();
     const handleLogoClick = () => {
         nav('/eventsList');
         window.scrollTo({
             top: 0,
-            behavior: 'smooth'
+            behavior: "smooth"
         });
     };
-    return(
+    return (
         <div className={styles.header}>
             <div className={styles.headerElementsBlock}>
                 {
-                    isAuth?
+                    isAuth ?
                         <>
                             <Typography
                                 variant="h5"
                                 onClick={handleLogoClick}
                                 sx={{
                                     '&:hover': {
-                                        cursor:"pointer"
+                                        cursor: "pointer"
                                     }
                                 }}
                             >T-meeting</Typography>

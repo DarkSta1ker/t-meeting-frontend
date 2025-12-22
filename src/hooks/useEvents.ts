@@ -9,7 +9,7 @@ export const useEvents = ()=> {
     const getAllEvents = useCallback(async()=>{
         setIsLoading(true);
         const response = await EventService.getAllEvents();
-        if (response.status==='Success'){
+        if (response.status==="Success"){
             setEvents(response.payload)
         }
         else{

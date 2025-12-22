@@ -42,7 +42,7 @@ export const useEvent=() => {
             event.status = event.status==='published'? 'draft':'published';
             try{
                 const response=await updateEvent(event);
-                if(response.status==='Success'){
+                if (response.status==='Success'){
                     console.log('Статус мероприятия обновлен');
                 }
                 else{

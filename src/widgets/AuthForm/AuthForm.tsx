@@ -1,19 +1,18 @@
-import TextField from '@mui/material/TextField';
-import React, {FC, useCallback, FormEvent} from 'react';
-import styles from "./AuthForm.module.css";
 import {Button} from "@mui/material";
-import {useAuth} from "../../contexts/AuthContext";
-import {useState} from "react";
-import {useAuthForm} from "../../hooks/useAuthForm";
+import TextField from '@mui/material/TextField';
+import React, {FC, FormEvent, useCallback, useState} from 'react';
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../../contexts/AuthContext";
+import {useAuthForm} from "../../hooks/useAuthForm";
 import {ValidationErrors} from "../../shared/types/auth";
-import {validateLogin,validatePassword} from "./validationErrors";
+import styles from "./AuthForm.module.css";
+import {validateLogin, validatePassword} from "./validationErrors";
 
-export const AuthForm: FC = ()=>{
+export const AuthForm: FC = () => {
     const nav = useNavigate();
     const {loginUser, isLoadingAuth} = useAuth();
     const [loginError, setLoginError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState("");
     const {authData, handlePasswordFieldChange, handleLoginFieldChange} = useAuthForm();
 
     const [touched, setTouched] = useState({
@@ -22,45 +21,44 @@ export const AuthForm: FC = ()=>{
     });
 
     const [errors, setErrors] = useState<ValidationErrors>({
-        login:'',
-        password:'',
+        login: '',
+        password: "",
     });
 
-    const handlePasswordChange = (value:string)=>{
+    const handlePasswordChange = (value: string) => {
         handlePasswordFieldChange(value);
         const error = validatePassword(value);
-        setErrors(prev=>({...prev, password:error}));
-    }
+        setErrors((prev) => ({...prev, password: error}));
+    };
 
-    const handleLoginChange = (value:string)=>{
+    const handleLoginChange = (value: string) => {
         handleLoginFieldChange(value);
         const error = validateLogin(value);
-        setErrors(prev=>({...prev, login:error}));
+        setErrors(prev => ({...prev, login: error}));
     }
 
-    const handleLogin = useCallback(async(e: FormEvent)=>{
+    const handleLogin = useCallback(async (e: FormEvent) => {
         e.preventDefault()
         const result = await loginUser(authData);
-        if(result.status==="Success"){
+        if (result.status === "Success") {
             setLoginError(false);
             console.log("Авторизация успешна");
             nav('/eventsList');
-        }
-        else{
+        } else {
             setLoginError(true);
             setErrorMessage(result.payload)
             console.log(`Ошибка ${result.payload}`);
         }
-    },[authData, loginUser, nav]);
+    }, [authData, loginUser, nav]);
     const handleBlur = (field: 'login' | 'password') => {
-        setTouched(prev => ({ ...prev, [field]: true }));
+        setTouched(prev => ({...prev, [field]: true}));
         if (field === 'login') {
             const error = validateLogin(authData.login);
-            setErrors(prev => ({ ...prev, login: error }));
+            setErrors(prev => ({...prev, login: error}));
 
         } else {
             const error = validatePassword(authData.password);
-            setErrors(prev => ({ ...prev, password: error }));
+            setErrors(prev => ({...prev, password: error}));
         }
 
     };
@@ -108,7 +106,7 @@ export const AuthForm: FC = ()=>{
             <Button
                 type="submit"
                 variant="outlined"
-                disabled={!!errors?.login || !!errors?.password|| isLoadingAuth}
+                disabled={!!errors?.login || !!errors?.password || isLoadingAuth}
                 sx={{
                     backgroundColor: "transparent",
                     borderRadius: '5px',

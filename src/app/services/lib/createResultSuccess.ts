@@ -4,5 +4,5 @@ export const createResultSuccess = <T>(payload: T):ResultSuccess<T> => {
     return{
         status: 'Success',
         payload: payload
-    }
+    };
 }

@@ -1,6 +1,6 @@
 import {mockAccountData} from "../../shared/mocks/accountMocks";
-import {createResultSuccess} from "./lib/createResultSuccess";
 import {createResultError} from "./lib/createResultError";
+import {createResultSuccess} from "./lib/createResultSuccess";
 
 export const AccountService = {
     async getAccountInfo(login: string, token: string) {

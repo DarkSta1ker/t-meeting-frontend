@@ -59,10 +59,10 @@ export const EventPage: FC = () => {
                                 <Typography
                                     variant="h4"
                                     sx={{
-                                        display: "flex",
                                         alignItems: "center",
-                                        wordWrap: "break-word",
+                                        display: "flex",
                                         overflowWrap: "break-word",
+                                        wordWrap: "break-word",
                                     }}
                                 >
                                     {eventData.name}

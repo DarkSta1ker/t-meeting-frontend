@@ -1,7 +1,6 @@
 import {createResultError} from "../../app/services/lib/createResultError";
 import {createResultSuccess} from "../../app/services/lib/createResultSuccess";
-import {ResultError} from "../types/api";
-import {ResultSuccess} from "../types/api";
+import {ResultError, ResultSuccess} from "../types/api";
 
 interface LoginSuccessPayload {
     token: string;
@@ -14,16 +13,16 @@ const usersInDB = [
     {login: "login3", password: "password", token: "token3", email: "email3"},
 ]
 
-type LoginResult = ResultSuccess<LoginSuccessPayload>| ResultError;
+type LoginResult = ResultSuccess<LoginSuccessPayload> | ResultError;
 
-export const mockLoginUser = (login: string, password: string):Promise<LoginResult> => {
+export const mockLoginUser = (login: string, password: string): Promise<LoginResult> => {
     return new Promise((resolve) => {
         setTimeout(() => {
-            for(const person of usersInDB) {
-                if(person.login === login && person.password === password) {
+            for (const person of usersInDB) {
+                if (person.login === login && person.password === password) {
                     resolve(createResultSuccess({
                         token: person.token,
-                        login: person.login
+                        login: person.login,
                     }));
                     return;
                 }

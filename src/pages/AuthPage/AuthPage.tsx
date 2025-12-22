@@ -9,7 +9,7 @@ export const AuthPage: FC = ()=>{
     const {isAuth} = useAuth();
     useEffect(() => {
         if(isAuth){
-            nav('/eventsList');
+            nav("/eventsList");
         }
     }, [isAuth, nav]);
     return(
