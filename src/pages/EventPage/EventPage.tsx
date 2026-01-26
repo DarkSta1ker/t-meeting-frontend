@@ -9,7 +9,7 @@ import {useParams} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEventForm} from '../../hooks/useEventForm';
 import styles from './EventPage.module.css';
-
+import {Loader} from '../../shared/loader/Loader'
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault('Asia/Novosibirsk');
@@ -42,16 +42,7 @@ export const EventPage: FC = () => {
                 {
                     isLoading ?
                         <div className={styles.loading}>
-                            <Typography
-                                variant='h2'
-                                sx={{
-                                    alignItems: 'center',
-                                    display: 'flex',
-                                    height: '70px',
-                                }}
-                            >
-                                Загрузка...
-                            </Typography>
+                            <Loader/>
                         </div>
                         :
                         <>

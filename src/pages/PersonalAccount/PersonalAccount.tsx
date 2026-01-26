@@ -4,6 +4,7 @@ import React, {type FC, useEffect, useState} from 'react';
 import {AccountService} from '../../app/services/AccountService';
 import {useAuth} from '../../contexts/AuthContext';
 import {defaultAccountData} from '../../shared/constants/constants';
+import {Loader} from '../../shared/loader/Loader'
 import styles from './PersonalAccount.module.css';
 
 export const PersonalAccount: FC = () => {
@@ -42,16 +43,7 @@ export const PersonalAccount: FC = () => {
             {
                 isLoading ?
                     <div className={styles.loading}>
-                        <Typography
-                            variant='h4'
-                            sx={{
-                                alignItems: 'center',
-                                display: 'flex',
-                                height: '70px',
-                            }}
-                        >
-                            Загрузка...
-                        </Typography>
+                        <Loader/>
                     </div>
                     :
                     <div className={styles.personalAccountBox}>

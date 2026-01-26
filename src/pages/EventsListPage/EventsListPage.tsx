@@ -10,6 +10,7 @@ import {useNavigate} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEvents} from '../../hooks/useEvents';
 import {EventStatusCircle} from '../../shared/ui/EventStatus/EventStatusCircle';
+import {Loader} from '../../shared/loader/Loader'
 import styles from './EventsListPage.module.css';
 
 dayjs.extend(utc);
@@ -79,13 +80,7 @@ export const EventsListPage: FC = () => {
                 <div className={styles.eventsListBlock}>
                     {
                         isLoading ?
-                            <Typography
-                                variant="h6"
-                                sx={{
-                                    alignItems: 'center',
-                                    display: 'flex',
-                                }}
-                            >Загрузка мероприятий...</Typography>
+                            <Loader/>
                             :
                             <>
                                 {

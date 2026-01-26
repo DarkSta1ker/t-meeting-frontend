@@ -41,12 +41,17 @@ export const useEventForm = (eventId?: string) => {
     }, [setEventData]);
 
     const handleTextAreaChange = useCallback((field: string, value: string) => {
-        setEventData((prev) => ({
-            ...prev,
-            content: [
-                ...prev.content.map((contentBlock) => contentBlock.block === field ? {...contentBlock, payload: [value]} : contentBlock)
-            ]
-        }));
+        setEventData((prev) => {
+            return ({
+                ...prev,
+                content: [
+                    ...prev.content.map((contentBlock) => contentBlock.block === field ? {
+                        ...contentBlock,
+                        payload: [value]
+                    } : contentBlock)
+                ]
+            });
+        });
     }, [setEventData]);
 
     const resetForm = useCallback(() => {

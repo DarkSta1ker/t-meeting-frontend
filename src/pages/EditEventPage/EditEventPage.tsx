@@ -4,6 +4,7 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEventForm} from '../../hooks/useEventForm';
 import {EventForm} from '../../widgets/EventForm/EventForm';
+import {Loader} from '../../shared/loader/Loader'
 import styles from './EditEventPage.module.css';
 
 export const EditEventPage: FC = () => {
@@ -41,7 +42,7 @@ export const EditEventPage: FC = () => {
                     Редактирование мероприятия
                 </Typography>
                 {
-                    isLoading ? <div>Загрузка...</div> :
+                    isLoading ? <Loader/> :
                         <EventForm
                             eventData={eventData}
                             handleMetadataFieldChange={handleMetadataFieldChange}

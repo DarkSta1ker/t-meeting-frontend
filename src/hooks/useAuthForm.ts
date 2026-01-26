@@ -1,7 +1,7 @@
-import {useState, useCallback} from 'react';
-import {defaultAuthData} from "../shared/constants/constants";
+import {useCallback, useState} from 'react';
+import {defaultAuthData} from '../shared/constants/constants';
 
-export const useAuthForm = (eventId?: string) => {
+export const useAuthForm = () => {
 
     const [authData, setAuthData] = useState(defaultAuthData);
     const handlePasswordFieldChange = useCallback((payload: string) => {
@@ -12,15 +12,15 @@ export const useAuthForm = (eventId?: string) => {
     }, [setAuthData]);
 
     const handleLoginFieldChange = useCallback((payload: string) => {
-        setAuthData((prev) =>({
+        setAuthData((prev) => ({
             ...prev,
             login: payload,
-        }))
+        }));
     }, [setAuthData]);
 
     return{
         authData,
         handleLoginFieldChange,
         handlePasswordFieldChange,
-    }
-}
+    };
+};

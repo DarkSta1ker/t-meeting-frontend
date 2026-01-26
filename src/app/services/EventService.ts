@@ -1,93 +1,88 @@
-import { EventNew, EventListItem} from "../../shared/types/event";
-import {requestApi} from "../../shared/api/requestApi";
-import {createResultError} from "./lib/createResultError";
-import {createResultSuccess} from "./lib/createResultSuccess";
-import {ApiData} from "../../shared/types/api";
-import {mockRequestApi} from "../../shared/mocks/eventsMocks";
+import {requestApi} from '../../shared/api/requestApi';
+import {mockRequestApi} from '../../shared/mocks/eventsMocks';
+import {ApiData} from '../../shared/types/api';
+import {EventListItem, EventNew} from '../../shared/types/event';
+import {createResultError} from './lib/createResultError';
+import {createResultSuccess} from './lib/createResultSuccess';
 
 export const EventService = {
-    async addEvent(eventPayload: EventNew){
-        try{
-            const apiData:ApiData<EventNew>={
-                url : "/api/event",
-                method : "POST",
+    async addEvent(eventPayload: EventNew) {
+        try {
+            const apiData: ApiData<EventNew> = {
+                url : '/api/event',
+                method : 'POST',
                 payload : eventPayload
-            }
+            };
             const response = await mockRequestApi(apiData);
-            if(!response.ok){
+            if (!response.ok) {
                 return createResultError(new Error(`HTTP Error: ${response.ok} ${response.statusText}`));
             }
             return createResultSuccess(response);
-        }
-        catch(error){
+        } catch (error) {
             return createResultError(error);
         }
     },
-    async getEvent(eventId: string){
-        try{
-            const apiData:ApiData={
+    async getEvent(eventId: string) {
+        try {
+            const apiData: ApiData = {
                 url : `/api/event/${eventId}`,
-                method : "GET",
-            }
+                method : 'GET',
+            };
             const response = await mockRequestApi(apiData);
-            if (!response.ok){
+            if (!response.ok) {
                 return createResultError(new Error(`HTTP Error: ${response.ok} ${response.statusText}`));
             }
-            const payload:EventListItem = await response.json();
+            const payload: EventListItem = await response.json();
             return createResultSuccess<EventListItem>(payload);
-        } catch(error){
+        } catch (error) {
             return createResultError(error);
         }
     },
-    async getAllEvents(){
-        try{
-            const apiData:ApiData={
-                url : "/api/events",
-                method : "GET",
-            }
+    async getAllEvents() {
+        try {
+            const apiData: ApiData = {
+                url : '/api/events',
+                method : 'GET',
+            };
             const response = await mockRequestApi(apiData);
-            if (!response.ok){
+            if (!response.ok) {
                 return createResultError(new Error(`HTTP Error: ${response.ok} ${response.statusText}`));
             }
-            const payload:EventListItem[] = await response.json();
+            const payload: EventListItem[] = await response.json();
             return createResultSuccess<EventListItem[]>(payload);
-        }
-        catch(error){
+        } catch (error) {
             return createResultError(error);
         }
     },
-    async deleteEvent(eventId: string){
-        try{
-            const apiData:ApiData={
+    async deleteEvent(eventId: string) {
+        try {
+            const apiData: ApiData = {
                 url : `/api/event/${eventId}`,
-                method : "DELETE",
-            }
+                method : 'DELETE',
+            };
             const response = await mockRequestApi(apiData);
-            if (!response.ok){
+            if (!response.ok) {
                 return createResultError(new Error(`HTTP Error: ${response.ok} ${response.statusText}`));
             }
             return createResultSuccess(response);
-        }
-        catch(error){
+        } catch (error) {
             return createResultError(error);
         }
     },
-    async updateEvent(eventPayload: EventListItem){
-        try{
-            const apiData:ApiData<EventListItem>={
+    async updateEvent(eventPayload: EventListItem) {
+        try {
+            const apiData: ApiData<EventListItem> = {
                 url : `/api/event/${eventPayload.id}`,
-                method : "PUT",
+                method : 'PUT',
                 payload : eventPayload
-            }
-            const response = await mockRequestApi(apiData)
-            if (!response.ok){
+            };
+            const response = await mockRequestApi(apiData);
+            if (!response.ok) {
                 return createResultError(new Error(`HTTP Error: ${response.ok} ${response.statusText}`));
             }
             return createResultSuccess(response);
-        }
-        catch(error){
+        } catch (error) {
             return createResultError(error);
         }
     }
-}
-
+};
