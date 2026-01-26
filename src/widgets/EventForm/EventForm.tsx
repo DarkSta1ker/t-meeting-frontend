@@ -8,20 +8,13 @@ import RadioGroup from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
 import {DateTimePicker} from '@mui/x-date-pickers/DateTimePicker';
 import {ruRU} from '@mui/x-date-pickers/locales';
-import dayjs, {Dayjs} from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
+import {Dayjs} from 'dayjs';
 import React, {ChangeEvent, FC, useCallback, useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {EventBaseField, EventListItem, EventMetadataField, EventNew} from '../../shared/types/event';
+import {getCurrentDate, getTimeAndDate, userTZ} from '../../shared/utils/formatTimeAndData';
 import styles from './EventForm.module.css';
-import 'dayjs/locale/ru';
-dayjs.locale('ru');
-dayjs.extend(utc);
-dayjs.extend(timezone);
-
-const NSK_TIMEZONE = 'Asia/Novosibirsk';
 
 interface EventFormProps {
     eventData: EventListItem | EventNew;
@@ -42,7 +35,7 @@ export const EventForm: FC<EventFormProps> = ({
                                               }) => {
     const [dateTimeValue, setDateTimeValue] = useState<Dayjs | null>(() => {
         if (eventData.metadata.datetime) {
-            const date = dayjs.utc(eventData.metadata.datetime).tz(NSK_TIMEZONE);
+            const date = getTimeAndDate(eventData.metadata.datetime);
             return date.isValid() ? date : null;
         }
         return null;
@@ -77,7 +70,7 @@ export const EventForm: FC<EventFormProps> = ({
             setNameError(false);
         }
         if (eventData.metadata.datetime) {
-            const date = dayjs.utc(eventData.metadata.datetime).tz(NSK_TIMEZONE);
+            const date = getTimeAndDate(eventData.metadata.datetime);
             if (date.isValid()) {
                 setDateTimeValue(date);
                 validateDate(date);
@@ -89,7 +82,7 @@ export const EventForm: FC<EventFormProps> = ({
         }
     }, [eventData.metadata.datetime]);
     const validateDate = (date: Dayjs): boolean => {
-        const now = dayjs().tz(NSK_TIMEZONE);
+        const now = getCurrentDate();
         const errors: string[] = [];
         if (!date.isValid()) {
             setDateErrorText('Неверный формат даты');
@@ -121,7 +114,7 @@ export const EventForm: FC<EventFormProps> = ({
         if (newValue && newValue.isValid()) {
             if (validateDate(newValue)) {
                 try {
-                    const isoString = newValue.tz(NSK_TIMEZONE).utc().toISOString();
+                    const isoString = newValue.tz(userTZ).utc().toISOString();
                     handleMetadataFieldChange('datetime', isoString);
                     setDateErrorText('');
                 } catch (error) {
@@ -211,8 +204,8 @@ export const EventForm: FC<EventFormProps> = ({
                                 ampm={false}
                                 format='DD.MM.YYYY HH:mm'
                                 timeSteps={{minutes: 5}}
-                                minDate={dayjs().tz(NSK_TIMEZONE).startOf('day')}
-                                maxDate={dayjs().tz(NSK_TIMEZONE).add(2, 'year')}
+                                minDate={getTimeAndDate().startOf('day')}
+                                maxDate={getTimeAndDate().add(2, 'year')}
                                 slotProps={{
                                     textField: {
                                         error: !!dateErrorText && touched,

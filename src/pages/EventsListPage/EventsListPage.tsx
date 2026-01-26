@@ -1,22 +1,16 @@
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
 import {Calendar, CirclePlus, EllipsisVertical, MapPinIcon} from 'lucide-react';
 import {DropdownMenu} from 'radix-ui';
 import React, {type FC, useCallback, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEvents} from '../../hooks/useEvents';
+import {Loader} from '../../shared/loader/Loader';
 import {EventStatusCircle} from '../../shared/ui/EventStatus/EventStatusCircle';
-import {Loader} from '../../shared/loader/Loader'
+import {getTimeAndDateString} from '../../shared/utils/formatTimeAndData';
 import styles from './EventsListPage.module.css';
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.tz.setDefault('Asia/Novosibirsk');
-const NSK_TIMEZONE = 'Asia/Novosibirsk';
 export const EventsListPage: FC = () => {
 
     const nav = useNavigate();
@@ -70,7 +64,7 @@ export const EventsListPage: FC = () => {
         <div className={styles.eventsListPage}>
             <div className={styles.board}>
                 <Typography
-                    variant="h5"
+                    variant='h5'
                     sx={{
                         alignItems: 'center',
                         display: 'flex',
@@ -96,7 +90,7 @@ export const EventsListPage: FC = () => {
                                                             onClick={() => handleEventPage(event.id)}
                                                         >
                                                             <Typography
-                                                                variant="h6"
+                                                                variant='h6'
                                                                 sx={{
                                                                     alignItems: 'center',
                                                                     display: 'flex',
@@ -107,7 +101,7 @@ export const EventsListPage: FC = () => {
                                                                 }}
                                                             >{event.name}</Typography>
                                                             <Typography
-                                                                variant="body1"
+                                                                variant='body1'
                                                                 sx={{
                                                                     WebkitBoxOrient: 'vertical',
                                                                     WebkitLineClamp: 3,
@@ -129,19 +123,19 @@ export const EventsListPage: FC = () => {
                                                         >
                                                             <div className={styles.dataBlock}>
                                                                 <Typography
-                                                                    variant="body1"
+                                                                    variant='body1'
                                                                     sx={{
                                                                         alignItems: 'center',
                                                                         display: 'flex',
                                                                     }}
                                                                 >
-                                                                    {dayjs.utc(event.metadata.datetime).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')}
+                                                                    {getTimeAndDateString(event.metadata.datetime)}
                                                                 </Typography>
                                                                 <Calendar/>
                                                             </div>
                                                             <div className={styles.placeBlock}>
                                                                 <Typography
-                                                                    variant="body1"
+                                                                    variant='body1'
                                                                     sx={{
                                                                         alignItems: 'center',
                                                                         display: 'flex',
@@ -159,14 +153,14 @@ export const EventsListPage: FC = () => {
                                                         <DropdownMenu.Root>
                                                             <DropdownMenu.Trigger asChild>
                                                                 <button className={styles.dropDownMenuButton}
-                                                                        aria-label="Actions">
+                                                                        aria-label='Actions'>
                                                                     <EllipsisVertical/>
                                                                 </button>
                                                             </DropdownMenu.Trigger>
 
                                                             <DropdownMenu.Portal>
                                                                 <DropdownMenu.Content
-                                                                    className={styles.dropdownMenuContent} side="left"
+                                                                    className={styles.dropdownMenuContent} side='left'
                                                                     sideOffset={5}>
                                                                     <DropdownMenu.Item
                                                                         className={styles.dropdownMenuItem}
@@ -194,12 +188,12 @@ export const EventsListPage: FC = () => {
                                                 </div>
                                                 <div className={styles.infoBlock}>
                                                     <Typography
-                                                        variant="body2"
-                                                    >Создано: {dayjs.utc(event.createdAt).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')} |
-                                                        Обновлено: {dayjs.utc(event.updatedAt).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')}</Typography>
+                                                        variant='body2'
+                                                    >Создано: {getTimeAndDateString(event.createdAt)} |
+                                                        Обновлено: {getTimeAndDateString(event.updatedAt)}</Typography>
                                                     <div className={styles.status}>
                                                         <Typography
-                                                            variant="body2"
+                                                            variant='body2'
                                                         >Cтатус: {handleGetRuStatus(event.status)}</Typography>
                                                         <EventStatusCircle status={event.status}/>
                                                     </div>
