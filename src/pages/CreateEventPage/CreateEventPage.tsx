@@ -1,3 +1,4 @@
+import {Loader} from '../../shared/loader/Loader'
 import Typography from '@mui/material/Typography';
 import React, {type FC, useCallback} from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -37,7 +38,7 @@ export const CreateEventPage: FC = () => {
                     }}
                 >Создание мероприятия</Typography>
                 {
-                    isLoading ? <div>Загрузка...</div>
+                    isLoading ? <Loader/>
                         :
                         <>
                             <EventForm

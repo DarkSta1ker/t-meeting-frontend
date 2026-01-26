@@ -7,6 +7,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
 import {DateTimePicker} from '@mui/x-date-pickers/DateTimePicker';
+import {ruRU} from '@mui/x-date-pickers/locales';
 import dayjs, {Dayjs} from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
@@ -15,7 +16,8 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {EventBaseField, EventListItem, EventMetadataField, EventNew} from '../../shared/types/event';
 import styles from './EventForm.module.css';
-
+import 'dayjs/locale/ru';
+dayjs.locale('ru');
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -201,6 +203,7 @@ export const EventForm: FC<EventFormProps> = ({
 
                         <div style={{width: '100%'}}>
                             <DateTimePicker
+                                localeText={ruRU.components.MuiLocalizationProvider.defaultProps.localeText}
                                 label='Дата и время проведения (НСК)'
                                 value={dateTimeValue}
                                 onChange={handleDateTimeChange}
