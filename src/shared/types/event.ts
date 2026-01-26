@@ -21,8 +21,8 @@ export interface EventListItem extends EventBase {
     };
     status: string;
     content: EventContentBlock[];
-    createdAt?: string;
-    updatedAt?: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface PromoTextBlock {

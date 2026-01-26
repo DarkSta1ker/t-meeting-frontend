@@ -15,7 +15,9 @@ export const defaultEvent: EventListItem = {
         location: ''
     },
     name: '',
-    status: 'draft'
+    status: 'draft',
+    createdAt: '',
+    updatedAt: '',
 };
 
 export const defaultAuthData: AuthData = {
