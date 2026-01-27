@@ -6,8 +6,10 @@ import {useNavigate} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEvents} from '../../hooks/useEvents';
 import {Loader} from '../../shared/loader/Loader';
-import styles from './EventsListPage.module.css';
+import {PageTitle} from '../../shared/ui/PageTitle/PageTitle';
 import {EventListElement} from '../../widgets/EventListElement/EventListElement';
+import styles from './EventsListPage.module.css';
+
 export const EventsListPage: FC = () => {
 
     const nav = useNavigate();
@@ -48,14 +50,7 @@ export const EventsListPage: FC = () => {
     return (
         <div className={styles.eventsListPage}>
             <div className={styles.board}>
-                <Typography
-                    variant='h5'
-                    sx={{
-                        alignItems: 'center',
-                        display: 'flex',
-                        height: '64px',
-                    }}
-                >Список мероприятий</Typography>
+                <PageTitle>Список мероприятий</PageTitle>
                 <div className={styles.eventsListBlock}>
                     {
                         isLoading ?

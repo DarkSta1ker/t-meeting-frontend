@@ -1,9 +1,9 @@
-import {Loader} from '../../shared/loader/Loader'
-import Typography from '@mui/material/Typography';
 import React, {type FC, useCallback} from 'react';
 import { useNavigate } from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEventForm} from '../../hooks/useEventForm';
+import {Loader} from '../../shared/loader/Loader';
+import {PageTitle} from '../../shared/ui/PageTitle/PageTitle';
 import {EventForm} from '../../widgets/EventForm/EventForm';
 import styles from './CreateEventPage.module.css';
 export const CreateEventPage: FC = () => {
@@ -29,14 +29,7 @@ export const CreateEventPage: FC = () => {
     return (
         <div className={styles.createEventPage}>
             <div className={styles.board}>
-                <Typography
-                    variant='h5'
-                    sx={{
-                        alignItems: 'center',
-                        display: 'flex',
-                        height: '64px',
-                    }}
-                >Создание мероприятия</Typography>
+                <PageTitle>Создание мероприятия</PageTitle>
                 {
                     isLoading ? <Loader/>
                         :

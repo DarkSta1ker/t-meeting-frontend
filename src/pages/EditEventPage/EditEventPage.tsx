@@ -1,10 +1,10 @@
-import Typography from '@mui/material/Typography';
 import React, {type FC, useCallback} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEventForm} from '../../hooks/useEventForm';
-import {EventForm} from '../../widgets/EventForm/EventForm';
 import {Loader} from '../../shared/loader/Loader'
+import {PageTitle} from '../../shared/ui/PageTitle/PageTitle';
+import {EventForm} from '../../widgets/EventForm/EventForm';
 import styles from './EditEventPage.module.css';
 
 export const EditEventPage: FC = () => {
@@ -31,16 +31,7 @@ export const EditEventPage: FC = () => {
     return (
         <div className={styles.editEventPage}>
             <div className={styles.board}>
-                <Typography
-                    variant='h5'
-                    sx={{
-                        alignItems: 'center',
-                        display: 'flex',
-                        height: '64px',
-                    }}
-                >
-                    Редактирование мероприятия
-                </Typography>
+                <PageTitle>Редактирование мероприятия</PageTitle>
                 {
                     isLoading ? <Loader/> :
                         <EventForm
