@@ -31,3 +31,16 @@ export const defaultAccountData: AccountData = {
     role: '',
     avatarPhoto: process.env.PUBLIC_URL + '/images/BaseAvatar.jpg'
 };
+
+export const getRuStatus = (status: string) => {
+    switch (status) {
+        case 'draft':
+            return 'Редактирование';
+        case 'cancelled':
+            return 'Отменено';
+        case 'archived':
+            return 'Архивировано';
+        default:
+            return 'Опубликовано';
+    }
+};

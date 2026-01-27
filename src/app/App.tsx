@@ -1,6 +1,5 @@
 import {LocalizationProvider} from '@mui/x-date-pickers';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
-import {ruRU} from '@mui/x-date-pickers/locales';
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
 import {AuthPage} from '../pages/AuthPage/AuthPage';
