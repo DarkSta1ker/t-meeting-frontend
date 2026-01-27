@@ -6,9 +6,9 @@ import {useParams} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEventForm} from '../../hooks/useEventForm';
 import {Loader} from '../../shared/loader/Loader';
+import {ReadOnlyTextField} from '../../shared/ui/ReadOnlyTextField/ReadOnlyTextField';
 import {getTimeAndDateString} from '../../shared/utils/formatTimeAndData';
 import styles from './EventPage.module.css';
-
 export const EventPage: FC = () => {
     const {eventId} = useParams<{ eventId: string }>();
     const {getEvent, isLoading} = useEvent();
@@ -59,7 +59,6 @@ export const EventPage: FC = () => {
                                         <Typography variant='h6' gutterBottom>
                                             Описание мероприятия
                                         </Typography>
-
                                         <Paper
                                             variant='outlined'
                                             sx={{
@@ -85,36 +84,16 @@ export const EventPage: FC = () => {
                                 </div>
                                 <div className={styles.timeAndPlace}>
                                     <div className={styles.textFieldWithIcon}>
-                                        <TextField
-                                            id='standard-read-only-input'
-                                            variant='standard'
-                                            sx={{
-                                                pointerEvents: 'none',
-                                            }}
-                                            label='Дата'
+                                        <ReadOnlyTextField
                                             value={getTimeAndDateString(eventData.metadata.datetime)}
-                                            slotProps={{
-                                                input: {
-                                                    readOnly: true,
-                                                },
-                                            }}
+                                            label={'Дата'}
                                         />
                                         <Calendar/>
                                     </div>
                                     <div className={styles.textFieldWithIcon}>
-                                        <TextField
-                                            id='standard-read-only-input'
-                                            label='Место проведения'
-                                            variant='standard'
-                                            sx={{
-                                                pointerEvents: 'none',
-                                            }}
+                                        <ReadOnlyTextField
                                             value={eventData.metadata.location}
-                                            slotProps={{
-                                                input: {
-                                                    readOnly: true,
-                                                },
-                                            }}
+                                            label={'Место проведения'}
                                         />
                                         <MapPinIcon/>
                                     </div>

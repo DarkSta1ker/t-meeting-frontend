@@ -1,12 +1,10 @@
-import {TextField} from '@mui/material';
-import Typography from '@mui/material/Typography';
 import React, {type FC, useEffect, useState} from 'react';
 import {AccountService} from '../../app/services/AccountService';
 import {useAuth} from '../../contexts/AuthContext';
 import {defaultAccountData} from '../../shared/constants/constants';
-import {Loader} from '../../shared/loader/Loader'
+import {Loader} from '../../shared/loader/Loader';
+import {ReadOnlyTextField} from '../../shared/ui/ReadOnlyTextField/ReadOnlyTextField';
 import styles from './PersonalAccount.module.css';
-
 export const PersonalAccount: FC = () => {
     const {userData} = useAuth();
     const [AccountData, setAccountData] = useState(defaultAccountData);
@@ -51,47 +49,17 @@ export const PersonalAccount: FC = () => {
                             <img src={AccountData.avatarPhoto}/>
                         </div>
                         <div className={styles.accountInfo}>
-                            <TextField
-                                id='multiline-read-only-input'
-                                label='Логин'
+                            <ReadOnlyTextField
                                 value={AccountData.login}
-                                variant='standard'
-                                sx={{
-                                    pointerEvents: 'none',
-                                }}
-                                slotProps={{
-                                    input: {
-                                        readOnly: true,
-                                    },
-                                }}
+                                label={'Логин'}
                             />
-                            <TextField
-                                id='multiline-read-only-input'
-                                label='Электронная почта'
+                            <ReadOnlyTextField
                                 value={AccountData.email}
-                                variant='standard'
-                                sx={{
-                                    pointerEvents: 'none',
-                                }}
-                                slotProps={{
-                                    input: {
-                                        readOnly: true,
-                                    },
-                                }}
+                                label={'Электронная почта'}
                             />
-                            <TextField
-                                id='multiline-read-only-input'
-                                label='Роль'
-                                sx={{
-                                    pointerEvents: 'none',
-                                }}
+                            <ReadOnlyTextField
                                 value={AccountData.role}
-                                variant='standard'
-                                slotProps={{
-                                    input: {
-                                        readOnly: true,
-                                    },
-                                }}
+                                label={'Роль'}
                             />
                         </div>
                     </div>
