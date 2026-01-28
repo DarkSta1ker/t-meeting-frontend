@@ -2,7 +2,7 @@ import React, {type FC, useCallback} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEventForm} from '../../hooks/useEventForm';
-import {Loader} from '../../shared/loader/Loader'
+import {Loader} from '../../shared/loader/Loader';
 import {PageTitle} from '../../shared/ui/PageTitle/PageTitle';
 import {EventForm} from '../../widgets/EventForm/EventForm';
 import styles from './EditEventPage.module.css';

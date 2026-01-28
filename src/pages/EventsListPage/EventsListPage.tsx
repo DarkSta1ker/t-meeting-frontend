@@ -1,5 +1,4 @@
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import {CirclePlus} from 'lucide-react';
 import React, {type FC, useCallback, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
@@ -46,34 +45,38 @@ export const EventsListPage: FC = () => {
     const handleEventPage = (eventId: string) => {
         nav(`/event/${eventId}`);
     };
-
+    if (isLoading) {
+        return(
+            <div className={styles.eventsListPage}>
+                <div className={styles.board}>
+                    <PageTitle>Список мероприятий</PageTitle>
+                    <div className={styles.eventsListBlock}>
+                        <Loader/>
+                    </div>
+                </div>
+            </div>
+        );
+    }
     return (
         <div className={styles.eventsListPage}>
             <div className={styles.board}>
                 <PageTitle>Список мероприятий</PageTitle>
                 <div className={styles.eventsListBlock}>
                     {
-                        isLoading ?
-                            <Loader/>
+                        events && events.length > 0 ?
+                            events.map((event) => (
+                                <EventListElement
+                                    key={event.id}
+                                    event={event}
+                                    handleEditEvent={handleEditEvent}
+                                    handleEventPage={handleEventPage}
+                                    handleDeleteEvent={handleDeleteEvent}
+                                />
+                            ))
                             :
-                            <>
-                                {
-                                    events ?
-                                        events.map((event) => (
-                                            <EventListElement
-                                                key={event.id}
-                                                event={event}
-                                                handleEditEvent={handleEditEvent}
-                                                handleEventPage={handleEventPage}
-                                                handleDeleteEvent={handleDeleteEvent}
-                                            />
-                                        ))
-                                        :
-                                        <div className={styles.noEventsBlock}>
-                                            Пока что тут нет мероприятий, вы можете добавить их с помощью кнопки ниже.
-                                        </div>
-                                }
-                            </>
+                            <div className={styles.noEventsBlock}>
+                                Пока что тут нет мероприятий, вы можете добавить их с помощью кнопки ниже.
+                            </div>
                     }
                     <IconButton onClick={() => nav('/createEvent')}
                                 sx={{

@@ -1,5 +1,4 @@
 import {Box, Paper, Typography} from '@mui/material';
-import TextField from '@mui/material/TextField';
 import {Calendar, MapPinIcon} from 'lucide-react';
 import React, {type FC, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
