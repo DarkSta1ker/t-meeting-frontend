@@ -1,30 +1,34 @@
-export const validateLogin = (login: string) => {
+export const validateLogin = (login: string): string => {
     if (!login.trim()) {
         return 'Логин обязателен';
     }
+
     if (login.length < 3) {
-        return 'Минимальная длина - 3 символов';
+        return 'Логин должен содержать минимум 3 символа';
     }
-    if (login.length > 50) {
-        return 'Максимальная длина - 50 символов';
+
+    if (login.length > 20) {
+        return 'Логин не должен превышать 20 символов';
     }
+
+    if (!/^[a-zA-Z0-9_-]+$/.test(login)) {
+        return 'Логин может содержать только буквы, цифры, дефисы и подчеркивания';
+    }
+
     return '';
 };
-export const validatePassword = (password: string) => {
+
+export const validatePassword = (password: string): string => {
     if (!password) {
         return 'Пароль обязателен';
     }
+
     if (password.length < 6) {
-        return 'Минимальная длина - 6 символов';
+        return 'Пароль должен содержать минимум 6 символов';
     }
+
     if (password.length > 50) {
         return 'Максимальная длина - 50 символов';
-    }
-    if (!/^[a-zA-Z0-9_-]+$/.test(password)) {
-        return 'Разрешенные символы: a-z A-Z 0-9 _ -';
-    }
-    if (/\s/.test(password)) {
-        return 'Пароль не должен содержать пробелы';
     }
     return '';
 };

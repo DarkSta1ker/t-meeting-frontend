@@ -25,7 +25,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
         checkAuth();
     }, [checkAuth]);
 
-    const loginUser = useCallback(async (authData: AuthData) => {
+    const authUser = useCallback(async (authData: AuthData) => {
         setIsLoadingAuth(true);
         try {
             const result = await AuthService.loginUser(authData);
@@ -59,7 +59,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
             isAuth,
             isLoadingAuth,
             userData,
-            loginUser,
+            authUser,
             logoutUser,
         }}>
             {children}

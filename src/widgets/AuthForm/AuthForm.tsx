@@ -1,71 +1,69 @@
-import {Button} from '@mui/material';
+import { Button } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import React, {FC, FormEvent, useCallback, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {useAuth} from '../../contexts/AuthContext';
-import {useAuthForm} from '../../hooks/useAuthForm';
-import {ValidationErrors} from '../../shared/types/auth';
+import React, { FC, FormEvent, useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { useAuthForm } from '../../hooks/useAuthForm';
 import styles from './AuthForm.module.css';
-import {validateLogin, validatePassword} from './validationErrors';
 
 export const AuthForm: FC = () => {
     const nav = useNavigate();
-    const {loginUser, isLoadingAuth} = useAuth();
-    const [loginError, setLoginError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
-    const {authData, handlePasswordFieldChange, handleLoginFieldChange} = useAuthForm();
+    const { authUser, isLoadingAuth } = useAuth();
+    const [authError, setAuthError] = useState('');
 
-    const [touched, setTouched] = useState({
-        login: false,
-        password: false,
-    });
+    const {
+        authData,
+        errors,
+        touched,
+        hasErrors,
+        validateForm,
+        handleLoginFieldChange,
+        handlePasswordFieldChange,
+        handleBlur,
+        resetForm,
+    } = useAuthForm();
 
-    const [errors, setErrors] = useState<ValidationErrors>({
-        login: '',
-        password: '',
-    });
+    useEffect(() => {
+        if (authError) {
+            setAuthError('');
+        }
+    }, [authData.login, authData.password]);
 
-    const handlePasswordChange = (value: string) => {
-        handlePasswordFieldChange(value);
-        const error = validatePassword(value);
-        setErrors((prev) => ({...prev, password: error}));
-    };
-
-    const handleLoginChange = (value: string) => {
-        handleLoginFieldChange(value);
-        const error = validateLogin(value);
-        setErrors((prev) => ({...prev, login: error}));
-    };
-
-    const handleLogin = useCallback(async (e: FormEvent) => {
+    const handleAuth = useCallback(async (e: FormEvent) => {
         e.preventDefault();
-        const result = await loginUser(authData);
+        const isValid = validateForm();
+        if (!isValid) {
+            return;
+        }
+
+        const result = await authUser(authData);
         if (result.status === 'Success') {
-            setLoginError(false);
             console.log('Авторизация успешна');
+            resetForm();
             nav('/eventsList');
         } else {
-            setLoginError(true);
-            setErrorMessage(result.payload);
+            setAuthError(result.payload);
             console.log(`Ошибка ${result.payload}`);
         }
-    }, [authData, loginUser, nav]);
-    const handleBlur = (field: 'login' | 'password') => {
-        setTouched((prev) => ({...prev, [field]: true}));
-        if (field === 'login') {
-            const error = validateLogin(authData.login);
-            setErrors((prev) => ({...prev, login: error}));
+    }, [
+        authData,
+        authUser,
+        nav,
+        validateForm,
+        resetForm
+    ]);
 
-        } else {
-            const error = validatePassword(authData.password);
-            setErrors((prev) => ({...prev, password: error}));
+    const handleKeyDown = useCallback((e: React.KeyboardEvent, nextFieldId?: string) => {
+        if (e.key === 'Enter' && nextFieldId) {
+            e.preventDefault();
+            document.getElementById(nextFieldId)?.focus();
         }
+    }, []);
 
-    };
     return (
         <form
             className={styles.authForm}
-            onSubmit={handleLogin}
+            onSubmit={handleAuth}
             noValidate
         >
             <TextField
@@ -74,71 +72,88 @@ export const AuthForm: FC = () => {
                 label='Логин'
                 variant='outlined'
                 value={authData.login}
-                onChange={(e) => handleLoginChange(e.target.value)}
+                onChange={(e) => handleLoginFieldChange(e.target.value)}
                 onBlur={() => handleBlur('login')}
-                error={touched.login && !!errors?.login}
-                helperText={touched.login && errors?.login}
+                onFocus={() => {
+                    if (authError) { setAuthError(''); }
+                }}
+                error={touched.login && !!errors.login}
+                helperText={touched.login ? errors.login : ' '}
                 fullWidth
                 margin='normal'
                 autoComplete='username'
-                onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !authData.password) {
-                        e.preventDefault();
-                        document.getElementById('password-input')?.focus();
-                    }
-                }}
+                autoFocus
+                onKeyDown={(e) => handleKeyDown(e, 'password-input')}
+                disabled={isLoadingAuth}
             />
+
             <TextField
                 required
                 id='password-input'
                 label='Пароль'
                 type='password'
                 value={authData.password}
-                onChange={(e) => handlePasswordChange(e.target.value)}
+                onChange={(e) => handlePasswordFieldChange(e.target.value)}
                 onBlur={() => handleBlur('password')}
-                error={touched.password && !!errors?.password}
-                helperText={touched.password && errors?.password}
+                onFocus={() => {
+                    if (authError) { setAuthError(''); }
+                }}
+                error={touched.password && !!errors.password}
+                helperText={touched.password ? errors.password : ' '}
                 fullWidth
                 margin='normal'
                 autoComplete='current-password'
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !hasErrors) {
+                        handleAuth(e);
+                    }
+                }}
+                disabled={isLoadingAuth}
             />
 
             <Button
                 type='submit'
                 variant='outlined'
-                disabled={!!errors?.login || !!errors?.password || isLoadingAuth}
+                disabled={hasErrors || isLoadingAuth}
                 sx={{
-                    '&:hover': {
+                    '&:hover:not(:disabled)': {
                         backgroundColor: '#cfd0d5',
                         borderRadius: '5px',
                     },
                     'backgroundColor': 'transparent',
-                    'borderRadius': '5px'
+                    'borderRadius': '5px',
+                    'marginTop': '16px',
                 }}
+                fullWidth
             >
-                Войти
+                {isLoadingAuth ? 'Вход...' : 'Войти'}
             </Button>
-            {loginError && <TextField
-                error
-                id='multiline-read-only-input'
-                value={errorMessage}
-                variant='standard'
-                sx={{
-                    'width': '100%',
-                    '& .MuiInputBase-root': {
-                        justifyContent: 'center',
-                        textAlign: 'center',
-                    },
-                    '& .MuiInputBase-input': {
-                        textAlign: 'center',
-                    },
-                }}
-                slotProps={{
-                    input: {
-                        readOnly: true,
-                    },
-                }}
-            />}
+
+            {authError && (
+                <div className={styles.errorContainer}>
+                    <TextField
+                        error
+                        value={authError}
+                        variant='standard'
+                        sx={{
+                            'width': '100%',
+                            'marginTop': '16px',
+                            '& .MuiInputBase-root': {
+                                justifyContent: 'center',
+                                textAlign: 'center',
+                            },
+                            '& .MuiInputBase-input': {
+                                textAlign: 'center',
+                            },
+                        }}
+                        slotProps={{
+                            input: {
+                                readOnly: true,
+                            },
+                        }}
+                    />
+                </div>
+            )}
         </form>
     );
 };
