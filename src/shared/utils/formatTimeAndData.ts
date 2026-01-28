@@ -13,12 +13,15 @@ export const getTimeAndDateString = (datetime?: string) => {
     }
     return  dayjs.utc().tz(userTZ).format('DD.MM.YYYY HH:mm');
 };
-export const getTimeAndDate = (datetime?: string) => {
+export const getTZTimeAndDate = (datetime?: string) => {
     if (datetime) {
         return dayjs.utc(datetime).tz(userTZ);
     }
     return  dayjs.utc().tz(userTZ);
 };
-export const getCurrentDate = () => {
+export const getTimeAndDate = (datetime?: string) => {
+    if (datetime) {
+        return dayjs.utc(datetime);
+    }
     return  dayjs.utc();
 };

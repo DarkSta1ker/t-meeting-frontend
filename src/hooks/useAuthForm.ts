@@ -14,7 +14,6 @@ export const useAuthForm = () => {
         password: '',
     });
 
-    // Функции для получения ошибок без установки состояния
     const getLoginError = useCallback((login: string): string => {
         return validateLogin(login);
     }, []);
@@ -23,7 +22,6 @@ export const useAuthForm = () => {
         return validatePassword(password);
     }, []);
 
-    // Функция для валидации всей формы
     const validateForm = useCallback((): boolean => {
         const loginError = getLoginError(authData.login);
         const passwordError = getPasswordError(authData.password);
