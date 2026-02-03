@@ -1,27 +1,20 @@
-import React, {FC, useEffect} from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, {FC} from 'react';
 import {useAuth} from '../../contexts/AuthContext';
+import {useAuthRedirect} from '../../hooks/useAuthRedirect';
 import {AuthForm} from '../../widgets/AuthForm/AuthForm';
 import styles from './AuthPage.module.css';
 
 export const AuthPage: FC = () => {
-    const nav = useNavigate();
     const {isAuth} = useAuth();
-    useEffect(() => {
-        if (isAuth) {
-            nav('/eventsList');
-        }
-    }, [isAuth, nav]);
-    return(
+    useAuthRedirect(isAuth);
+
+    return (
         <div className={styles.formAndButtonBox}>
             <AuthForm/>
-            <div>
-                <p>
-                    login1 password
-                </p>
-                <p>
-                    login2 password
-                </p>
+            <div className={styles.testCredentials}>
+                <p>Тестовые учетные записи:</p>
+                <p>login1 / password</p>
+                <p>login2 / password</p>
             </div>
         </div>
     );

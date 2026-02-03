@@ -12,7 +12,7 @@ export const AuthService = {
             }
             return createResultSuccess(response.payload);
         } catch (error) {
-            return createResultError(error);
+            return createResultError(`Error: ${error}`);
         }
     }
 };

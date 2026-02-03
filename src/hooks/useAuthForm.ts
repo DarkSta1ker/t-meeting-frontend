@@ -1,95 +1,85 @@
-import { useCallback, useState, useMemo } from 'react';
-import { defaultAuthData } from '../shared/constants/constants';
-import { ValidationErrors } from '../shared/types/auth';
-import { validateLogin, validatePassword } from '../widgets/AuthForm/validationErrors';
+import {useCallback, useState} from 'react';
+import {AuthData} from '../shared/types/auth';
 
 export const useAuthForm = () => {
-    const [authData, setAuthData] = useState(defaultAuthData);
-    const [touched, setTouched] = useState({
-        login: false,
-        password: false,
-    });
-    const [errors, setErrors] = useState<ValidationErrors>({
+    const [authData, setAuthData] = useState<AuthData>({
         login: '',
         password: '',
     });
 
-    const getLoginError = useCallback((login: string): string => {
-        return validateLogin(login);
-    }, []);
+    const [errors, setErrors] = useState<Partial<Record<keyof AuthData, string>>>({});
+    const [touched, setTouched] = useState<Partial<Record<keyof AuthData, boolean>>>({});
 
-    const getPasswordError = useCallback((password: string): string => {
-        return validatePassword(password);
-    }, []);
-
-    const validateForm = useCallback((): boolean => {
-        const loginError = getLoginError(authData.login);
-        const passwordError = getPasswordError(authData.password);
-
-        setTouched({ login: true, password: true });
-        setErrors({ login: loginError, password: passwordError });
-
-        return !loginError && !passwordError;
-    }, [authData, getLoginError, getPasswordError]);
-
-    const handlePasswordFieldChange = useCallback((payload: string) => {
-        setAuthData((prev) => ({
-            ...prev,
-            password: payload,
-        }));
-
-        if (touched.password) {
-            const error = getPasswordError(payload);
-            setErrors((prev) => ({ ...prev, password: error }));
+    const validateField = useCallback((field: keyof AuthData, value: string): string => {
+        if (!value.trim()) {
+            return 'Это поле обязательно для заполнения';
         }
-    }, [touched.password, getPasswordError]);
 
-    const handleLoginFieldChange = useCallback((payload: string) => {
-        setAuthData((prev) => ({
-            ...prev,
-            login: payload,
-        }));
+        if (field === 'login' && value.length < 3) {
+            return 'Логин должен содержать минимум 3 символа';
+        }
+
+        if (field === 'password' && value.length < 6) {
+            return 'Пароль должен содержать минимум 6 символов';
+        }
+
+        return '';
+    }, []);
+
+    const handleLoginFieldChange = useCallback((value: string) => {
+        setAuthData(prev => ({...prev, login: value}));
 
         if (touched.login) {
-            const error = getLoginError(payload);
-            setErrors((prev) => ({ ...prev, login: error }));
+            const error = validateField('login', value);
+            setErrors(prev => ({...prev, login: error}));
         }
-    }, [touched.login, getLoginError]);
+    }, [touched.login, validateField]);
 
-    const handleBlur = useCallback((field: 'login' | 'password') => {
-        setTouched((prev) => ({ ...prev, [field]: true }));
+    const handlePasswordFieldChange = useCallback((value: string) => {
+        setAuthData(prev => ({...prev, password: value}));
 
-        if (field === 'login') {
-            const error = getLoginError(authData.login);
-            setErrors((prev) => ({ ...prev, login: error }));
-        } else {
-            const error = getPasswordError(authData.password);
-            setErrors((prev) => ({ ...prev, password: error }));
+        if (touched.password) {
+            const error = validateField('password', value);
+            setErrors(prev => ({...prev, password: error}));
         }
-    }, [authData, getLoginError, getPasswordError]);
+    }, [touched.password, validateField]);
+
+    const handleBlur = useCallback((field: keyof AuthData) => {
+        setTouched(prev => ({...prev, [field]: true}));
+
+        const error = validateField(field, authData[field]);
+        setErrors(prev => ({...prev, [field]: error}));
+    }, [authData, validateField]);
+
+    const validateForm = useCallback((): boolean => {
+        const newErrors = {
+            login: validateField('login', authData.login),
+            password: validateField('password', authData.password),
+        };
+
+        setErrors(newErrors);
+        setTouched({login: true, password: true});
+
+        return !newErrors.login && !newErrors.password;
+    }, [authData, validateField]);
 
     const resetForm = useCallback(() => {
-        setAuthData(defaultAuthData);
-        setTouched({ login: false, password: false });
-        setErrors({ login: '', password: '' });
+        setAuthData({login: '', password: ''});
+        setErrors({});
+        setTouched({});
     }, []);
 
-    const hasErrors = useMemo(() => {
-        return !!(errors.login || errors.password);
-    }, [errors]);
+    const hasErrors = !!errors.login || !!errors.password;
 
     return {
         authData,
         errors,
         touched,
         hasErrors,
-        getLoginError,
-        getPasswordError,
         validateForm,
         handleLoginFieldChange,
         handlePasswordFieldChange,
         handleBlur,
         resetForm,
-        setAuthData,
     };
 };

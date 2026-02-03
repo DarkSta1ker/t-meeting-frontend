@@ -9,7 +9,7 @@ export interface ResultSuccess<T> {
     payload: T;
 }
 
-export interface ResultError {
+export interface ResultError<T> {
     status: 'Error';
-    payload: unknown;
+    payload: T;
 }
