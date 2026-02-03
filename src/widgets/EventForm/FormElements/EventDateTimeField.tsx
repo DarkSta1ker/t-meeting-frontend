@@ -13,14 +13,8 @@ interface EventDateTimeFieldProps {
     onBlur: () => void;
 }
 
-export const EventDateTimeField: FC<EventDateTimeFieldProps> = ({
-                                                                    value,
-                                                                    errorText,
-                                                                    touched,
-                                                                    onChange,
-                                                                    onBlur,
-                                                                    ...props
-                                                                }) => (
+export const EventDateTimeField: FC<EventDateTimeFieldProps> = (
+    {value, errorText, touched, onChange, onBlur, ...props}) => (
     <div style={{ width: '100%' }}>
         <DateTimePicker
             localeText={ruRU.components.MuiLocalizationProvider.defaultProps.localeText}

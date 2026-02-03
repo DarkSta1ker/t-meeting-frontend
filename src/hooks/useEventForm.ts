@@ -42,14 +42,14 @@ export const useEventForm = (eventId?: string) => {
 
     const handleDesriptionChange = useCallback((value: string) => {
         setEventData((prev) => {
+            const content = prev.content.map((contentBlock) => contentBlock.block === 'promo-text' ? {
+                ...contentBlock,
+                payload: [value]
+            } : contentBlock)
+
             return ({
                 ...prev,
-                content: [
-                    ...prev.content.map((contentBlock) => contentBlock.block === "promo-text" ? {
-                        ...contentBlock,
-                        payload: [value]
-                    } : contentBlock)
-                ]
+                content,
             });
         });
     }, [setEventData]);

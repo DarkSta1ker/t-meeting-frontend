@@ -2,7 +2,18 @@ import React, {createContext, useCallback, useContext, useEffect, useState} from
 import {AuthService} from '../app/services/AuthService';
 import {AuthContextType, AuthData, AuthProviderProps, UserData} from '../shared/types/auth';
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const defaultAuthContext: AuthContextType = {
+    isAuth: false,
+    isLoadingAuth: false,
+    userData: null,
+    authUser: async () => ({
+        status: 'Error' as const,
+        payload: 'Auth context not initialized',
+    }),
+    logoutUser: () => {},
+};
+
+const AuthContext = createContext<AuthContextType>(defaultAuthContext);
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     const [isAuth, setIsAuth] = useState(false);
@@ -35,8 +46,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
                     token: result.payload.token,
                     login: result.payload.login,
                 });
-                localStorage.removeItem('token');
-                localStorage.removeItem('login');
                 localStorage.setItem('token', result.payload.token);
                 localStorage.setItem('login', result.payload.login);
             }
@@ -69,8 +78,5 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 
 export const useAuth = () => {
     const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error('useAuth must be used within AuthProvider');
-    }
     return context;
 };

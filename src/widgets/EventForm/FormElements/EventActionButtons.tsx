@@ -11,14 +11,8 @@ interface EventActionButtonsProps {
     isLoading: boolean;
 }
 
-export const EventActionButtons: FC<EventActionButtonsProps> = ({
-                                                                    eventId,
-                                                                    onCancel,
-                                                                    onDelete,
-                                                                    onSubmit,
-                                                                    disabled,
-                                                                    isLoading
-                                                                }) => (
+export const EventActionButtons: FC<EventActionButtonsProps> = (
+    {eventId, onCancel, onDelete, onSubmit, disabled, isLoading})=> (
     <div className={styles.buttonsBlock}>
         <Button
             variant='outlined'
