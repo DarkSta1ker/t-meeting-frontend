@@ -8,6 +8,7 @@ import {Loader} from '../../shared/loader/Loader';
 import {PageTitle} from '../../shared/ui/PageTitle/PageTitle';
 import {EventListElement} from '../../widgets/EventListElement/EventListElement';
 import styles from './EventsListPage.module.css';
+import {ROUTES, buildEditEventRoute, buildEventRoute} from '../../shared/constants/constants';
 
 export const EventsListPage: FC = () => {
 
@@ -39,11 +40,11 @@ export const EventsListPage: FC = () => {
     }, [deleteEvent, handleUpdateEventList]);
 
     const handleEditEvent = (eventId: string) => {
-        nav(`/editEvent/${eventId}`);
+        nav(buildEditEventRoute(eventId));
     };
 
     const handleEventPage = (eventId: string) => {
-        nav(`/event/${eventId}`);
+        nav(buildEventRoute(eventId));
     };
     if (isLoading) {
         return(
@@ -78,7 +79,7 @@ export const EventsListPage: FC = () => {
                                 Пока что тут нет мероприятий, вы можете добавить их с помощью кнопки ниже.
                             </div>
                     }
-                    <IconButton onClick={() => nav('/createEvent')}
+                    <IconButton onClick={() => nav(ROUTES.CREATE_EVENT)}
                                 sx={{
                                     '&:hover': {
                                         backgroundColor: '#cfd0d5',

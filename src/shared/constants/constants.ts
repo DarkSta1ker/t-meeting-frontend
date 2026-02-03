@@ -87,3 +87,15 @@ export const buttonStyles = {
         '&:hover': { backgroundColor: 'rgba(28,255,0,0.26)' }
     },
 };
+
+
+export const ROUTES = {
+    AUTH: '/',
+    EVENTS_LIST: '/eventsList',
+    CREATE_EVENT: '/createEvent',
+    EDIT_EVENT: '/editEvent/:eventId',
+    PERSONAL_ACCOUNT: '/personalAccount',
+    EVENT: '/event/:eventId',
+} as const;
+export const buildEventRoute = (eventId: string | number) => `/event/${eventId}`;
+export const buildEditEventRoute = (eventId: string | number) => `/editEvent/${eventId}`;

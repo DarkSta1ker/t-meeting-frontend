@@ -6,6 +6,7 @@ import {Loader} from '../../shared/loader/Loader';
 import {PageTitle} from '../../shared/ui/PageTitle/PageTitle';
 import {EventForm} from '../../widgets/EventForm/EventForm';
 import styles from './CreateEventPage.module.css';
+import {ROUTES} from '../../shared/constants/constants';
 export const CreateEventPage: FC = () => {
 
     const nav = useNavigate();
@@ -20,7 +21,7 @@ export const CreateEventPage: FC = () => {
     const handleAddEvent = useCallback(async () => {
         const resp = await addEvent(eventData);
         if (resp.status === 'Success') {
-            nav('/eventsList');
+            nav(ROUTES.EVENTS_LIST);
         } else {
             console.log(`${resp.status} | ${resp.payload}`);
         }

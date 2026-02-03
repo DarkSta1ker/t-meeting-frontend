@@ -6,7 +6,7 @@ import {Loader} from '../../shared/loader/Loader';
 import {PageTitle} from '../../shared/ui/PageTitle/PageTitle';
 import {EventForm} from '../../widgets/EventForm/EventForm';
 import styles from './EditEventPage.module.css';
-
+import {ROUTES} from '../../shared/constants/constants';
 export const EditEventPage: FC = () => {
     const nav = useNavigate();
     const {eventId} = useParams<{ eventId: string }>();
@@ -22,7 +22,7 @@ export const EditEventPage: FC = () => {
         const result = await updateEvent(eventData);
         if (result.status === 'Success') {
             console.log('Event updated');
-            nav('/eventsList');
+            nav(ROUTES.EVENTS_LIST);
         } else {
             console.log(`Error ${result.payload}`);
         }

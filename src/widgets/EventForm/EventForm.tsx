@@ -19,6 +19,8 @@ import { EventDateTimeField } from './FormElements/EventDateTimeField';
 import { EventNameField } from './FormElements/EventNameField';
 import { EventStatusRadioGroup } from './FormElements/EventStatusRadioGroup';
 import {EventTimePoints} from './FormElements/EventTimePoints';
+import {ROUTES} from '../../shared/constants/constants';
+
 
 interface EventFormProps {
     eventData: EventListItem | EventNew;
@@ -72,7 +74,7 @@ export const EventForm: FC<EventFormProps> = ({
     }, [eventData.name, eventData.metadata.datetime]);
 
     const handleCancel = useCallback(() => {
-        nav('/eventsList');
+        nav(ROUTES.EVENTS_LIST);
     }, [nav]);
 
     const handleDeleteEvent = useCallback(async () => {
@@ -80,7 +82,7 @@ export const EventForm: FC<EventFormProps> = ({
             const result = await deleteEvent(eventId);
             if (result.status === 'Success') {
                 console.log('Event deleted');
-                nav('/eventsList');
+                nav(ROUTES.EVENTS_LIST);
             }
         }
     }, [deleteEvent, eventId, nav]);
