@@ -1,5 +1,6 @@
 import {useCallback, useState} from 'react';
 import {AuthData} from '../shared/types/auth';
+import {validateLogin, validatePassword} from '../widgets/AuthForm/validationErrors';
 
 export const useAuthForm = () => {
     const [authData, setAuthData] = useState<AuthData>({
@@ -11,19 +12,11 @@ export const useAuthForm = () => {
     const [touched, setTouched] = useState<Partial<Record<keyof AuthData, boolean>>>({});
 
     const validateField = useCallback((field: keyof AuthData, value: string): string => {
-        if (!value.trim()) {
-            return 'Это поле обязательно для заполнения';
+        if (field === 'login') {
+            return validateLogin(value);
+        } else {
+            return validatePassword(value);
         }
-
-        if (field === 'login' && value.length < 3) {
-            return 'Логин должен содержать минимум 3 символа';
-        }
-
-        if (field === 'password' && value.length < 6) {
-            return 'Пароль должен содержать минимум 6 символов';
-        }
-
-        return '';
     }, []);
 
     const handleLoginFieldChange = useCallback((value: string) => {

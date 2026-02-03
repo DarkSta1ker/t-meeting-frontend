@@ -1,34 +1,18 @@
+import {max, min, regexp, required} from '../../shared/utils/validationFunctions';
+
 export const validateLogin = (login: string): string => {
-    if (!login.trim()) {
-        return 'Логин обязателен';
-    }
-
-    if (login.length < 3) {
-        return 'Логин должен содержать минимум 3 символа';
-    }
-
-    if (login.length > 20) {
-        return 'Логин не должен превышать 20 символов';
-    }
-
-    if (!/^[a-zA-Z0-9_-]+$/.test(login)) {
-        return 'Логин может содержать только буквы, цифры, дефисы и подчеркивания';
-    }
-
-    return '';
+    return required({value: login, message: 'Логин обязателен'})
+        || min({value: login, conditions: 3, message: 'Логин должен содержать минимум 3 символа'})
+        || max({value: login, conditions: 20, message: 'Логин не должен превышать 20 символов'})
+        || regexp({
+            value: login,
+            conditions: /^[a-zA-Z0-9_-]+$/,
+            message: 'Логин может содержать только буквы, цифры, дефисы и подчеркивания'
+        });
 };
 
 export const validatePassword = (password: string): string => {
-    if (!password) {
-        return 'Пароль обязателен';
-    }
-
-    if (password.length < 6) {
-        return 'Пароль должен содержать минимум 6 символов';
-    }
-
-    if (password.length > 50) {
-        return 'Максимальная длина - 50 символов';
-    }
-    return '';
+    return required({value: password, message: 'Пароль обязателен'})
+        || min({value: password, conditions: 6, message: 'Пароль должен содержать минимум 6 символов'})
+        || max({value: password, conditions: 50, message: 'Максимальная длина - 50 символов'});
 };
