@@ -40,12 +40,12 @@ export const useEventForm = (eventId?: string) => {
         }));
     }, [setEventData]);
 
-    const handleTextAreaChange = useCallback((field: string, value: string) => {
+    const handleDesriptionChange = useCallback((value: string) => {
         setEventData((prev) => {
             return ({
                 ...prev,
                 content: [
-                    ...prev.content.map((contentBlock) => contentBlock.block === field ? {
+                    ...prev.content.map((contentBlock) => contentBlock.block === "promo-text" ? {
                         ...contentBlock,
                         payload: [value]
                     } : contentBlock)
@@ -70,7 +70,7 @@ export const useEventForm = (eventId?: string) => {
         handleBaseFieldChange,
         handleChangeStatus,
         handleMetadataFieldChange,
-        handleTextAreaChange,
+        handleDesriptionChange,
         resetForm,
         setEventData
     };

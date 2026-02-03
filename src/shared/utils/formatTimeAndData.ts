@@ -25,3 +25,13 @@ export const getTimeAndDate = (datetime?: string) => {
     }
     return  dayjs.utc();
 };
+export const getTime = (timeString: string) => {
+    try {
+        if (timeString.includes('T')) {
+            return timeString.split('T')[1].split('.')[0].substring(0, 5); // Берем часы и минуты
+        }
+        return timeString.substring(0, 5);
+    } catch {
+        return timeString;
+    }
+};

@@ -13,7 +13,7 @@ export const EditEventPage: FC = () => {
     const {updateEvent, isLoading} = useEvent();
     const {
         eventData,
-        handleTextAreaChange,
+        handleDesriptionChange,
         handleMetadataFieldChange,
         handleBaseFieldChange,
         handleChangeStatus
@@ -38,7 +38,7 @@ export const EditEventPage: FC = () => {
                             eventData={eventData}
                             handleMetadataFieldChange={handleMetadataFieldChange}
                             handleBaseFieldChange={handleBaseFieldChange}
-                            TextAreaChange={handleTextAreaChange}
+                            TextAreaChange={handleDesriptionChange}
                             handleChangeStatus={handleChangeStatus}
                             handlePostOrUpdate={handleUpdateEvent}
                         />

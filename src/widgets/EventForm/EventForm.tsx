@@ -4,19 +4,27 @@ import React, { ChangeEvent, FC, useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEvent } from '../../hooks/useEvent';
 import { useEventFormValidation } from '../../hooks/useEventFormValidation';
-import { EventBaseField, EventListItem, EventMetadataField, EventNew } from '../../shared/types/event';
+import {
+    EventBaseField,
+    EventContentBlock,
+    EventListItem,
+    EventMetadataField,
+    EventNew,
+    TimeLineBlock
+} from '../../shared/types/event';
 import { getTZTimeAndDate } from '../../shared/utils/formatTimeAndData';
 import styles from './EventForm.module.css';
 import { EventActionButtons } from './FormElements/EventActionButtons';
 import { EventDateTimeField } from './FormElements/EventDateTimeField';
 import { EventNameField } from './FormElements/EventNameField';
 import { EventStatusRadioGroup } from './FormElements/EventStatusRadioGroup';
+import {EventTimePoints} from './FormElements/EventTimePoints';
 
 interface EventFormProps {
     eventData: EventListItem | EventNew;
     handleBaseFieldChange: (paramName: EventBaseField, payload: string) => void;
     handleMetadataFieldChange: (paramName: EventMetadataField, payload: string) => void;
-    TextAreaChange: (paramName: string, payload: string) => void;
+    TextAreaChange: ( payload: string) => void;
     handleChangeStatus: (paramName: string) => void;
     handlePostOrUpdate: () => void;
 }
@@ -132,6 +140,13 @@ export const EventForm: FC<EventFormProps> = ({
         handlePostOrUpdate();
     }, [eventData, validateForm, handlePostOrUpdate]);
 
+
+    const findTimeLineBlock = (content: EventContentBlock[]): TimeLineBlock['payload']=>{
+        const block = content.find((item): item is TimeLineBlock =>
+            item.block === 'timeline'
+        );
+        return block?.payload||[];
+    }
     return (
         <form onSubmit={handleSubmit}>
             <div className={styles.editBlock}>
@@ -181,12 +196,14 @@ export const EventForm: FC<EventFormProps> = ({
                         }}
                         value={eventData.content.find((block) => block.block === 'promo-text')?.payload.join('') || ''}
                         onChange={(e) => {
-                            TextAreaChange('promo-text', e.target.value);
+                            TextAreaChange( e.target.value);
                         }}
                     />
                 </div>
             </div>
-
+            <div>
+                <EventTimePoints block={findTimeLineBlock(eventData.content)}/>
+            </div>
             <EventActionButtons
                 eventId={eventId}
                 onCancel={handleCancel}

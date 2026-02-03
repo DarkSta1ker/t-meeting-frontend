@@ -30,11 +30,12 @@ export interface PromoTextBlock {
     payload: string[];
 }
 
-export interface EventsState {
-    events: EventListItem[];
+export interface TimeLineBlock {
+    block: 'timeline';
+    payload: { name: string, time: string }[]
 }
 
-export type EventContentBlock = | PromoTextBlock;
+export type EventContentBlock = | PromoTextBlock | TimeLineBlock;
 
 export type EventBaseField = 'name';
 export type EventMetadataField = keyof EventBase['metadata'];
