@@ -60,6 +60,12 @@ export const AuthForm: FC = () => {
         }
     }, []);
 
+    const clearError = useCallback(() => {
+        if (authError) {
+            setAuthError('');
+        }
+    }, [authError]);
+
     return (
         <form
             className={styles.authForm}
@@ -74,9 +80,7 @@ export const AuthForm: FC = () => {
                 value={authData.login}
                 onChange={(e) => handleLoginFieldChange(e.target.value)}
                 onBlur={() => handleBlur('login')}
-                onFocus={() => {
-                    if (authError) { setAuthError(''); }
-                }}
+                onFocus={clearError}
                 error={touched.login && !!errors.login}
                 helperText={touched.login ? errors.login : ' '}
                 fullWidth
@@ -95,9 +99,7 @@ export const AuthForm: FC = () => {
                 value={authData.password}
                 onChange={(e) => handlePasswordFieldChange(e.target.value)}
                 onBlur={() => handleBlur('password')}
-                onFocus={() => {
-                    if (authError) { setAuthError(''); }
-                }}
+                onFocus={clearError}
                 error={touched.password && !!errors.password}
                 helperText={touched.password ? errors.password : ' '}
                 fullWidth
