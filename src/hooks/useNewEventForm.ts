@@ -1,27 +1,9 @@
-import {useCallback, useEffect, useState} from 'react';
-import {defaultEditEvent,} from '../shared/constants/constants';
+import {useCallback, useState} from 'react';
+import {defaultNewEvent,} from '../shared/constants/constants';
 import {EventBaseField, EventMetadataField,} from '../shared/types/event';
-import {useEvent} from './useEvent';
 
-export const useEventForm = (eventId?: string) => {
-    const {getEvent} = useEvent();
-    const [eventData, setEventData] = useState(defaultEditEvent);
-    useEffect(() => {
-        if (!eventId) {
-            setEventData(defaultEditEvent);
-            return;
-        }
-        const loadEvent = async () => {
-            const result = await getEvent(eventId);
-            if (result.status === 'Success') {
-                console.log('Event loaded');
-                setEventData(result.payload);
-            } else {
-                console.log(`Error ${result.payload}`);
-            }
-        };
-        loadEvent();
-    }, [eventId, getEvent]);
+export const useNewEventForm = () => {
+    const [eventData, setEventData] = useState(defaultNewEvent);
 
     const handleBaseFieldChange = useCallback((field: EventBaseField, value: string) => {
         setEventData((prev) => ({
@@ -55,7 +37,7 @@ export const useEventForm = (eventId?: string) => {
     }, [setEventData]);
 
     const resetForm = useCallback(() => {
-        setEventData(defaultEditEvent);
+        setEventData(defaultNewEvent);
     }, []);
 
     const handleChangeStatus = useCallback((status: string) => {

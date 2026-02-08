@@ -1,18 +1,7 @@
 import React, {createContext, useContext} from 'react';
 import {useAuthLogic} from '../hooks/useAuthLogic';
+import {defaultAuthContext} from '../shared/constants/constants';
 import {AuthContextType, AuthProviderProps} from '../shared/types/auth';
-
-const defaultAuthContext: AuthContextType = {
-    isAuth: false,
-    isLoadingAuth: false,
-    userData: null,
-    authUser: async () => ({
-        status: 'Error' as const,
-        payload: 'Auth context not initialized',
-    }),
-    logoutUser: () => {
-    },
-};
 
 const AuthContext = createContext<AuthContextType>(defaultAuthContext);
 

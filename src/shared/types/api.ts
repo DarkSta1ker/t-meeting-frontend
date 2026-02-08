@@ -1,4 +1,4 @@
-export interface ApiData<T = Record<string, unknown>> {
+export interface ApiData<T> {
     url: string;
     method: string;
     payload?: T;

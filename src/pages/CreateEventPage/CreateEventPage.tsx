@@ -1,12 +1,13 @@
 import React, {type FC, useCallback} from 'react';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
-import {useEventForm} from '../../hooks/useEventForm';
+import {useNewEventForm} from '../../hooks/useNewEventForm';
+import {ROUTES} from '../../shared/constants/constants';
 import {Loader} from '../../shared/loader/Loader';
 import {PageTitle} from '../../shared/ui/PageTitle/PageTitle';
 import {EventForm} from '../../widgets/EventForm/EventForm';
 import styles from './CreateEventPage.module.css';
-import {ROUTES} from '../../shared/constants/constants';
+
 export const CreateEventPage: FC = () => {
 
     const nav = useNavigate();
@@ -17,7 +18,7 @@ export const CreateEventPage: FC = () => {
         handleMetadataFieldChange,
         handleBaseFieldChange,
         handleChangeStatus
-    } = useEventForm();
+    } = useNewEventForm();
     const handleAddEvent = useCallback(async () => {
         const resp = await addEvent(eventData);
         if (resp.status === 'Success') {

@@ -1,7 +1,6 @@
 import {Dayjs} from 'dayjs';
 import {useCallback, useMemo, useState} from 'react';
-import {getTimeAndDate} from '../shared/utils/formatTimeAndData';
-import {max, min, required} from '../shared/utils/validationFunctions';
+import {dateRange, max, min, required} from '../shared/utils/validationFunctions';
 
 interface UseEventFormValidationProps {
     initialName?: string;
@@ -31,15 +30,7 @@ export const useEventFormValidation = ({initialName = '', initialDate = null}: U
     }, []);
 
     const validateDate = useCallback((date: Dayjs | null): string => {
-        const now = getTimeAndDate();
-        const maxFutureDate = now.add(2, 'year');
-
-        const error =
-            (!date || !date.isValid() ? 'Поле даты должно быть заполнено' : '') ||
-            (date && date.isBefore(now, 'day') ? 'Дата не может быть в прошлом' : '') ||
-            (date && date.isAfter(maxFutureDate) ? 'Дата не может быть более чем на 2 года вперед' : '');
-
-        return error;
+        return dateRange(date);
     }, []);
 
     const validateForm = useCallback((name: string, date: Dayjs | null): boolean => {
