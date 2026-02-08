@@ -2,11 +2,11 @@ import Typography from '@mui/material/Typography';
 import {Calendar, EllipsisVertical, MapPinIcon} from 'lucide-react';
 import {DropdownMenu} from 'radix-ui';
 import React, {FC} from 'react';
-import styles from '../../pages/EventsListPage/EventsListPage.module.css';
 import {getRuStatus} from '../../shared/constants/constants';
 import {EventListItem} from '../../shared/types/event';
 import {EventStatusCircle} from '../../shared/ui/EventStatus/EventStatusCircle';
 import {getTimeAndDateString} from '../../shared/utils/formatTimeAndData';
+import styles from './EventListElement.module.css';
 
 interface EventListElementProps {
     event: EventListItem;
@@ -15,7 +15,12 @@ interface EventListElementProps {
     handleDeleteEvent: (eventId: string) => void;
 }
 
-export const EventListElement: FC<EventListElementProps> = ({event, handleEditEvent, handleEventPage, handleDeleteEvent}) => {
+export const EventListElement: FC<EventListElementProps> = ({
+                                                                event,
+                                                                handleEditEvent,
+                                                                handleEventPage,
+                                                                handleDeleteEvent
+                                                            }) => {
     return (
         <div className={styles.eventBlock}>
             <div className={styles.eventBlockCardBox}>
@@ -27,29 +32,12 @@ export const EventListElement: FC<EventListElementProps> = ({event, handleEditEv
                         onClick={() => handleEventPage(event.id)}
                     >
                         <Typography
-                            variant='h6'
-                            sx={{
-                                alignItems: 'center',
-                                display: 'flex',
-                                maxWidth: '90%',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                            }}
+                            variant="h6"
+                            className={`${styles.textEllipsis} ${styles.flexCenter}`}
                         >{event.name}</Typography>
                         <Typography
-                            variant='body1'
-                            sx={{
-                                WebkitBoxOrient: 'vertical',
-                                WebkitLineClamp: 3,
-                                display: '-webkit-box',
-                                lineHeight: 1.5,
-                                margin: 0,
-                                maxHeight: '4.5em',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                width: '95%',
-                            }}
+                            variant="body1"
+                            className={styles.textEllipsisMultiline}
                         >
                             {event.content[0].payload.join(' ')}
                         </Typography>
@@ -60,11 +48,8 @@ export const EventListElement: FC<EventListElementProps> = ({event, handleEditEv
                     >
                         <div className={styles.dataBlock}>
                             <Typography
-                                variant='body1'
-                                sx={{
-                                    alignItems: 'center',
-                                    display: 'flex',
-                                }}
+                                variant="body1"
+                                className={`${styles.textOverflow} ${styles.flexCenter}`}
                             >
                                 {getTimeAndDateString(event.metadata.datetime)}
                             </Typography>
@@ -72,14 +57,8 @@ export const EventListElement: FC<EventListElementProps> = ({event, handleEditEv
                         </div>
                         <div className={styles.placeBlock}>
                             <Typography
-                                variant='body1'
-                                sx={{
-                                    alignItems: 'center',
-                                    display: 'flex',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap',
-                                }}
+                                variant="body1"
+                                className={`${styles.textOverflow} ${styles.flexCenter}`}
                             >{event.metadata.location}</Typography>
 
                             <MapPinIcon/>
@@ -90,14 +69,14 @@ export const EventListElement: FC<EventListElementProps> = ({event, handleEditEv
                     <DropdownMenu.Root>
                         <DropdownMenu.Trigger asChild>
                             <button className={styles.dropDownMenuButton}
-                                    aria-label='Actions'>
+                                    aria-label="Actions">
                                 <EllipsisVertical/>
                             </button>
                         </DropdownMenu.Trigger>
 
                         <DropdownMenu.Portal>
                             <DropdownMenu.Content
-                                className={styles.dropdownMenuContent} side='left'
+                                className={styles.dropdownMenuContent} side="left"
                                 sideOffset={5}>
                                 <DropdownMenu.Item
                                     className={styles.dropdownMenuItem}
@@ -125,12 +104,12 @@ export const EventListElement: FC<EventListElementProps> = ({event, handleEditEv
             </div>
             <div className={styles.infoBlock}>
                 <Typography
-                    variant='body2'
+                    variant="body2"
                 >Создано: {getTimeAndDateString(event.createdAt)} |
                     Обновлено: {getTimeAndDateString(event.updatedAt)}</Typography>
                 <div className={styles.status}>
                     <Typography
-                        variant='body2'
+                        variant="body2"
                     >Cтатус: {getRuStatus(event.status)}</Typography>
                     <EventStatusCircle status={event.status}/>
                 </div>

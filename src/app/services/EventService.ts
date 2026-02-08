@@ -1,4 +1,3 @@
-import {requestApi} from '../../shared/api/requestApi';
 import {mockRequestApi} from '../../shared/mocks/eventsMocks';
 import {ApiData} from '../../shared/types/api';
 import {EventListItem, EventNew} from '../../shared/types/event';
@@ -8,10 +7,13 @@ import {createResultSuccess} from './lib/createResultSuccess';
 export const EventService = {
     async addEvent(eventPayload: EventNew) {
         try {
+            let temp = JSON.stringify(eventPayload);
+            let eventWithoutId = JSON.parse(temp);
+            delete eventWithoutId.id;
             const apiData: ApiData<EventNew> = {
-                url : '/api/event',
-                method : 'POST',
-                payload : eventPayload
+                url: '/api/event',
+                method: 'POST',
+                payload: eventWithoutId
             };
             const response = await mockRequestApi(apiData);
             if (!response.ok) {
@@ -25,8 +27,8 @@ export const EventService = {
     async getEvent(eventId: string) {
         try {
             const apiData: ApiData = {
-                url : `/api/event/${eventId}`,
-                method : 'GET',
+                url: `/api/event/${eventId}`,
+                method: 'GET',
             };
             const response = await mockRequestApi(apiData);
             if (!response.ok) {
@@ -41,8 +43,8 @@ export const EventService = {
     async getAllEvents() {
         try {
             const apiData: ApiData = {
-                url : '/api/events',
-                method : 'GET',
+                url: '/api/events',
+                method: 'GET',
             };
             const response = await mockRequestApi(apiData);
             if (!response.ok) {
@@ -57,8 +59,8 @@ export const EventService = {
     async deleteEvent(eventId: string) {
         try {
             const apiData: ApiData = {
-                url : `/api/event/${eventId}`,
-                method : 'DELETE',
+                url: `/api/event/${eventId}`,
+                method: 'DELETE',
             };
             const response = await mockRequestApi(apiData);
             if (!response.ok) {
@@ -72,9 +74,9 @@ export const EventService = {
     async updateEvent(eventPayload: EventListItem) {
         try {
             const apiData: ApiData<EventListItem> = {
-                url : `/api/event/${eventPayload.id}`,
-                method : 'PUT',
-                payload : eventPayload
+                url: `/api/event/${eventPayload.id}`,
+                method: 'PUT',
+                payload: eventPayload
             };
             const response = await mockRequestApi(apiData);
             if (!response.ok) {
