@@ -1,6 +1,6 @@
 import {ApiData} from '../types/api';
 
-export const requestApi = async <T = Record<string, unknown>>(data: ApiData<T>): Promise<Response> => {
+export const requestApi = async <T>(data: ApiData<T>): Promise<Response> => {
     const fetchOptions: RequestInit = {
         body: data.payload ? JSON.stringify(data.payload) : undefined,
         headers: {'Content-Type': 'application/json'},

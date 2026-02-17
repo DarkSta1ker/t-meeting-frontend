@@ -1,18 +1,19 @@
-import Typography from '@mui/material/Typography';
 import React, {type FC, useCallback} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEventForm} from '../../hooks/useEventForm';
+import {Loader} from '../../shared/loader/Loader';
+import {PageTitle} from '../../shared/ui/PageTitle/PageTitle';
 import {EventForm} from '../../widgets/EventForm/EventForm';
 import styles from './EditEventPage.module.css';
-
+import {ROUTES} from '../../shared/constants/constants';
 export const EditEventPage: FC = () => {
     const nav = useNavigate();
     const {eventId} = useParams<{ eventId: string }>();
     const {updateEvent, isLoading} = useEvent();
     const {
         eventData,
-        handleTextAreaChange,
+        handleDesriptionChange,
         handleMetadataFieldChange,
         handleBaseFieldChange,
         handleChangeStatus
@@ -21,7 +22,7 @@ export const EditEventPage: FC = () => {
         const result = await updateEvent(eventData);
         if (result.status === 'Success') {
             console.log('Event updated');
-            nav('/eventsList');
+            nav(ROUTES.EVENTS_LIST);
         } else {
             console.log(`Error ${result.payload}`);
         }
@@ -30,23 +31,14 @@ export const EditEventPage: FC = () => {
     return (
         <div className={styles.editEventPage}>
             <div className={styles.board}>
-                <Typography
-                    variant='h5'
-                    sx={{
-                        alignItems: 'center',
-                        display: 'flex',
-                        height: '64px',
-                    }}
-                >
-                    Редактирование мероприятия
-                </Typography>
+                <PageTitle>Редактирование мероприятия</PageTitle>
                 {
-                    isLoading ? <div>Загрузка...</div> :
+                    isLoading ? <Loader/> :
                         <EventForm
                             eventData={eventData}
                             handleMetadataFieldChange={handleMetadataFieldChange}
                             handleBaseFieldChange={handleBaseFieldChange}
-                            TextAreaChange={handleTextAreaChange}
+                            TextAreaChange={handleDesriptionChange}
                             handleChangeStatus={handleChangeStatus}
                             handlePostOrUpdate={handleUpdateEvent}
                         />

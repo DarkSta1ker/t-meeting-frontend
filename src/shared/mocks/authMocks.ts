@@ -13,7 +13,7 @@ const usersInDB = [
     {login: 'login3', password: 'password', token: 'token3', email: 'email3'},
 ];
 
-type LoginResult = ResultSuccess<LoginSuccessPayload> | ResultError;
+type LoginResult = ResultSuccess<LoginSuccessPayload> | ResultError<string>;
 
 export const mockLoginUser = (login: string, password: string): Promise<LoginResult> => {
     return new Promise((resolve) => {

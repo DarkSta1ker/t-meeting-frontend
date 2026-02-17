@@ -1,31 +1,32 @@
-import {FormHelperText} from '@mui/material';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
-import {DateTimePicker} from '@mui/x-date-pickers/DateTimePicker';
-import dayjs, {Dayjs} from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
-import React, {ChangeEvent, FC, useCallback, useEffect, useState} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
-import {useEvent} from '../../hooks/useEvent';
-import {EventBaseField, EventListItem, EventMetadataField, EventNew} from '../../shared/types/event';
+import { Dayjs } from 'dayjs';
+import React, { ChangeEvent, FC, useCallback, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEvent } from '../../hooks/useEvent';
+import { useEventFormValidation } from '../../hooks/useEventFormValidation';
+import {
+    EventBaseField,
+    EventContentBlock,
+    EventListItem,
+    EventMetadataField,
+    EventNew,
+    TimeLineBlock
+} from '../../shared/types/event';
+import { getTZTimeAndDate } from '../../shared/utils/formatTimeAndData';
 import styles from './EventForm.module.css';
+import { EventActionButtons } from './FormElements/EventActionButtons';
+import { EventDateTimeField } from './FormElements/EventDateTimeField';
+import { EventNameField } from './FormElements/EventNameField';
+import { EventStatusRadioGroup } from './FormElements/EventStatusRadioGroup';
+import {EventTimePoints} from './FormElements/EventTimePoints';
+import {ROUTES} from '../../shared/constants/constants';
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
-
-const NSK_TIMEZONE = 'Asia/Novosibirsk';
 
 interface EventFormProps {
     eventData: EventListItem | EventNew;
     handleBaseFieldChange: (paramName: EventBaseField, payload: string) => void;
     handleMetadataFieldChange: (paramName: EventMetadataField, payload: string) => void;
-    TextAreaChange: (paramName: string, payload: string) => void;
+    TextAreaChange: ( payload: string) => void;
     handleChangeStatus: (paramName: string) => void;
     handlePostOrUpdate: () => void;
 }
@@ -38,23 +39,42 @@ export const EventForm: FC<EventFormProps> = ({
                                                   handleChangeStatus,
                                                   handlePostOrUpdate,
                                               }) => {
-    const [dateTimeValue, setDateTimeValue] = useState<Dayjs | null>(() => {
-        if (eventData.metadata.datetime) {
-            const date = dayjs.utc(eventData.metadata.datetime).tz(NSK_TIMEZONE);
-            return date.isValid() ? date : null;
-        }
-        return null;
-    });
-    const {eventId} = useParams<{ eventId: string }>();
+    const { eventId } = useParams<{ eventId: string }>();
     const nav = useNavigate();
-    const {deleteEvent, isLoading} = useEvent();
-    const [dateErrorText, setDateErrorText] = useState<string>('asd');
-    const [touched, setTouched] = useState(false);
-    const [nameError, setNameError] = useState(true);
-    const [dateError, setDateError] = useState(true);
-    const [nameErrorText, setNameErrorText] = useState<string>('');
+    const { deleteEvent, isLoading } = useEvent();
+
+    const {
+        errors,
+        touched,
+        hasErrors,
+        validateName,
+        validateDate,
+        validateForm,
+        handleBlur,
+        setErrors,
+        setTouched,
+    } = useEventFormValidation({
+        initialName: eventData.name,
+        initialDate: eventData.metadata.datetime ? getTZTimeAndDate(eventData.metadata.datetime) : null,
+    });
+
+    useEffect(() => {
+        if (eventData.name) {
+            const nameError = validateName(eventData.name);
+            setErrors((prev) => ({ ...prev, name: nameError }));
+        }
+
+        if (eventData.metadata.datetime) {
+            const date = getTZTimeAndDate(eventData.metadata.datetime);
+            if (date.isValid()) {
+                const dateError = validateDate(date);
+                setErrors((prev) => ({ ...prev, date: dateError }));
+            }
+        }
+    }, [eventData.name, eventData.metadata.datetime]);
+
     const handleCancel = useCallback(() => {
-        nav('/eventsList');
+        nav(ROUTES.EVENTS_LIST);
     }, [nav]);
 
     const handleDeleteEvent = useCallback(async () => {
@@ -62,69 +82,24 @@ export const EventForm: FC<EventFormProps> = ({
             const result = await deleteEvent(eventId);
             if (result.status === 'Success') {
                 console.log('Event deleted');
-                nav('/eventsList');
-            } else {
-                console.log(`Error ${result.payload}`);
+                nav(ROUTES.EVENTS_LIST);
             }
-        } else {
-            console.log('Ошибка! Нет id');
         }
     }, [deleteEvent, eventId, nav]);
-    useEffect(() => {
-        if (eventData.name) {
-            setNameError(false);
-        }
-        if (eventData.metadata.datetime) {
-            const date = dayjs.utc(eventData.metadata.datetime).tz(NSK_TIMEZONE);
-            if (date.isValid()) {
-                setDateTimeValue(date);
-                validateDate(date);
-            } else {
-                setDateErrorText('Неверный формат даты');
-            }
-        } else {
-            setDateTimeValue(null);
-        }
-    }, [eventData.metadata.datetime]);
-    const validateDate = (date: Dayjs): boolean => {
-        const now = dayjs().tz(NSK_TIMEZONE);
-        const errors: string[] = [];
-        if (!date.isValid()) {
-            setDateErrorText('Неверный формат даты');
-            return false;
-        }
-        if (date.isBefore(now, 'day')) {
-            errors.push('Дата не может быть в прошлом');
-        }
-        const maxFutureDate = now.add(2, 'year');
-        if (date.isAfter(maxFutureDate)) {
-            errors.push('Дата не может быть более чем на 2 года вперед');
-        }
 
-        if (errors.length > 0) {
-            setDateErrorText(errors.join('. '));
-            setDateError(true);
-            return false;
-        }
+    const handleDateTimeChange = useCallback((newValue: Dayjs | null) => {
+        setTouched((prev) => ({ ...prev, date: true }));
 
-        setDateErrorText('');
-        setDateError(false);
-        return true;
-    };
+        if (newValue?.isValid()) {
+            const error = validateDate(newValue);
+            setErrors((prev) => ({ ...prev, date: error }));
 
-    const handleDateTimeChange = (newValue: Dayjs | null) => {
-        setDateTimeValue(newValue);
-        setTouched(true);
-
-        if (newValue && newValue.isValid()) {
-            if (validateDate(newValue)) {
+            if (!error) {
                 try {
-                    const isoString = newValue.tz(NSK_TIMEZONE).utc().toISOString();
+                    const isoString = newValue.utc().toISOString();
                     handleMetadataFieldChange('datetime', isoString);
-                    setDateErrorText('');
                 } catch (error) {
-                    console.error('Ошибка при конвертации даты:', error);
-                    setDateErrorText('Ошибка сохранения даты');
+                    setErrors((prev) => ({ ...prev, date: 'Ошибка сохранения даты' }));
                     handleMetadataFieldChange('datetime', '');
                 }
             } else {
@@ -132,149 +107,82 @@ export const EventForm: FC<EventFormProps> = ({
             }
         } else {
             handleMetadataFieldChange('datetime', '');
-            if (!newValue) {
-                setDateErrorText('Поле даты должно быть заполнено полностью');
-            } else {
-                if (newValue.toString().includes('Invalid Date')) {
-                    setDateErrorText('Неверный формат даты');
-                } else {
-                    validateDate(newValue);
-                }
-            }
+            setErrors((prev) => ({
+                ...prev,
+                date: newValue ? 'Неверный формат даты' : 'Поле даты должно быть заполнено'
+            }));
         }
-    };
+    }, [validateDate, handleMetadataFieldChange, setErrors, setTouched]);
 
-    const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const trimmedValue = e.target.value.trim();
-        if (e.target.value.trim() === '') {
-            setNameError(true);
-            setNameErrorText('Поле названия не может быть пустым');
-        } else if (trimmedValue.length > 100) {
-            setNameError(true);
-            setNameErrorText('Максимальная длина названия - 100 символов');
-        } else if (trimmedValue.length < 3) {
-            setNameError(true);
-            setNameErrorText('Минимальная длина названия - 3 символа');
-        } else {
-            setNameError(false);
-            setNameErrorText('');
-        }
-        handleBaseFieldChange('name', e.target.value);
-    };
+    const handleNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        const error = validateName(value);
 
-    const handleStatus = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setTouched((prev) => ({ ...prev, name: true }));
+        setErrors((prev) => ({ ...prev, name: error }));
+        handleBaseFieldChange('name', value);
+    }, [validateName, handleBaseFieldChange, setErrors, setTouched]);
+
+    const handleStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         handleChangeStatus(e.target.value);
-    };
-    const handleBlur = () => {
-        setTouched(true);
-        if (dateTimeValue) {
-            validateDate(dateTimeValue);
-        } else {
-            setDateErrorText('Поле даты должно быть заполнено полностью');
-        }
-    };
+    }, [handleChangeStatus]);
 
+    const handleSubmit = useCallback(async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        const currentDate = eventData.metadata.datetime
+            ? getTZTimeAndDate(eventData.metadata.datetime)
+            : null;
+
+        const isValid = validateForm(eventData.name, currentDate);
+        if (!isValid) {
+            return;
+        }
+
+        handlePostOrUpdate();
+    }, [eventData, validateForm, handlePostOrUpdate]);
+
+
+    const findTimeLineBlock = (content: EventContentBlock[]): TimeLineBlock['payload']=>{
+        const block = content.find((item): item is TimeLineBlock =>
+            item.block === 'timeline'
+        );
+        return block?.payload||[];
+    }
     return (
-        <>
+        <form onSubmit={handleSubmit}>
             <div className={styles.editBlock}>
                 <div className={styles.nameAndTimeAndLocation}>
-                    <TextField
-                        id='outlined-basic'
-                        label='Название мероприятия'
-                        variant='outlined'
-                        required
-                        sx={{width: '100%'}}
+                    <EventNameField
                         value={eventData.name}
-                        error={nameError}
-                        helperText={nameError && nameErrorText}
+                        error={touched.name && !!errors.name}
+                        helperText={touched.name ? errors.name : ''}
                         onChange={handleNameChange}
+                        onBlur={() => handleBlur('name')}
                     />
+
                     <div className={styles.timeAndPlace}>
                         <TextField
                             id='location-input'
                             label='Место проведения'
                             variant='outlined'
-                            sx={{width: '100%'}}
+                            sx={{ width: '100%' }}
                             value={eventData.metadata.location}
                             onChange={(e) => handleMetadataFieldChange('location', e.target.value)}
                         />
 
-                        <div style={{width: '100%'}}>
-                            <DateTimePicker
-                                label='Дата и время проведения (НСК)'
-                                value={dateTimeValue}
-                                onChange={handleDateTimeChange}
-                                sx={{width: '100%'}}
-                                ampm={false}
-                                format='DD.MM.YYYY HH:mm'
-                                timeSteps={{minutes: 5}}
-                                minDate={dayjs().tz(NSK_TIMEZONE).startOf('day')}
-                                maxDate={dayjs().tz(NSK_TIMEZONE).add(2, 'year')}
-                                slotProps={{
-                                    textField: {
-                                        error: !!dateErrorText && touched,
-                                        onBlur: handleBlur,
-
-                                    },
-                                    actionBar: {
-                                        actions: ['accept', 'cancel', 'today', 'clear']
-                                    }
-                                }}
-                            />
-
-                            {dateErrorText && touched && (
-                                <FormHelperText error sx={{mt: 0.5}}>
-                                    {dateErrorText}
-                                </FormHelperText>
-                            )}
-
-                            {dateTimeValue && !dateErrorText && (
-                                <FormHelperText sx={{mt: 0.5, color: 'green'}}>
-                                    {dateTimeValue.format('dddd, D MMMM YYYY [в] HH:mm')}
-                                </FormHelperText>
-                            )}
-                        </div>
-                        {
-                            eventId ?
-                                <FormControl>
-                                    <FormLabel id='demo-radio-buttons-group-label'>Статус мероприятия</FormLabel>
-                                    <RadioGroup
-                                        aria-labelledby='demo-radio-buttons-group-label'
-                                        defaultValue='Status'
-                                        name='radio-buttons-group'
-                                        value={eventData.status}
-                                        onChange={handleStatus}
-                                    >
-                                        <FormControlLabel value='published' control={<Radio
-                                            sx={{
-                                                'color': '#34c658',
-                                                '&.Mui-checked': {
-                                                    color: '#34c658',
-                                                },
-                                            }}/>} label='Опубликовано'/>
-                                        <FormControlLabel value='draft' control={<Radio sx={{
-                                            'color': '#fecd00',
-                                            '&.Mui-checked': {
-                                                color: '#fecd00',
-                                            },
-                                        }}/>} label='Редактирование' color='#fecd00'/>
-                                        <FormControlLabel value='archived' control={<Radio sx={{
-                                            'color': '#00c5ff',
-                                            '&.Mui-checked': {
-                                                color: '#00c5ff',
-                                            },
-                                        }}/>} label='Архивировано' color='#00c5ff'/>
-                                        <FormControlLabel value='cancelled' control={<Radio sx={{
-                                            'color': '#ec231e',
-                                            '&.Mui-checked': {
-                                                color: '#ec231e',
-                                            },
-                                        }}/>} label='Отменено' color='#ec231e'/>
-                                    </RadioGroup>
-                                </FormControl>
-                                :
-                                null
-                        }
+                        <EventDateTimeField
+                            value={eventData.metadata.datetime ? getTZTimeAndDate(eventData.metadata.datetime) : null}
+                            errorText={errors.date}
+                            touched={touched.date}
+                            onChange={handleDateTimeChange}
+                            onBlur={() => handleBlur('date')}
+                        />
+                        <EventStatusRadioGroup
+                            eventId={eventId}
+                            value={eventData.status}
+                            onChange={handleStatus}
+                        />
                     </div>
                 </div>
 
@@ -290,67 +198,22 @@ export const EventForm: FC<EventFormProps> = ({
                         }}
                         value={eventData.content.find((block) => block.block === 'promo-text')?.payload.join('') || ''}
                         onChange={(e) => {
-                            TextAreaChange('promo-text', e.target.value);
+                            TextAreaChange( e.target.value);
                         }}
                     />
                 </div>
             </div>
-            <div className={styles.buttonsBlock}>
-                <Button
-                    variant='outlined'
-                    onClick={handleCancel}
-                    size='large'
-                    disabled={isLoading}
-                    sx={{
-                        'color': '#fecd00',
-                        'borderColor': '#fecd00',
-                        'fontWeight': 'bold',
-                        'border': '2px solid #fecd00',
-                        '&:hover': {
-                            backgroundColor: 'rgba(255,249,0,0.26)',
-                        }
-                    }}
-                >
-                    Отмена
-                </Button>
-                {
-                    eventId &&
-                    <Button
-                        variant='outlined'
-                        disabled={isLoading}
-                        onClick={handleDeleteEvent}
-                        size='large'
-                        sx={{
-                            'color': '#ec231e',
-                            'borderColor': '#ec231e',
-                            'fontWeight': 'bold',
-                            'border': '2px solid #ec231e',
-                            '&:hover': {
-                                backgroundColor: 'rgba(255,0,13,0.26)',
-                            }
-                        }}
-                    >
-                        Удалить
-                    </Button>
-                }
-                <Button
-                    variant='outlined'
-                    disabled={nameError || dateError}
-                    onClick={handlePostOrUpdate}
-                    size='large'
-                    sx={{
-                        'color': '#34c658',
-                        'borderColor': '#34c658',
-                        'fontWeight': 'bold',
-                        'border': '2px solid #34c658',
-                        '&:hover': {
-                            backgroundColor: 'rgba(28,255,0,0.26)',
-                        }
-                    }}
-                >
-                    {eventId ? 'Сохранить' : 'Отправить'}
-                </Button>
+            <div>
+                <EventTimePoints block={findTimeLineBlock(eventData.content)}/>
             </div>
-        </>
+            <EventActionButtons
+                eventId={eventId}
+                onCancel={handleCancel}
+                onDelete={eventId ? handleDeleteEvent : undefined}
+                onSubmit={handlePostOrUpdate}
+                disabled={hasErrors}
+                isLoading={isLoading}
+            />
+        </form>
     );
 };
