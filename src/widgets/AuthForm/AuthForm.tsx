@@ -1,17 +1,16 @@
+import {Button} from '@mui/material';
 import TextField from '@mui/material/TextField';
-import React, {FC, useCallback} from 'react';
-import styles from "./AuthForm.module.css";
-import {Button} from "@mui/material";
-import {useAuth} from "../../contexts/AuthContext";
-import {useState} from "react";
-import {useAuthForm} from "../../hooks/useAuthForm";
-import {useNavigate} from "react-router-dom";
-import {ValidationErrors} from "../../shared/types/auth";
-import {validateLogin,validatePassword} from "./validationErrors";
+import React, {FC, FormEvent, useCallback, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {useAuth} from '../../contexts/AuthContext';
+import {useAuthForm} from '../../hooks/useAuthForm';
+import {ValidationErrors} from '../../shared/types/auth';
+import styles from './AuthForm.module.css';
+import {validateLogin, validatePassword} from './validationErrors';
 
-export const AuthForm: FC = ()=>{
+export const AuthForm: FC = () => {
     const nav = useNavigate();
-    const {loginUser} = useAuth();
+    const {loginUser, isLoadingAuth} = useAuth();
     const [loginError, setLoginError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const {authData, handlePasswordFieldChange, handleLoginFieldChange} = useAuthForm();
@@ -22,100 +21,124 @@ export const AuthForm: FC = ()=>{
     });
 
     const [errors, setErrors] = useState<ValidationErrors>({
-        login:'',
-        password:'',
+        login: '',
+        password: '',
     });
 
-    const handlePasswordChange = (value:string)=>{
+    const handlePasswordChange = (value: string) => {
         handlePasswordFieldChange(value);
         const error = validatePassword(value);
-        setErrors(prev=>({...prev, password:error}));
-    }
+        setErrors((prev) => ({...prev, password: error}));
+    };
 
-    const handleLoginChange = (value:string)=>{
+    const handleLoginChange = (value: string) => {
         handleLoginFieldChange(value);
         const error = validateLogin(value);
-        setErrors(prev=>({...prev, login:error}));
-    }
+        setErrors((prev) => ({...prev, login: error}));
+    };
 
-    const handleLogin = useCallback(async()=>{
+    const handleLogin = useCallback(async (e: FormEvent) => {
+        e.preventDefault();
         const result = await loginUser(authData);
-        if(result.status==="Success"){
+        if (result.status === 'Success') {
             setLoginError(false);
-            console.log("Авторизация успешна");
+            console.log('Авторизация успешна');
             nav('/eventsList');
-        }
-        else{
+        } else {
             setLoginError(true);
-            setErrorMessage(result.payload)
+            setErrorMessage(result.payload);
             console.log(`Ошибка ${result.payload}`);
         }
-    },[authData, loginUser, nav]);
+    }, [authData, loginUser, nav]);
     const handleBlur = (field: 'login' | 'password') => {
-        setTouched(prev => ({ ...prev, [field]: true }));
+        setTouched((prev) => ({...prev, [field]: true}));
         if (field === 'login') {
             const error = validateLogin(authData.login);
-            setErrors(prev => ({ ...prev, login: error }));
+            setErrors((prev) => ({...prev, login: error}));
 
         } else {
             const error = validatePassword(authData.password);
-            setErrors(prev => ({ ...prev, password: error }));
+            setErrors((prev) => ({...prev, password: error}));
         }
 
     };
     return (
-        <div className={styles.authForm}>
+        <form
+            className={styles.authForm}
+            onSubmit={handleLogin}
+            noValidate
+        >
             <TextField
                 required
-                id="login-input"
-                label="Логин"
-                variant="outlined"
+                id='login-input'
+                label='Логин'
+                variant='outlined'
                 value={authData.login}
-                onChange={(e)=>handleLoginChange(e.target.value)}
+                onChange={(e) => handleLoginChange(e.target.value)}
                 onBlur={() => handleBlur('login')}
                 error={touched.login && !!errors?.login}
-                helperText={!!errors?.login && errors?.login}
+                helperText={touched.login && errors?.login}
+                fullWidth
+                margin='normal'
+                autoComplete='username'
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !authData.password) {
+                        e.preventDefault();
+                        document.getElementById('password-input')?.focus();
+                    }
+                }}
             />
             <TextField
                 required
-                id="password-input"
-                label="Пароль"
-                type="password"
+                id='password-input'
+                label='Пароль'
+                type='password'
                 value={authData.password}
-                onChange={(e)=>handlePasswordChange(e.target.value)}
-                autoComplete="current-password"
+                onChange={(e) => handlePasswordChange(e.target.value)}
                 onBlur={() => handleBlur('password')}
                 error={touched.password && !!errors?.password}
                 helperText={touched.password && errors?.password}
+                fullWidth
+                margin='normal'
+                autoComplete='current-password'
             />
 
             <Button
-                variant="outlined"
-                onClick={handleLogin}
-                disabled={!!errors?.login || !!errors?.password}
+                type='submit'
+                variant='outlined'
+                disabled={!!errors?.login || !!errors?.password || isLoadingAuth}
                 sx={{
-                    backgroundColor: "transparent",
-                    borderRadius: '5px',
                     '&:hover': {
+                        backgroundColor: '#cfd0d5',
                         borderRadius: '5px',
-                        backgroundColor: "#cfd0d5",
-                    }
+                    },
+                    'backgroundColor': 'transparent',
+                    'borderRadius': '5px'
                 }}
             >
                 Войти
             </Button>
             {loginError && <TextField
                 error
-                id="multiline-read-only-input"
+                id='multiline-read-only-input'
                 value={errorMessage}
-                variant="standard"
+                variant='standard'
+                sx={{
+                    'width': '100%',
+                    '& .MuiInputBase-root': {
+                        justifyContent: 'center',
+                        textAlign: 'center',
+                    },
+                    '& .MuiInputBase-input': {
+                        textAlign: 'center',
+                    },
+                }}
                 slotProps={{
                     input: {
                         readOnly: true,
                     },
                 }}
             />}
-        </div>
-    )
-}
-
+        </form>
+    );
+};

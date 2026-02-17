@@ -1,67 +1,72 @@
-import {useState, useCallback, useEffect} from 'react';
-import {EventBaseField, EventMetadataField, } from "../shared/types/event";
-import {defaultEvent} from "../shared/constants/constants";
-import {useEvent} from './useEvent'
+import {useCallback, useEffect, useState} from 'react';
+import {defaultEvent} from '../shared/constants/constants';
+import {EventBaseField, EventMetadataField, } from '../shared/types/event';
+import {useEvent} from './useEvent';
 
-export const useEventForm = (eventId?:string) => {
+export const useEventForm = (eventId?: string) => {
     const {getEvent} = useEvent();
     const [eventData, setEventData] = useState(defaultEvent);
-
     useEffect(() => {
-        if(!eventId){
-            setEventData(defaultEvent)
+        if (!eventId) {
+            setEventData(defaultEvent);
             return;
         }
-        const loadEvent = async()=>{
+        const loadEvent = async () => {
             const result = await getEvent(eventId);
-            if(result.status==="Success"){
-                console.log("Event loaded");
+            if (result.status === 'Success') {
+                console.log('Event loaded');
                 setEventData(result.payload);
-            }
-            else{
+            } else {
                 console.log(`Error ${result.payload}`);
             }
-        }
+        };
         loadEvent();
-    },[eventId, getEvent])
-
+    }, [eventId, getEvent]);
 
     const handleBaseFieldChange = useCallback((field: EventBaseField, value: string) => {
-        setEventData(prev => ({
+        setEventData((prev) => ({
             ...prev,
             [field]: value
         }));
     }, [setEventData]);
 
     const handleMetadataFieldChange = useCallback((field: EventMetadataField, value: string) => {
-        setEventData(prev =>({
+        setEventData((prev) => ({
             ...prev,
-            metadata:{
+            metadata: {
                 ...prev.metadata,
-                [field]:value
+                [field]: value
             }
-        }))
+        }));
     }, [setEventData]);
 
-    const handleTextAreaChange =useCallback((field:string, value:string)=>{
-        setEventData(prev =>({
+    const handleTextAreaChange = useCallback((field: string, value: string) => {
+        setEventData((prev) => ({
             ...prev,
             content: [
-                ...prev.content.map(contentBlock=> contentBlock.block===field ? {...contentBlock, payload:[value]} : contentBlock)
+                ...prev.content.map((contentBlock) => contentBlock.block === field ? {...contentBlock, payload: [value]} : contentBlock)
             ]
         }));
-    },[setEventData]);
+    }, [setEventData]);
 
     const resetForm = useCallback(() => {
         setEventData(defaultEvent);
     }, []);
 
-    return{
+    const handleChangeStatus = useCallback((status: string) => {
+        setEventData((prev) => ({
+            ...prev,
+            status
+        }));
+    }, [setEventData]);
+
+    return {
         eventData,
-        setEventData,
         handleBaseFieldChange,
+        handleChangeStatus,
         handleMetadataFieldChange,
         handleTextAreaChange,
-        resetForm
-    }
-}
+        resetForm,
+        setEventData
+    };
+};

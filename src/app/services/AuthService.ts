@@ -1,6 +1,6 @@
-import {createResultError} from "./lib/createResultError";
 import {mockLoginUser} from "../../shared/mocks/authMocks";
 import {AuthData} from "../../shared/types/auth";
+import {createResultError} from "./lib/createResultError";
 import {createResultSuccess} from "./lib/createResultSuccess";
 
 

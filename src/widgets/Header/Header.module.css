@@ -3,10 +3,13 @@
     margin:0;
     width: 100%;
     display:flex;
+    position:sticky;
+    top: 0;
     justify-content: center;
     border-bottom: 1px solid;
     border-bottom-color: #E2E2E2;
     background-color: white;
+    z-index: 1000;
 }
 .headerElementsBlock{
     box-sizing: border-box;
@@ -26,39 +29,4 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-.accountButtonChildrenBox{
-    box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-}
-.email{
-    widht: 64px;
-    font-size: 16px;
-}
-.avatarButton {
-    height: 56px;
-    min-width: 56px;
-    background: transparent;
-    border: none;
-}
-.avatarButton:hover{
-    background-color: #B3B3B3;
-    border: 2px solid;
-}
-.iconButton{
-    height: 56px;
-    width: 56px;
-    background: transparent;
-    border: none;
-}
-.iconButton:hover{
-    background-color: #B3B3B3;
-    border: 2px solid;
-}
-.headerText{
-    height:28px;
-    font-size:22px;
 }

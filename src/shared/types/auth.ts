@@ -1,24 +1,24 @@
-import {ReactNode} from "react";
+import {ReactNode} from 'react';
 
-export interface AuthData{
+export interface AuthData {
     login: string;
     password: string;
 }
 
-export interface ValidationErrors{
+export interface ValidationErrors {
     login?: string;
     password?: string;
 }
 
 export interface AuthFormProps {
-    authData:AuthData,
-    handlePasswordFieldChange:(payload:string)=>void,
-    handleLoginFieldChange:(payload:string)=>void,
+    authData: AuthData;
+    handlePasswordFieldChange: (payload: string) => void;
+    handleLoginFieldChange: (payload: string) => void;
 }
 
 export interface UserData {
     token: string;
-    email: string;
+    login: string;
 }
 
 export interface AuthContextType {
@@ -32,7 +32,8 @@ export interface AuthContextType {
 export interface AuthProviderProps {
     children: ReactNode;
 }
-export interface Validation{
+
+export interface Validation {
     login: string;
     password: string;
 }

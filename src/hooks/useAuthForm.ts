@@ -5,14 +5,14 @@ export const useAuthForm = (eventId?: string) => {
 
     const [authData, setAuthData] = useState(defaultAuthData);
     const handlePasswordFieldChange = useCallback((payload: string) => {
-        setAuthData(prev => ({
+        setAuthData((prev) => ({
             ...prev,
             password: payload,
         }));
     }, [setAuthData]);
 
     const handleLoginFieldChange = useCallback((payload: string) => {
-        setAuthData(prev =>({
+        setAuthData((prev) =>({
             ...prev,
             login: payload,
         }))

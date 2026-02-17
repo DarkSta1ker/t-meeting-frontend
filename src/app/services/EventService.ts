@@ -35,8 +35,7 @@ export const EventService = {
             }
             const payload:EventListItem = await response.json();
             return createResultSuccess<EventListItem>(payload);
-        }
-        catch(error){
+        } catch(error){
             return createResultError(error);
         }
     },
