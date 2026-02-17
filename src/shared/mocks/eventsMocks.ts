@@ -6,7 +6,7 @@ const mockEventsDB = [
         id: '5378afbf-e87b-411f-95df-b1aeeb5b770f',
         name: 'Новогодний корпоратив',
         metadata: {
-            datetime: '2025-12-25T12:00:00.000Z',
+            datetime: '2026-12-26T12:00:00.000Z',
             location: 'БЦ Кронос'
         },
         content: [
@@ -54,7 +54,7 @@ const mockEventsDB = [
         id: '5378afbf-e87b-411f-95df-b1aeeb5b770a',
         name: 'Вечер настольных игр',
         metadata: {
-            datetime: '2026-01-10T12:30:00.000Z',
+            datetime: '2026-06-10T12:30:00.000Z',
             location: 'ТЦ Академгородка'
         },
         content: [
@@ -102,9 +102,25 @@ const mockEventsDB = [
                 block: 'timeline',
                 payload: [
                     {
-                        name: 'string',
-                        time: '03:24:44.726Z'
-                    }
+                        name: 'Первый поинт',
+                        time: '06:30:44.726Z'
+                    },
+                    {
+                        name: 'Второй поинт',
+                        time: '07:45:44.726Z'
+                    },{
+                        name: 'Третий поинт',
+                        time: '08:30:44.726Z'
+                    },{
+                        name: 'Четвертый поинт',
+                        time: '10:55:44.726Z'
+                    },{
+                        name: 'Пятый поинт',
+                        time: '12:30:44.726Z'
+                    },{
+                        name: 'Шестой поинт',
+                        time: '19:00:44.726Z'
+                    },
                 ]
             }
         ],
@@ -116,7 +132,7 @@ const mockEventsDB = [
         id: '5378afbf-e87b-411f-95df-b1aeeb5b770b',
         name: 'Сбор книжного клуба',
         metadata: {
-            datetime: '2026-02-15T10:00:00.000Z',
+            datetime: '2026-06-15T10:00:00.000Z',
             location: 'БЦ Кронос'
         },
         content: [

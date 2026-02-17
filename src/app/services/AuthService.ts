@@ -1,11 +1,10 @@
-import {mockLoginUser} from "../../shared/mocks/authMocks";
-import {AuthData} from "../../shared/types/auth";
-import {createResultError} from "./lib/createResultError";
-import {createResultSuccess} from "./lib/createResultSuccess";
-
+import {mockLoginUser} from '../../shared/mocks/authMocks';
+import {AuthData} from '../../shared/types/auth';
+import {createResultError} from './lib/createResultError';
+import {createResultSuccess} from './lib/createResultSuccess';
 
 export const AuthService = {
-    async loginUser(authData:AuthData) {
+    async loginUser(authData: AuthData) {
         try {
             const response = await mockLoginUser(authData.login, authData.password);
             if (response.status === 'Error') {
@@ -13,7 +12,7 @@ export const AuthService = {
             }
             return createResultSuccess(response.payload);
         } catch (error) {
-            return createResultError(error);
+            return createResultError(`Error: ${error}`);
         }
     }
-}
+};

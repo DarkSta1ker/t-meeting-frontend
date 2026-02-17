@@ -1,21 +1,15 @@
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
-import {Calendar, CirclePlus, EllipsisVertical, MapPinIcon} from 'lucide-react';
-import {DropdownMenu} from 'radix-ui';
+import {CirclePlus} from 'lucide-react';
 import React, {type FC, useCallback, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEvents} from '../../hooks/useEvents';
-import {EventStatusCircle} from '../../shared/ui/EventStatus/EventStatusCircle';
+import {Loader} from '../../shared/loader/Loader';
+import {PageTitle} from '../../shared/ui/PageTitle/PageTitle';
+import {EventListElement} from '../../widgets/EventListElement/EventListElement';
 import styles from './EventsListPage.module.css';
+import {ROUTES, buildEditEventRoute, buildEventRoute} from '../../shared/constants/constants';
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.tz.setDefault('Asia/Novosibirsk');
-const NSK_TIMEZONE = 'Asia/Novosibirsk';
 export const EventsListPage: FC = () => {
 
     const nav = useNavigate();
@@ -46,180 +40,46 @@ export const EventsListPage: FC = () => {
     }, [deleteEvent, handleUpdateEventList]);
 
     const handleEditEvent = (eventId: string) => {
-        nav(`/editEvent/${eventId}`);
+        nav(buildEditEventRoute(eventId));
     };
 
     const handleEventPage = (eventId: string) => {
-        nav(`/event/${eventId}`);
+        nav(buildEventRoute(eventId));
     };
-
-    const handleGetRuStatus = (status: string) => {
-        switch (status) {
-            case 'draft':
-                return 'Редактирование';
-            case 'cancelled':
-                return 'Отменено';
-            case 'archived':
-                return 'Архивировано';
-            default:
-                return 'Опубликовано';
-        }
-    };
+    if (isLoading) {
+        return(
+            <div className={styles.eventsListPage}>
+                <div className={styles.board}>
+                    <PageTitle>Список мероприятий</PageTitle>
+                    <div className={styles.eventsListBlock}>
+                        <Loader/>
+                    </div>
+                </div>
+            </div>
+        );
+    }
     return (
         <div className={styles.eventsListPage}>
             <div className={styles.board}>
-                <Typography
-                    variant="h5"
-                    sx={{
-                        alignItems: 'center',
-                        display: 'flex',
-                        height: '64px',
-                    }}
-                >Список мероприятий</Typography>
+                <PageTitle>Список мероприятий</PageTitle>
                 <div className={styles.eventsListBlock}>
                     {
-                        isLoading ?
-                            <Typography
-                                variant="h6"
-                                sx={{
-                                    alignItems: 'center',
-                                    display: 'flex',
-                                }}
-                            >Загрузка мероприятий...</Typography>
+                        events && events.length > 0 ?
+                            events.map((event) => (
+                                <EventListElement
+                                    key={event.id}
+                                    event={event}
+                                    handleEditEvent={handleEditEvent}
+                                    handleEventPage={handleEventPage}
+                                    handleDeleteEvent={handleDeleteEvent}
+                                />
+                            ))
                             :
-                            <>
-                                {
-                                    events ?
-                                        events.map((event) => (
-                                            <div key={event.id} className={styles.eventBlock}>
-                                                <div className={styles.eventBlockCardBox}>
-                                                    <div
-                                                        className={styles.eventBlockCard}
-                                                    >
-                                                        <div
-                                                            className={styles.nameAndDescriptionListPage}
-                                                            onClick={() => handleEventPage(event.id)}
-                                                        >
-                                                            <Typography
-                                                                variant="h6"
-                                                                sx={{
-                                                                    alignItems: 'center',
-                                                                    display: 'flex',
-                                                                    maxWidth: '90%',
-                                                                    overflow: 'hidden',
-                                                                    textOverflow: 'ellipsis',
-                                                                    whiteSpace: 'nowrap',
-                                                                }}
-                                                            >{event.name}</Typography>
-                                                            <Typography
-                                                                variant="body1"
-                                                                sx={{
-                                                                    WebkitBoxOrient: 'vertical',
-                                                                    WebkitLineClamp: 3,
-                                                                    display: '-webkit-box',
-                                                                    lineHeight: 1.5,
-                                                                    margin: 0,
-                                                                    maxHeight: '4.5em',
-                                                                    overflow: 'hidden',
-                                                                    textOverflow: 'ellipsis',
-                                                                    width: '95%',
-                                                                }}
-                                                            >
-                                                                {event.content[0].payload.join(' ')}
-                                                            </Typography>
-                                                        </div>
-                                                        <div
-                                                            className={styles.dataAndPlace}
-                                                            onClick={() => handleEventPage(event.id)}
-                                                        >
-                                                            <div className={styles.dataBlock}>
-                                                                <Typography
-                                                                    variant="body1"
-                                                                    sx={{
-                                                                        alignItems: 'center',
-                                                                        display: 'flex',
-                                                                    }}
-                                                                >
-                                                                    {dayjs.utc(event.metadata.datetime).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')}
-                                                                </Typography>
-                                                                <Calendar/>
-                                                            </div>
-                                                            <div className={styles.placeBlock}>
-                                                                <Typography
-                                                                    variant="body1"
-                                                                    sx={{
-                                                                        alignItems: 'center',
-                                                                        display: 'flex',
-                                                                        overflow: 'hidden',
-                                                                        textOverflow: 'ellipsis',
-                                                                        whiteSpace: 'nowrap',
-                                                                    }}
-                                                                >{event.metadata.location}</Typography>
-
-                                                                <MapPinIcon/>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className={styles.dropDownMenu}>
-                                                        <DropdownMenu.Root>
-                                                            <DropdownMenu.Trigger asChild>
-                                                                <button className={styles.dropDownMenuButton}
-                                                                        aria-label="Actions">
-                                                                    <EllipsisVertical/>
-                                                                </button>
-                                                            </DropdownMenu.Trigger>
-
-                                                            <DropdownMenu.Portal>
-                                                                <DropdownMenu.Content
-                                                                    className={styles.dropdownMenuContent} side="left"
-                                                                    sideOffset={5}>
-                                                                    <DropdownMenu.Item
-                                                                        className={styles.dropdownMenuItem}
-                                                                        onSelect={() => handleEventPage(event.id)}>
-                                                                        Страница мероприятия
-                                                                    </DropdownMenu.Item>
-                                                                    <DropdownMenu.Item
-                                                                        className={styles.dropdownMenuItem}
-                                                                        onSelect={() => handleEditEvent(event.id)}>
-                                                                        Редактировать
-                                                                    </DropdownMenu.Item>
-                                                                    <DropdownMenu.Item
-                                                                        className={styles.dropdownMenuItem}
-                                                                        onSelect={() => handleDeleteEvent(event.id)}>
-                                                                        Удалить
-                                                                    </DropdownMenu.Item>
-                                                                    <DropdownMenu.Arrow
-                                                                        className={styles.dropdownMenuArrow}/>
-
-                                                                </DropdownMenu.Content>
-                                                            </DropdownMenu.Portal>
-                                                        </DropdownMenu.Root>
-
-                                                    </div>
-                                                </div>
-                                                <div className={styles.infoBlock}>
-                                                    <Typography
-                                                        variant="body2"
-                                                    >Создано: {dayjs.utc(event.createdAt).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')} |
-                                                        Обновлено: {dayjs.utc(event.updatedAt).tz(NSK_TIMEZONE).format('DD.MM.YYYY HH:mm')}</Typography>
-                                                    <div className={styles.status}>
-                                                        <Typography
-                                                            variant="body2"
-                                                        >Cтатус: {handleGetRuStatus(event.status)}</Typography>
-                                                        <EventStatusCircle status={event.status}/>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        ))
-                                        :
-                                        <div className={styles.noEventsBlock}>
-                                            Пока что тут нет мероприятий, вы можете добавить их с помощью кнопки ниже.
-                                        </div>
-                                }
-                            </>
+                            <div className={styles.noEventsBlock}>
+                                Пока что тут нет мероприятий, вы можете добавить их с помощью кнопки ниже.
+                            </div>
                     }
-                    <IconButton onClick={() => nav('/createEvent')}
+                    <IconButton onClick={() => nav(ROUTES.CREATE_EVENT)}
                                 sx={{
                                     '&:hover': {
                                         backgroundColor: '#cfd0d5',

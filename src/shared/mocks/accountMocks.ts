@@ -23,7 +23,7 @@ const usersInDB = [
     {login: 'login3', password: 'password', token: 'token3', email: 'email3', role: 'Неизвестный'},
 ];
 
-type accountMockResult = ResultSuccess<AccountData> | ResultError;
+type accountMockResult = ResultSuccess<AccountData> | ResultError<Error>;
 
 export const mockAccountData = (login: string, token: string): Promise<accountMockResult> => {
     return new Promise((resolve) => {
