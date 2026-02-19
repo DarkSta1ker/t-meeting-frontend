@@ -17,6 +17,7 @@ export const CreateEventPage: FC = () => {
         handleDesriptionChange,
         handleMetadataFieldChange,
         handleBaseFieldChange,
+        handleUpdateTimeLine,
         handleChangeStatus
     } = useNewEventForm();
     const handleAddEvent = useCallback(async () => {
@@ -37,6 +38,7 @@ export const CreateEventPage: FC = () => {
                         :
                         <>
                             <EventForm
+                                handleUpdateTimeLine={handleUpdateTimeLine}
                                 eventData={eventData}
                                 handleMetadataFieldChange={handleMetadataFieldChange}
                                 handleBaseFieldChange={handleBaseFieldChange}

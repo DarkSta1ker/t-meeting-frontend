@@ -1,48 +1,67 @@
-.editBlock{
+.editBlock {
     width: 1232px;
-    height: 550px;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     background-color: white;
-    border:#E2E2E2 1px solid;
+    border: #E2E2E2 1px solid;
     border-radius: 15px;
     box-shadow: 2px 2px 8px #E2E2E2;
     padding: 40px 60px;
     box-sizing: border-box;
+    gap: 30px;
 }
-.nameAndTimeAndLocation{
+
+.blockBoard {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+
+}
+
+.timeLine {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.nameAndTimeAndLocation {
     width: 450px;
     height: 100%;
     display: flex;
-    gap:20px;
-    align-items:center;
-    flex-direction:column;
+    gap: 20px;
+    align-items: center;
+    flex-direction: column;
     box-sizing: border-box;
 }
-.description{
+
+.description {
     width: 450px;
     height: 100%;
     display: flex;
     justify-content: space-between;
-    align-items:center;
-    flex-direction:column;
-    box-sizing: border-box;
-}
-.timeAndPlace{
-    display:flex;
+    align-items: center;
     flex-direction: column;
     box-sizing: border-box;
-    gap:20px;
+}
+
+.timeAndPlace {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    gap: 20px;
     width: 100%;
     justify-content: space-between;
 }
-.buttonsBlock{
+
+.buttonsBlock {
     width: 1232px;
     height: 96px;
     display: flex;
     justify-content: right;
-    align-items:center;
-    gap:30px;
+    align-items: center;
+    gap: 30px;
     box-sizing: border-box;
 }

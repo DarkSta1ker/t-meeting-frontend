@@ -7,6 +7,10 @@ export const defaultNewEvent: EventNew = {
         {
             block: 'promo-text',
             payload: [],
+        },
+        {
+            block: 'timeline',
+            payload: [],
         }
     ],
     metadata: {
