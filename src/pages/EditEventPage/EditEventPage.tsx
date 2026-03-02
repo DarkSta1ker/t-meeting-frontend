@@ -18,7 +18,8 @@ export const EditEventPage: FC = () => {
         handleMetadataFieldChange,
         handleBaseFieldChange,
         handleUpdateTimeLine,
-        handleChangeStatus
+        handleChangeStatus,
+        handleUpdateMapBlock
     } = useEventForm(eventId);
     const handleUpdateEvent = useCallback(async () => {
         const result = await updateEvent(eventData);
@@ -44,6 +45,7 @@ export const EditEventPage: FC = () => {
                             handleUpdateTimeLine={handleUpdateTimeLine}
                             handleChangeStatus={handleChangeStatus}
                             handlePostOrUpdate={handleUpdateEvent}
+                            handleUpdateMapBlock={handleUpdateMapBlock}
                         />
                 }
             </div>

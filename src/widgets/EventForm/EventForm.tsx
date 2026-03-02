@@ -11,12 +11,15 @@ import {
     EventListItem,
     EventMetadataField,
     EventNew,
+    MapBlock,
+    PromoTextBlock,
     TimeLineBlock
 } from '../../shared/types/event';
 import {getTZTimeAndDate} from '../../shared/utils/formatTimeAndData';
 import styles from './EventForm.module.css';
 import {EventActionButtons} from './FormElements/EventActionButtons';
 import {EventDateTimeField} from './FormElements/EventDateTimeField';
+import {EventMap} from './FormElements/EventMap';
 import {EventNameField} from './FormElements/EventNameField';
 import {EventStatusRadioGroup} from './FormElements/EventStatusRadioGroup';
 import {EventTimePoints} from './FormElements/EventTimePoints';
@@ -29,6 +32,7 @@ interface EventFormProps {
     handleChangeStatus: (paramName: string) => void;
     handlePostOrUpdate: () => void;
     handleUpdateTimeLine: (block: { name: string, time: string }[]) => void;
+    handleUpdateMapBlock: (block: { background: string, points: { x: number; y: number; text: string }[] }) => void;
 }
 
 export const EventForm: FC<EventFormProps> = ({
@@ -38,7 +42,8 @@ export const EventForm: FC<EventFormProps> = ({
                                                   TextAreaChange,
                                                   handleChangeStatus,
                                                   handlePostOrUpdate,
-                                                  handleUpdateTimeLine
+                                                  handleUpdateTimeLine,
+                                                  handleUpdateMapBlock,
                                               }) => {
     const {eventId} = useParams<{ eventId: string }>();
     const nav = useNavigate();
@@ -149,6 +154,12 @@ export const EventForm: FC<EventFormProps> = ({
         );
         return block?.payload || [];
     };
+    const findMapBlock = (content: EventContentBlock[]): MapBlock['payload'] => {
+        const block = content.find((item): item is MapBlock =>
+            item.block === 'map'
+        );
+        return block?.payload || {background: '', points: []};
+    };
     return (
         <form onSubmit={handleSubmit}>
             <div className={styles.editBlock}>
@@ -197,7 +208,7 @@ export const EventForm: FC<EventFormProps> = ({
                                 height: '100%',
                                 width: '100%',
                             }}
-                            value={eventData.content.find((block) => block.block === 'promo-text')?.payload.join('') || ''}
+                            value={eventData.content.find((block): block is PromoTextBlock => block.block === 'promo-text')?.payload.join('') || ''}
                             onChange={(e) => {
                                 TextAreaChange(e.target.value);
                             }}
@@ -209,6 +220,12 @@ export const EventForm: FC<EventFormProps> = ({
                     <EventTimePoints
                         handleUpdateTimeLine={handleUpdateTimeLine}
                         block={findTimeLineBlock(eventData.content)}
+                    />
+                </div>
+                <div className={styles.mapBlock}>
+                    <EventMap
+                        onUpdate={handleUpdateMapBlock}
+                        payload={findMapBlock(eventData.content)}
                     />
                 </div>
             </div>

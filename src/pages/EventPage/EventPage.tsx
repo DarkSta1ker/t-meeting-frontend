@@ -7,7 +7,9 @@ import {useEventForm} from '../../hooks/useEventForm';
 import {Loader} from '../../shared/loader/Loader';
 import {ReadOnlyTextField} from '../../shared/ui/ReadOnlyTextField/ReadOnlyTextField';
 import {getTimeAndDateString} from '../../shared/utils/formatTimeAndData';
+import {getDescription} from '../../shared/utils/helpFunks';
 import styles from './EventPage.module.css';
+
 export const EventPage: FC = () => {
     const {eventId} = useParams<{ eventId: string }>();
     const {getEvent, isLoading} = useEvent();
@@ -41,7 +43,7 @@ export const EventPage: FC = () => {
                         <>
                             <div className={styles.eventNameBox}>
                                 <Typography
-                                    variant='h4'
+                                    variant="h4"
                                     sx={{
                                         alignItems: 'center',
                                         display: 'flex',
@@ -55,11 +57,11 @@ export const EventPage: FC = () => {
                             <div className={styles.editBlock}>
                                 <div className={styles.description}>
                                     <Box sx={{height: '100%'}}>
-                                        <Typography variant='h6' gutterBottom>
+                                        <Typography variant="h6" gutterBottom>
                                             Описание мероприятия
                                         </Typography>
                                         <Paper
-                                            variant='outlined'
+                                            variant="outlined"
                                             sx={{
                                                 backgroundColor: 'background.paper',
                                                 minHeight: '100px',
@@ -69,14 +71,14 @@ export const EventPage: FC = () => {
                                             }}
                                         >
                                             <Typography
-                                                variant='body1'
+                                                variant="body1"
                                                 sx={{
                                                     lineHeight: 1.6,
                                                     whiteSpace: 'pre-wrap',
                                                     wordBreak: 'break-word',
                                                 }}
                                             >
-                                                {eventData.content[0].payload.join(' ')}
+                                                {getDescription(eventData)}
                                             </Typography>
                                         </Paper>
                                     </Box>

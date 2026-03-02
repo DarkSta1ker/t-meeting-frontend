@@ -77,7 +77,7 @@ export const EventTimePoints: FC<EventTimePointsProps> = ({block = [], handleUpd
     const handleSaveEdit = () => {
         if (!editTime) {
             return;
-        } // или можно установить запасное значение, например, текущее время
+        }
 
         const newTimePoints = [...timePoints];
         newTimePoints[selectedIndex] = {

@@ -79,12 +79,30 @@ export const useEventForm = (eventId?: string) => {
         });
     }, []);
 
+    const handleUpdateMapBlock = useCallback((block: {
+        background: string,
+        points: { x: number; y: number; text: string }[]
+    }) => {
+        setEventData((prev) => {
+            const content = prev.content.map((contentBlock) => contentBlock.block === 'map' ? {
+                ...contentBlock,
+                payload: block
+            } : contentBlock);
+
+            return ({
+                ...prev,
+                content,
+            });
+        });
+    }, []);
+
     return {
         eventData,
         handleBaseFieldChange,
         handleChangeStatus,
         handleMetadataFieldChange,
         handleDesriptionChange,
+        handleUpdateMapBlock,
         handleUpdateTimeLine,
         resetForm,
         setEventData

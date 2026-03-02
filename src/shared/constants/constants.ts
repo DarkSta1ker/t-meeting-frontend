@@ -11,6 +11,13 @@ export const defaultNewEvent: EventNew = {
         {
             block: 'timeline',
             payload: [],
+        },
+        {
+            block: 'map',
+            payload: {
+                background: '',
+                points: []
+            }
         }
     ],
     metadata: {

@@ -32,10 +32,15 @@ export interface PromoTextBlock {
 
 export interface TimeLineBlock {
     block: 'timeline';
-    payload: { name: string, time: string }[]
+    payload: { name: string, time: string }[];
 }
 
-export type EventContentBlock = | PromoTextBlock | TimeLineBlock;
+export interface MapBlock {
+    block: 'map';
+    payload: { background: string, points: { x: number; y: number; text: string }[] };
+}
+
+export type EventContentBlock = | PromoTextBlock | TimeLineBlock | MapBlock;
 
 export type EventBaseField = 'name';
 export type EventMetadataField = keyof EventBase['metadata'];

@@ -30,10 +30,25 @@ const mockEventsDB = [
             {
                 block: 'map',
                 payload: {
-                    longitude: 0,
-                    latitude: 0,
-                    title: 'string',
-                    icon: 'https://example.com/'
+                    background: process.env.PUBLIC_URL + '/images/map1.jpg',
+                    points:
+                        [
+                            {
+                                x: 0.2,
+                                y: 0.2,
+                                text: 'почти левый верхний угол'
+                            },
+                            {
+                                x: 0.8,
+                                y: 0.8,
+                                text: 'почти правый верхний угол'
+                            },
+                            {
+                                x: 0.5,
+                                y: 0.5,
+                                text: 'центр'
+                            }
+                        ]
                 }
             },
             {
@@ -92,10 +107,25 @@ const mockEventsDB = [
             {
                 block: 'map',
                 payload: {
-                    longitude: 0,
-                    latitude: 0,
-                    title: 'string',
-                    icon: 'https://example.com/'
+                    background: process.env.PUBLIC_URL + '/images/map2.jpg',
+                    points:
+                        [
+                            {
+                                x: 0.2,
+                                y: 0.2,
+                                text: 'почти левый верхний угол'
+                            },
+                            {
+                                x: 0.8,
+                                y: 0.8,
+                                text: 'почти правый верхний угол'
+                            },
+                            {
+                                x: 0.5,
+                                y: 0.5,
+                                text: 'центр'
+                            }
+                        ]
                 }
             },
             {
@@ -108,16 +138,16 @@ const mockEventsDB = [
                     {
                         name: 'Второй поинт',
                         time: '07:45:44.726Z'
-                    },{
+                    }, {
                         name: 'Третий поинт',
                         time: '08:30:44.726Z'
-                    },{
+                    }, {
                         name: 'Четвертый поинт',
                         time: '10:55:44.726Z'
-                    },{
+                    }, {
                         name: 'Пятый поинт',
                         time: '12:30:44.726Z'
-                    },{
+                    }, {
                         name: 'Шестой поинт',
                         time: '19:00:44.726Z'
                     },
@@ -173,10 +203,25 @@ const mockEventsDB = [
             {
                 block: 'map',
                 payload: {
-                    longitude: 0,
-                    latitude: 0,
-                    title: 'string',
-                    icon: 'https://example.com/'
+                    background: process.env.PUBLIC_URL + '/images/map3.jpg',
+                    points:
+                        [
+                            {
+                                x: 0.2,
+                                y: 0.2,
+                                text: 'почти левый верхний угол'
+                            },
+                            {
+                                x: 0.8,
+                                y: 0.8,
+                                text: 'почти правый верхний угол'
+                            },
+                            {
+                                x: 0.5,
+                                y: 0.5,
+                                text: 'центр'
+                            }
+                        ]
                 }
             },
             {
