@@ -1,34 +1,38 @@
 import TextField from '@mui/material/TextField';
-import { Dayjs } from 'dayjs';
-import React, { ChangeEvent, FC, useCallback, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useEvent } from '../../hooks/useEvent';
-import { useEventFormValidation } from '../../hooks/useEventFormValidation';
+import {Dayjs} from 'dayjs';
+import React, {ChangeEvent, FC, useCallback, useEffect} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
+import {useEvent} from '../../hooks/useEvent';
+import {useEventFormValidation} from '../../hooks/useEventFormValidation';
+import {ROUTES} from '../../shared/constants/constants';
 import {
     EventBaseField,
     EventContentBlock,
     EventListItem,
     EventMetadataField,
     EventNew,
+    MapBlock,
+    PromoTextBlock,
     TimeLineBlock
 } from '../../shared/types/event';
-import { getTZTimeAndDate } from '../../shared/utils/formatTimeAndData';
+import {getTZTimeAndDate} from '../../shared/utils/formatTimeAndData';
 import styles from './EventForm.module.css';
-import { EventActionButtons } from './FormElements/EventActionButtons';
-import { EventDateTimeField } from './FormElements/EventDateTimeField';
-import { EventNameField } from './FormElements/EventNameField';
-import { EventStatusRadioGroup } from './FormElements/EventStatusRadioGroup';
+import {EventActionButtons} from './FormElements/EventActionButtons';
+import {EventDateTimeField} from './FormElements/EventDateTimeField';
+import {EventMap} from './FormElements/EventMap';
+import {EventNameField} from './FormElements/EventNameField';
+import {EventStatusRadioGroup} from './FormElements/EventStatusRadioGroup';
 import {EventTimePoints} from './FormElements/EventTimePoints';
-import {ROUTES} from '../../shared/constants/constants';
-
 
 interface EventFormProps {
     eventData: EventListItem | EventNew;
     handleBaseFieldChange: (paramName: EventBaseField, payload: string) => void;
     handleMetadataFieldChange: (paramName: EventMetadataField, payload: string) => void;
-    TextAreaChange: ( payload: string) => void;
+    TextAreaChange: (payload: string) => void;
     handleChangeStatus: (paramName: string) => void;
     handlePostOrUpdate: () => void;
+    handleUpdateTimeLine: (block: { name: string, time: string }[]) => void;
+    handleUpdateMapBlock: (block: { background: string, points: { x: number; y: number; text: string }[] }) => void;
 }
 
 export const EventForm: FC<EventFormProps> = ({
@@ -38,10 +42,12 @@ export const EventForm: FC<EventFormProps> = ({
                                                   TextAreaChange,
                                                   handleChangeStatus,
                                                   handlePostOrUpdate,
+                                                  handleUpdateTimeLine,
+                                                  handleUpdateMapBlock,
                                               }) => {
-    const { eventId } = useParams<{ eventId: string }>();
+    const {eventId} = useParams<{ eventId: string }>();
     const nav = useNavigate();
-    const { deleteEvent, isLoading } = useEvent();
+    const {deleteEvent, isLoading} = useEvent();
 
     const {
         errors,
@@ -61,14 +67,14 @@ export const EventForm: FC<EventFormProps> = ({
     useEffect(() => {
         if (eventData.name) {
             const nameError = validateName(eventData.name);
-            setErrors((prev) => ({ ...prev, name: nameError }));
+            setErrors((prev) => ({...prev, name: nameError}));
         }
 
         if (eventData.metadata.datetime) {
             const date = getTZTimeAndDate(eventData.metadata.datetime);
             if (date.isValid()) {
                 const dateError = validateDate(date);
-                setErrors((prev) => ({ ...prev, date: dateError }));
+                setErrors((prev) => ({...prev, date: dateError}));
             }
         }
     }, [eventData.name, eventData.metadata.datetime]);
@@ -88,18 +94,18 @@ export const EventForm: FC<EventFormProps> = ({
     }, [deleteEvent, eventId, nav]);
 
     const handleDateTimeChange = useCallback((newValue: Dayjs | null) => {
-        setTouched((prev) => ({ ...prev, date: true }));
+        setTouched((prev) => ({...prev, date: true}));
 
         if (newValue?.isValid()) {
             const error = validateDate(newValue);
-            setErrors((prev) => ({ ...prev, date: error }));
+            setErrors((prev) => ({...prev, date: error}));
 
             if (!error) {
                 try {
                     const isoString = newValue.utc().toISOString();
                     handleMetadataFieldChange('datetime', isoString);
                 } catch (error) {
-                    setErrors((prev) => ({ ...prev, date: 'Ошибка сохранения даты' }));
+                    setErrors((prev) => ({...prev, date: 'Ошибка сохранения даты'}));
                     handleMetadataFieldChange('datetime', '');
                 }
             } else {
@@ -118,8 +124,8 @@ export const EventForm: FC<EventFormProps> = ({
         const value = e.target.value;
         const error = validateName(value);
 
-        setTouched((prev) => ({ ...prev, name: true }));
-        setErrors((prev) => ({ ...prev, name: error }));
+        setTouched((prev) => ({...prev, name: true}));
+        setErrors((prev) => ({...prev, name: error}));
         handleBaseFieldChange('name', value);
     }, [validateName, handleBaseFieldChange, setErrors, setTouched]);
 
@@ -142,70 +148,88 @@ export const EventForm: FC<EventFormProps> = ({
         handlePostOrUpdate();
     }, [eventData, validateForm, handlePostOrUpdate]);
 
-
-    const findTimeLineBlock = (content: EventContentBlock[]): TimeLineBlock['payload']=>{
+    const findTimeLineBlock = (content: EventContentBlock[]): TimeLineBlock['payload'] => {
         const block = content.find((item): item is TimeLineBlock =>
             item.block === 'timeline'
         );
-        return block?.payload||[];
-    }
+        return block?.payload || [];
+    };
+    const findMapBlock = (content: EventContentBlock[]): MapBlock['payload'] => {
+        const block = content.find((item): item is MapBlock =>
+            item.block === 'map'
+        );
+        return block?.payload || {background: '', points: []};
+    };
     return (
         <form onSubmit={handleSubmit}>
             <div className={styles.editBlock}>
-                <div className={styles.nameAndTimeAndLocation}>
-                    <EventNameField
-                        value={eventData.name}
-                        error={touched.name && !!errors.name}
-                        helperText={touched.name ? errors.name : ''}
-                        onChange={handleNameChange}
-                        onBlur={() => handleBlur('name')}
-                    />
+                <div className={styles.blockBoard}>
+                    <div className={styles.nameAndTimeAndLocation}>
+                        <EventNameField
+                            value={eventData.name}
+                            error={touched.name && !!errors.name}
+                            helperText={touched.name ? errors.name : ''}
+                            onChange={handleNameChange}
+                            onBlur={() => handleBlur('name')}
+                        />
 
-                    <div className={styles.timeAndPlace}>
+                        <div className={styles.timeAndPlace}>
+                            <TextField
+                                id="location-input"
+                                label="Место проведения"
+                                variant="outlined"
+                                sx={{width: '100%'}}
+                                value={eventData.metadata.location}
+                                onChange={(e) => handleMetadataFieldChange('location', e.target.value)}
+                            />
+
+                            <EventDateTimeField
+                                value={eventData.metadata.datetime ? getTZTimeAndDate(eventData.metadata.datetime) : null}
+                                errorText={errors.date}
+                                touched={touched.date}
+                                onChange={handleDateTimeChange}
+                                onBlur={() => handleBlur('date')}
+                            />
+                            <EventStatusRadioGroup
+                                eventId={eventId}
+                                value={eventData.status}
+                                onChange={handleStatus}
+                            />
+                        </div>
+                    </div>
+
+                    <div className={styles.description}>
                         <TextField
-                            id='location-input'
-                            label='Место проведения'
-                            variant='outlined'
-                            sx={{ width: '100%' }}
-                            value={eventData.metadata.location}
-                            onChange={(e) => handleMetadataFieldChange('location', e.target.value)}
-                        />
-
-                        <EventDateTimeField
-                            value={eventData.metadata.datetime ? getTZTimeAndDate(eventData.metadata.datetime) : null}
-                            errorText={errors.date}
-                            touched={touched.date}
-                            onChange={handleDateTimeChange}
-                            onBlur={() => handleBlur('date')}
-                        />
-                        <EventStatusRadioGroup
-                            eventId={eventId}
-                            value={eventData.status}
-                            onChange={handleStatus}
+                            id="outlined-multiline-static"
+                            label="Описание мероприятия"
+                            multiline
+                            rows={16}
+                            sx={{
+                                height: '100%',
+                                width: '100%',
+                            }}
+                            value={eventData.content.find((block): block is PromoTextBlock => block.block === 'promo-text')?.payload.join('') || ''}
+                            onChange={(e) => {
+                                TextAreaChange(e.target.value);
+                            }}
                         />
                     </div>
                 </div>
 
-                <div className={styles.description}>
-                    <TextField
-                        id='outlined-multiline-static'
-                        label='Описание мероприятия'
-                        multiline
-                        rows={16}
-                        sx={{
-                            height: '100%',
-                            width: '100%',
-                        }}
-                        value={eventData.content.find((block) => block.block === 'promo-text')?.payload.join('') || ''}
-                        onChange={(e) => {
-                            TextAreaChange( e.target.value);
-                        }}
+                <div className={styles.timeLine}>
+                    <EventTimePoints
+                        handleUpdateTimeLine={handleUpdateTimeLine}
+                        block={findTimeLineBlock(eventData.content)}
+                    />
+                </div>
+                <div className={styles.mapBlock}>
+                    <EventMap
+                        onUpdate={handleUpdateMapBlock}
+                        payload={findMapBlock(eventData.content)}
                     />
                 </div>
             </div>
-            <div>
-                <EventTimePoints block={findTimeLineBlock(eventData.content)}/>
-            </div>
+
             <EventActionButtons
                 eventId={eventId}
                 onCancel={handleCancel}

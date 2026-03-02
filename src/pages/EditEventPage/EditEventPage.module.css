@@ -1,23 +1,24 @@
-.editEventPage{
+.editEventPage {
     display: flex;
     flex-direction: column;
-    margin:0;
+    margin: 0;
     justify-content: center;
 }
-.board{
+
+.board {
     width: 1232px;
-    height: 880px;
-    margin:auto;
+    margin: auto;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
 }
-.buttonsBlock{
+
+.buttonsBlock {
     width: 1232px;
     height: 96px;
     display: flex;
     justify-content: right;
-    align-items:center;
-    gap:30px;
+    align-items: center;
+    gap: 30px;
     box-sizing: border-box;
 }

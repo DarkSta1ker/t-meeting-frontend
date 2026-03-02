@@ -6,6 +6,7 @@ import {getRuStatus} from '../../shared/constants/constants';
 import {EventListItem} from '../../shared/types/event';
 import {EventStatusCircle} from '../../shared/ui/EventStatus/EventStatusCircle';
 import {getTimeAndDateString} from '../../shared/utils/formatTimeAndData';
+import {getDescription} from '../../shared/utils/helpFunks';
 import styles from './EventListElement.module.css';
 
 interface EventListElementProps {
@@ -39,7 +40,7 @@ export const EventListElement: FC<EventListElementProps> = ({
                             variant="body1"
                             className={styles.textEllipsisMultiline}
                         >
-                            {event.content[0].payload.join(' ')}
+                            {getDescription(event)}
                         </Typography>
                     </div>
                     <div

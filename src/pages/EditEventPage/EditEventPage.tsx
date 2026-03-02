@@ -2,11 +2,12 @@ import React, {type FC, useCallback} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEventForm} from '../../hooks/useEventForm';
+import {ROUTES} from '../../shared/constants/constants';
 import {Loader} from '../../shared/loader/Loader';
 import {PageTitle} from '../../shared/ui/PageTitle/PageTitle';
 import {EventForm} from '../../widgets/EventForm/EventForm';
 import styles from './EditEventPage.module.css';
-import {ROUTES} from '../../shared/constants/constants';
+
 export const EditEventPage: FC = () => {
     const nav = useNavigate();
     const {eventId} = useParams<{ eventId: string }>();
@@ -16,7 +17,9 @@ export const EditEventPage: FC = () => {
         handleDesriptionChange,
         handleMetadataFieldChange,
         handleBaseFieldChange,
-        handleChangeStatus
+        handleUpdateTimeLine,
+        handleChangeStatus,
+        handleUpdateMapBlock
     } = useEventForm(eventId);
     const handleUpdateEvent = useCallback(async () => {
         const result = await updateEvent(eventData);
@@ -39,8 +42,10 @@ export const EditEventPage: FC = () => {
                             handleMetadataFieldChange={handleMetadataFieldChange}
                             handleBaseFieldChange={handleBaseFieldChange}
                             TextAreaChange={handleDesriptionChange}
+                            handleUpdateTimeLine={handleUpdateTimeLine}
                             handleChangeStatus={handleChangeStatus}
                             handlePostOrUpdate={handleUpdateEvent}
+                            handleUpdateMapBlock={handleUpdateMapBlock}
                         />
                 }
             </div>

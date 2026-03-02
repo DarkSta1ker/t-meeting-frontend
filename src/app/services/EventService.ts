@@ -1,4 +1,4 @@
-import {requestApi} from '../../shared/api/requestApi';
+import {mockRequestApi} from '../../shared/mocks/eventsMocks';
 import {ApiData} from '../../shared/types/api';
 import {EventBase, EventListItem} from '../../shared/types/event';
 import {createResultError} from './lib/createResultError';
@@ -9,7 +9,7 @@ async function makeRequest<T>(
     parseResponse?: (response: Response) => Promise<T>
 ): Promise<any> {
     try {
-        const response = await requestApi(apiData);
+        const response = await mockRequestApi(apiData);
 
         if (response.ok === false) {
             return createResultError(
