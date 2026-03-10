@@ -40,9 +40,18 @@ export const useAuthLogic = () => {
                     token: result.payload.token,
                     login: result.payload.login,
                 };
+                tokenManager.startRefresh();
                 setUserData(userData);
                 localStorage.setItem('token', result.payload.token);
                 localStorage.setItem('login', result.payload.login);
+
+                const urlParams = new URLSearchParams(window.location.search);
+                const backUrl = urlParams.get('back');
+
+                if (backUrl) {
+                    window.location.href = decodeURIComponent(backUrl);
+                }
+
             } else {
                 setAuthError(result.payload);
             }
@@ -64,6 +73,7 @@ export const useAuthLogic = () => {
         setIsAuth(false);
         setUserData(null);
         setIsLoadingAuth(false);
+        tokenManager.stopRefresh();
         navigate(ROUTES.AUTH);
     }, [navigate]);
 
