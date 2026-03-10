@@ -1,9 +1,7 @@
 import request, {Context, Next} from '@tinkoff/request-core';
 import http from '@tinkoff/request-plugin-protocol-http';
-import {useAuth} from '../contexts/AuthContext';
-import {tockenManager} from './tockenManager';
+import {tokenManager} from './tokenManager';
 
-const {logoutUser} = useAuth();
 const credentialsPlugin = {
     init(context: Context, next: Next) {
         const currentRequest = context.getRequest();
@@ -35,7 +33,7 @@ export const createApiClient = (baseUrl: string) => {
             if (error && error.status === 401) {
                 try {
                     console.log('Trying refresh request');
-                    await tockenManager.refreshTocken();
+                    await tokenManager.refreshToken();
                     const result = await makeRequest({
                         url: baseUrl + endpoint,
                         headers: {'Content-Type': 'application/json', ...options.headers},
@@ -44,7 +42,7 @@ export const createApiClient = (baseUrl: string) => {
                     });
                     return result;
                 } catch (refreshError) {
-                    logoutUser();
+
                 }
             }
             throw error;

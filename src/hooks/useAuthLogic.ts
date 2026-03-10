@@ -1,5 +1,6 @@
 import {useCallback, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {tokenManager} from '../api/tokenManager';
 import {AuthService} from '../app/services/AuthService';
 import {ROUTES} from '../shared/constants/constants';
 import {AuthData, UserData} from '../shared/types/auth';
@@ -18,6 +19,7 @@ export const useAuthLogic = () => {
             setUserData({token, login});
             setIsAuth(true);
         }
+        tokenManager.startRefresh();
         setIsLoadingAuth(false);
     }, []);
 
