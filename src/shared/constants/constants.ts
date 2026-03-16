@@ -132,4 +132,5 @@ export const defaultAuthContext: AuthContextType = {
     }),
     logoutUser: () => {
     },
+
 };

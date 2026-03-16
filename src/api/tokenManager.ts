@@ -1,3 +1,5 @@
+import {AuthService} from '../app/services/AuthService';
+
 class TokenManager {
     private isRefreshing = false;
     private refreshPromise: Promise<void> | null = null;
@@ -10,21 +12,14 @@ class TokenManager {
         }
         this.isRefreshing = true;
         this.refreshPromise = (async () => {
-            try {
-                const response = await fetch('/api/auth/refresh', {
-                    method: 'POST',
-                    credentials: 'include',
-                });
-                if (!response.ok) {
-                    throw new Error(`Could not refresh tocken`);
-                }
-            } catch (error) {
+            AuthService.refresh().catch((error) => {
                 this.stopRefresh();
                 throw error;
-            } finally {
-                this.isRefreshing = false;
-                this.refreshPromise = null;
-            }
+            }).finally(() => {
+                    this.isRefreshing = false;
+                    this.refreshPromise = null;
+                }
+            );
         })();
         return this.refreshPromise;
     }

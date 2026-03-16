@@ -4,6 +4,7 @@ import {useAuthForm} from './useAuthForm';
 
 export const useAuthFormLogic = () => {
     const {authUser, isLoadingAuth} = useAuth();
+    const [authError, setAuthError] = useState<string | null>(null);
     const {
         authData,
         errors,
@@ -15,12 +16,11 @@ export const useAuthFormLogic = () => {
         handleBlur,
         resetForm,
     } = useAuthForm();
-    const [authError, setAuthError] = useState<string | null>(null);
     useEffect(() => {
         if (authError) {
             setAuthError('');
         }
-    }, [authData.login, authData.password]);
+    }, [authData.email, authData.password]);
 
     const handleAuth = useCallback(
         async (e: React.FormEvent) => {
@@ -29,14 +29,14 @@ export const useAuthFormLogic = () => {
             if (!isValid) {
                 return;
             }
-
-            const result = await authUser(authData);
-            if (result.status === 'Success') {
-                resetForm();
-            } else {
-                setAuthError(result.payload);
-                console.log(result.payload);
-            }
+            authUser(authData)
+                .then(() => {
+                    resetForm();
+                })
+                .catch((err) => {
+                    setAuthError(`Error: ${err}`);
+                    console.log(err);
+                });
         },
         [authData, authUser, validateForm, resetForm]
     );

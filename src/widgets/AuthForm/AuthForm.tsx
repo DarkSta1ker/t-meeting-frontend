@@ -26,12 +26,12 @@ export const AuthForm: FC = () => {
                 id="login-input"
                 label="Логин"
                 variant="outlined"
-                value={authData.login}
+                value={authData.email}
                 onChange={(e) => handleLoginFieldChange(e.target.value)}
-                onBlur={() => handleBlur('login')}
+                onBlur={() => handleBlur('email')}
                 onFocus={clearAuthError}
-                error={touched.login && !!errors.login}
-                helperText={touched.login ? errors.login : ' '}
+                error={touched.email && !!errors.email}
+                helperText={touched.email ? errors.email : ' '}
                 fullWidth
                 margin="normal"
                 autoComplete="username"

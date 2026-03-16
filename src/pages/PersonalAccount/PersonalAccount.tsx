@@ -5,19 +5,20 @@ import {defaultAccountData} from '../../shared/constants/constants';
 import {Loader} from '../../shared/loader/Loader';
 import {ReadOnlyTextField} from '../../shared/ui/ReadOnlyTextField/ReadOnlyTextField';
 import styles from './PersonalAccount.module.css';
+
 export const PersonalAccount: FC = () => {
     const {userData} = useAuth();
     const [AccountData, setAccountData] = useState(defaultAccountData);
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         const loadAccountData = async () => {
-            if (!userData?.login || !userData?.token) {
+            if (!userData?.email || !userData?.role) {
                 console.log('Нет данных пользователя');
                 setIsLoading(false);
                 return;
             }
             setIsLoading(true);
-            const result = await AccountService.getAccountInfo(userData.login, userData.token);
+            const result = await AccountService.getAccountInfo(userData.email, userData.role);
             if (result.status === 'Success') {
                 console.log('Account Data loaded');
                 if (result.payload.avatarPhoto === undefined) {

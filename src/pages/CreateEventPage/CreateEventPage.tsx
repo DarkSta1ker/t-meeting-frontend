@@ -22,8 +22,6 @@ export const CreateEventPage: FC = () => {
         handleChangeStatus
     } = useNewEventForm();
     const handleAddEvent = useCallback(() => {
-        console.log('Calling addEvent with data:', eventData);
-        console.log('JSON data:', JSON.stringify(eventData, null, 2));
         addEvent(eventData)
             .then(() => {
                 console.log('Event added successfully');

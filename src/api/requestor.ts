@@ -38,8 +38,6 @@ export const createApiClient = (baseUrl: string) => {
         endpoint: string,
         options: Omit<RequestInit, 'body' | 'method'> & { method: HTTPMethods, body?: any },
     ): Promise<T> => {
-        console.log('Request method:', options.method, 'endpoint:', endpoint, 'body:', options.body);
-        console.log('JSON data:', JSON.stringify(options.body, null, 2));
         const result = await makeRequest({
             url: baseUrl + endpoint,
             headers: {'Content-Type': 'application/json', ...options?.headers},

@@ -1,7 +1,7 @@
 import {ReactNode} from 'react';
 
 export interface AuthData {
-    login: string;
+    email: string;
     password: string;
 }
 
@@ -11,8 +11,8 @@ export interface ValidationErrors {
 }
 
 export interface UserData {
-    token: string;
-    login: string;
+    email: string;
+    role: string;
 }
 
 export interface AuthContextType {

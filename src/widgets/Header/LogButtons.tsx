@@ -37,7 +37,7 @@ export const LogButtons: FC = () => {
                     }
                 }}
             >
-                <Typography variant='button'>{userData?.login}</Typography>
+                <Typography variant="button">{userData?.email}</Typography>
                 <User size={36}/>
             </Button>;
 
