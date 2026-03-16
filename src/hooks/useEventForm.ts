@@ -12,13 +12,14 @@ export const useEventForm = (eventId?: string) => {
             return;
         }
         const loadEvent = async () => {
-            const result = await getEvent(eventId);
-            if (result.status === 'Success') {
-                console.log('Event loaded');
-                setEventData(result.payload);
-            } else {
-                console.log(`Error ${result.payload}`);
-            }
+            getEvent(eventId)
+                .then((res) => {
+                    setEventData(res);
+                    console.log('Event loaded');
+                })
+                .catch(err => {
+                    console.log('Error while loading event: ', err);
+                });
         };
         loadEvent();
     }, [eventId, getEvent]);

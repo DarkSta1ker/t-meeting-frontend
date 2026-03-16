@@ -22,7 +22,7 @@ export const useNewEventForm = () => {
         }));
     }, [setEventData]);
 
-    const handleDesriptionChange = useCallback((value: string) => {
+    const handleDescriptionChange = useCallback((value: string) => {
         setEventData((prev) => {
             const content = prev.content.map((contentBlock) => contentBlock.block === 'promo-text' ? {
                 ...contentBlock,
@@ -79,8 +79,8 @@ export const useNewEventForm = () => {
         eventData,
         handleBaseFieldChange,
         handleChangeStatus,
+        handleDescriptionChange,
         handleMetadataFieldChange,
-        handleDesriptionChange,
         handleUpdateMapBlock,
         handleUpdateTimeLine,
         resetForm,

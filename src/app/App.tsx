@@ -10,7 +10,7 @@ import {EventsListPage} from '../pages/EventsListPage/EventsListPage';
 import {PersonalAccount} from '../pages/PersonalAccount/PersonalAccount';
 import {Header} from '../widgets/Header/Header';
 import styles from './App.module.css';
-import {PrivateRoute} from './routing/PrivateRourte';
+import {PrivateRoute} from './routing/PrivateRoute';
 import {ROUTES} from '../shared/constants/constants';
 function App() {
     return (

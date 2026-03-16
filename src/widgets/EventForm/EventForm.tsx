@@ -85,11 +85,12 @@ export const EventForm: FC<EventFormProps> = ({
 
     const handleDeleteEvent = useCallback(async () => {
         if (eventId) {
-            const result = await deleteEvent(eventId);
-            if (result.status === 'Success') {
-                console.log('Event deleted');
-                nav(ROUTES.EVENTS_LIST);
-            }
+            deleteEvent(eventId)
+                .then(() => {
+                    console.log('Event deleted');
+                    nav(ROUTES.EVENTS_LIST);
+                })
+                .catch(error => console.log('Error while fetching deleteEvent: ', error));
         }
     }, [deleteEvent, eventId, nav]);
 

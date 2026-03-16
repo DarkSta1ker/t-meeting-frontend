@@ -1,5 +1,3 @@
-import {clearInterval} from 'node:timers';
-
 class TokenManager {
     private isRefreshing = false;
     private refreshPromise: Promise<void> | null = null;

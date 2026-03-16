@@ -2,66 +2,66 @@ import {useCallback} from 'react';
 import {EventService} from '../app/services/EventService';
 import {EventListItem, EventNew} from '../shared/types/event';
 import {useEvents} from './useEvents';
-
+//TODO много повторяющегося кода
 export const useEvent = () => {
     const {isLoading, setIsLoading} = useEvents();
     const addEvent = useCallback(async (event: EventNew) => {
         setIsLoading(true);
-        const response = await EventService.addEvent(event);
-        setIsLoading(false);
-        return response;
+        return EventService.addEvent(event)
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                console.log('Error while fetching addEvent: ', err);
+                throw err;
+            })
+            .finally(() => setIsLoading(false));
     }, [setIsLoading]);
 
     const getEvent = useCallback(async (eventId: string) => {
         setIsLoading(true);
-        const response = await EventService.getEvent(eventId);
-        setIsLoading(false);
-        return response;
+        return EventService.getEvent(eventId)
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                console.log('Error while fetching addEvent: ', err);
+                throw err;
+            })
+            .finally(() => setIsLoading(false));
     }, [setIsLoading]);
 
     const deleteEvent = useCallback(async (eventId: string) => {
         setIsLoading(true);
-        const response = await EventService.deleteEvent(eventId);
-        setIsLoading(false);
-        return response;
+        return EventService.deleteEvent(eventId)
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                console.log('Error while fetching addEvent: ', err);
+                throw err;
+            })
+            .finally(() => setIsLoading(false));
     }, [setIsLoading]);
 
     const updateEvent = useCallback(async (event: EventListItem) => {
         setIsLoading(true);
-        const response = await EventService.updateEvent(event);
-        setIsLoading(false);
-        return response;
+        return EventService.updateEvent(event)
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                console.log('Error while fetching addEvent: ', err);
+                throw err;
+            })
+            .finally(() => setIsLoading(false));
     }, [setIsLoading]);
-
-    const changeStatus = useCallback(async (eventId: string) => {
-        setIsLoading(true);
-        const eventFromResponse = await getEvent(eventId);
-        if (eventFromResponse.status === 'Success') {
-            const event = eventFromResponse.payload;
-            event.status = event.status === 'published' ? 'draft' : 'published';
-            try {
-                const response = await updateEvent(event);
-                if (response.status === 'Success') {
-                    console.log('Статус мероприятия обновлен');
-                } else {
-                    console.log(`Произошла ошибка ${response.payload}`);
-                }
-            } catch (err) {
-                console.log('Произошла ошибка при попытке обновления мероприятия');
-            }
-        } else {
-            console.log('Произошла ошибка при попытке запросить мероприятие');
-        }
-        setIsLoading(false);
-
-    }, [setIsLoading, getEvent, updateEvent]);
 
     return {
         addEvent,
         getEvent,
         deleteEvent,
         updateEvent,
-        changeStatus,
         isLoading
     };
 };

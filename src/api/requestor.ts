@@ -1,6 +1,7 @@
 import request, {Context, Next} from '@tinkoff/request-core';
 import http from '@tinkoff/request-plugin-protocol-http';
 import {ROUTES} from '../shared/constants/constants';
+import {HTTPMethods} from '../shared/types/api';
 
 const credentialsPlugin = {
     init: (context: Context, next: Next) => {
@@ -35,13 +36,16 @@ export const createApiClient = (baseUrl: string) => {
     ]);
     const requestWithAuth = async <T>(
         endpoint: string,
-        options: Omit<RequestInit, 'body'> & { body?: any } = {}
+        options: Omit<RequestInit, 'body' | 'method'> & { method: HTTPMethods, body?: any },
     ): Promise<T> => {
+        console.log('Request method:', options.method, 'endpoint:', endpoint, 'body:', options.body);
+        console.log('JSON data:', JSON.stringify(options.body, null, 2));
         const result = await makeRequest({
             url: baseUrl + endpoint,
-            headers: {'Content-Type': 'application/json', ...options.headers},
-            method: options.method || 'GET',
-            body: options.body ? JSON.stringify(options.body) : undefined,
+            headers: {'Content-Type': 'application/json', ...options?.headers},
+            httpMethod: options.method,
+            payload: options.body,
+            type: 'json'
         });
         return result;
     };

@@ -6,7 +6,7 @@ import {getRuStatus} from '../../shared/constants/constants';
 import {EventListItem} from '../../shared/types/event';
 import {EventStatusCircle} from '../../shared/ui/EventStatus/EventStatusCircle';
 import {getTimeAndDateString} from '../../shared/utils/formatTimeAndData';
-import {getDescription} from '../../shared/utils/helpFunks';
+import {getDescription} from '../../shared/utils/helpFunctions';
 import styles from './EventListElement.module.css';
 
 interface EventListElementProps {
