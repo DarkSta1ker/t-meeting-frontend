@@ -1,5 +1,3 @@
-import {createResultError} from '../../app/services/lib/createResultError';
-import {createResultSuccess} from '../../app/services/lib/createResultSuccess';
 import {ResultError, ResultSuccess} from '../types/api';
 
 interface LoginSuccessPayload {
@@ -15,19 +13,30 @@ const usersInDB = [
 
 type LoginResult = ResultSuccess<LoginSuccessPayload> | ResultError<string>;
 
-export const mockLoginUser = (login: string, password: string): Promise<LoginResult> => {
-    return new Promise((resolve) => {
+export const mockLoginUser = (login: string, password: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
         setTimeout(() => {
             for (const person of usersInDB) {
-                if (person.login === login && person.password === password) {
-                    resolve(createResultSuccess({
-                        token: person.token,
-                        login: person.login,
-                    }));
+                if (person.email === login && person.password === password) {
+                    resolve();
                     return;
                 }
             }
-            resolve(createResultError('Неправильный логин или пароль'));
+            reject('Неправильный логин или пароль');
+        }, 2000);
+    });
+};
+
+export const mockGetUserData = (login: string, password: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            for (const person of usersInDB) {
+                if (person.email === login && person.password === password) {
+                    resolve();
+                    return;
+                }
+            }
+            reject('Неправильный логин или пароль');
         }, 2000);
     });
 };

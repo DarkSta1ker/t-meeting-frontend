@@ -20,6 +20,7 @@ export interface AuthContextType {
     isLoadingAuth: boolean;
     userData: UserData | null;
     authUser: (authData: AuthData) => Promise<any>;
+    regUser: (authData: AuthData) => Promise<any>;
     logoutUser: () => void;
 }
 

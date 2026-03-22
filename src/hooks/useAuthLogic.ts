@@ -45,6 +45,33 @@ export const useAuthLogic = () => {
             });
     }, []);
 
+    const regUser = useCallback(async (authData: AuthData) => {
+        setIsLoadingAuth(true);
+        setAuthError('');
+        AuthService.regUser(authData)
+            .then((res) => {
+                console.log('User registered successfully');
+                setIsAuth(true);
+                tokenManager.startRefresh();
+                AuthService.getUserData()
+                    .then((resp) => {
+                        setUserData(resp);
+                    })
+                    .catch((err) => {
+                        console.log('Error while getting user data: ', err);
+                    });
+                return (res);
+            })
+            .catch((err) => {
+                console.log('Error while fetching register user: ', err);
+                setAuthError(err);
+                return err;
+            })
+            .finally(() => {
+                setIsLoadingAuth(false);
+            });
+    }, []);
+
     const logoutUser = useCallback(() => {
         setIsLoadingAuth(true);
         setIsAuth(false);
@@ -64,6 +91,7 @@ export const useAuthLogic = () => {
         userData,
         authError,
         authUser,
+        regUser,
         logoutUser,
         clearAuthError,
         setAuthError

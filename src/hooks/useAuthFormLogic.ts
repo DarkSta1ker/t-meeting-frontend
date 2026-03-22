@@ -3,7 +3,7 @@ import {useAuth} from '../contexts/AuthContext';
 import {useAuthForm} from './useAuthForm';
 
 export const useAuthFormLogic = () => {
-    const {authUser, isLoadingAuth} = useAuth();
+    const {authUser, regUser, isLoadingAuth} = useAuth();
     const [authError, setAuthError] = useState<string | null>(null);
     const {
         authData,
@@ -41,6 +41,25 @@ export const useAuthFormLogic = () => {
         [authData, authUser, validateForm, resetForm]
     );
 
+    const handleReg = useCallback(
+        async (e: React.FormEvent) => {
+            e.preventDefault();
+            const isValid = validateForm();
+            if (!isValid) {
+                return;
+            }
+            regUser(authData)
+                .then(() => {
+                    resetForm();
+                })
+                .catch((err) => {
+                    setAuthError(`Error: ${err}`);
+                    console.log(err);
+                });
+        },
+        [authData, regUser, validateForm, resetForm]
+    );
+
     const handleKeyDown = useCallback((e: React.KeyboardEvent, nextFieldId?: string) => {
         if (e.key === 'Enter' && nextFieldId) {
             e.preventDefault();
@@ -63,6 +82,7 @@ export const useAuthFormLogic = () => {
         handlePasswordFieldChange,
         handleBlur,
         handleAuth,
+        handleReg,
         handleKeyDown,
         clearAuthError,
     };

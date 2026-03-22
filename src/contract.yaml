@@ -13,7 +13,7 @@ servers:
   - url: http://localhost:33
     description: Local dev server
 security:
-  - BearerAuth: [ ]
+  - cookieAuth: [ ]
 paths:
   /event:
     post:
@@ -130,9 +130,10 @@ paths:
           description: Пользователь не существует
   /auth/register:
     post:
+      tags:
+        - auth
+      summary: Зарегистрировать пользователя
       security: [ ]
-      tags: [ auth ]
-      summary: Register
       requestBody:
         required: true
         content:
@@ -141,17 +142,26 @@ paths:
               $ref: '#/components/schemas/AuthCredentials'
       responses:
         '201':
-          description: Created
+          description: Успешная операция
+          headers:
+            Set-Cookie:
+              description:
+                Пара access и refresh токенов, каждый в новом заголовке
+              schema:
+                $ref: '#/components/schemas/CookieToken'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthResponse'
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Некорректный запрос
   /auth/login:
     post:
-      security: [ ]
-      tags: [ auth ]
-      summary: Login
+      tags:
+        - auth
+      summary: Авторизовать пользователя
       operationId: authLogin
+      security: [ ]
       requestBody:
         required: true
         content:
@@ -160,52 +170,54 @@ paths:
               $ref: '#/components/schemas/AuthCredentials'
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
+          description: Успешная операция
+          headers:
+            Set-Cookie:
+              description:
+                Пара access и refresh токенов, каждый в новом заголовке
               schema:
-                $ref: '#/components/schemas/AuthResponse'
-        '401':
-          description: Invalid credentials
-  /auth/refresh:
-    post:
-      security: [ ]
-      tags: [ auth ]
-      summary: Refresh token
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RefreshRequest'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TokenPair'
-  /auth/me:
-    get:
-      tags: [ auth ]
-      summary: Current user
-      responses:
-        '200':
-          description: OK
+                $ref: '#/components/schemas/CookieToken'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+        '401':
+          description: Неверные учетные данные
+  /auth/refresh:
+    post:
+      tags:
+        - auth
+      summary: Обновить токен
+      security: [ ]
+      parameters:
+        - name: refresh_token
+          in: cookie
+          schema:
+            $ref: '#/components/schemas/CookieToken'
+          required: true
+      responses:
+        '200':
+          description: Успешная операция
+          headers:
+            Set-Cookie:
+              description:
+                Пара access и refresh токенов, каждый в новом заголовке
+              schema:
+                $ref: '#/components/schemas/CookieToken'
 components:
   securitySchemes:
-    BearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: access_token
   schemas:
     Role:
       type: string
-      enum: [ admin, organizer, member, viewer ]
+      enum:
+        - admin
+        - organizer
+        - member
+        - viewer
     Id:
       type: string
       format: uuid
@@ -264,7 +276,9 @@ components:
           readOnly: true
     User:
       type: object
-      required: [ email, role ]
+      required:
+        - email
+        - role
       properties:
         email:
           type: string
@@ -347,7 +361,9 @@ components:
                 format: time
     AuthCredentials:
       type: object
-      required: [ email, password ]
+      required:
+        - email
+        - password
       properties:
         email:
           type: string
@@ -357,7 +373,9 @@ components:
           minLength: 8
     TokenPair:
       type: object
-      required: [ access_token, refresh_token ]
+      required:
+        - access_token
+        - refresh_token
       properties:
         access_token:
           type: string
@@ -365,7 +383,10 @@ components:
           type: string
     AuthResponse:
       type: object
-      required: [ access_token, refresh_token, user ]
+      required:
+        - access_token
+        - refresh_token
+        - user
       properties:
         access_token:
           type: string
@@ -375,10 +396,16 @@ components:
           $ref: '#/components/schemas/User'
     RefreshRequest:
       type: object
-      required: [ refresh_token ]
+      required:
+        - refresh_token
       properties:
         refresh_token:
           type: string
+    CookieToken:
+      type: string
+      examples:
+        - access_token=ab.cd12.34; Path=/; HttpOnly
+        - refresh_token=ef.gh56.78; Path=/; HttpOnly
   parameters:
     EventId:
       name: eventId

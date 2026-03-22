@@ -130,6 +130,10 @@ export const defaultAuthContext: AuthContextType = {
         status: 'Error' as const,
         payload: 'Auth context not initialized',
     }),
+    regUser: async () => ({
+        status: 'Error' as const,
+        payload: 'Auth context not initialized',
+    }),
     logoutUser: () => {
     },
 

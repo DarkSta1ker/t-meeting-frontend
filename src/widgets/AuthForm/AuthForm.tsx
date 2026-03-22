@@ -3,7 +3,11 @@ import React, {FC} from 'react';
 import {useAuthFormLogic} from '../../hooks/useAuthFormLogic';
 import styles from './AuthForm.module.css';
 
-export const AuthForm: FC = () => {
+interface AuthFormProps {
+    registration: boolean;
+}
+
+export const AuthForm: FC<AuthFormProps> = ({registration}) => {
     const {
         authData,
         errors,
@@ -15,12 +19,13 @@ export const AuthForm: FC = () => {
         handlePasswordFieldChange,
         handleBlur,
         handleAuth,
+        handleReg,
         handleKeyDown,
         clearAuthError
     } = useAuthFormLogic();
 
     return (
-        <form className={styles.authForm} onSubmit={handleAuth} noValidate>
+        <form className={styles.authForm} onSubmit={registration ? handleReg : handleAuth} noValidate>
             <TextField
                 required
                 id="login-input"
@@ -36,6 +41,11 @@ export const AuthForm: FC = () => {
                 margin="normal"
                 autoComplete="username"
                 autoFocus
+                sx={{
+                    '& .MuiOutlinedInput-root': {
+                        borderRadius: '10px',
+                    },
+                }}
                 onKeyDown={(e) => handleKeyDown(e, 'password-input')}
                 disabled={isLoadingAuth}
             />
@@ -59,25 +69,44 @@ export const AuthForm: FC = () => {
                         handleAuth(e);
                     }
                 }}
+                sx={{
+                    '& .MuiOutlinedInput-root': {
+                        borderRadius: '10px',
+                    },
+                }}
                 disabled={isLoadingAuth}
             />
 
             <Button
                 type="submit"
-                variant="outlined"
+                variant="contained"
                 disabled={hasErrors || isLoadingAuth}
-                sx={{
-                    '&:hover:not(:disabled)': {
-                        backgroundColor: '#cfd0d5',
-                        borderRadius: '5px',
-                    },
-                    backgroundColor: 'transparent',
-                    borderRadius: '5px',
-                    marginTop: '16px',
-                }}
                 fullWidth
+                sx={{
+                    marginTop: '20px',
+                    borderRadius: '10px',
+                    textTransform: 'none',
+                    fontSize: '15px',
+                    fontWeight: 600,
+                    padding: '10px',
+
+                    background: 'linear-gradient(135deg, #2563eb, #3b82f6)',
+
+                    boxShadow: '0 4px 14px rgba(37, 99, 235, 0.4)',
+
+                    '&:hover': {
+                        background: 'linear-gradient(135deg, #1d4ed8, #2563eb)',
+                        boxShadow: '0 6px 18px rgba(37, 99, 235, 0.5)',
+                    },
+
+                    '&:disabled': {
+                        background: '#9ca3af',
+                        boxShadow: 'none',
+                    },
+                }}
             >
-                {isLoadingAuth ? 'Вход...' : 'Войти'}
+                {isLoadingAuth ? (registration ? 'Регистрация' : 'Вход...') :
+                    (registration ? 'Зарегистрироваться' : 'Войти')}
             </Button>
 
             {authError && (
