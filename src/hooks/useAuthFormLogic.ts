@@ -23,7 +23,7 @@ export const useAuthFormLogic = () => {
     }, [authData.email, authData.password]);
 
     const handleAuth = useCallback(
-        async (e: React.FormEvent) => {
+        (e: React.FormEvent) => {
             e.preventDefault();
             const isValid = validateForm();
             if (!isValid) {
@@ -31,10 +31,11 @@ export const useAuthFormLogic = () => {
             }
             authUser(authData)
                 .then(() => {
+                    console.log('вход типа норм');
                     resetForm();
                 })
                 .catch((err) => {
-                    setAuthError(`Error: ${err}`);
+                    setAuthError(`Ошибка: ${err}`);
                     console.log(err);
                 });
         },
@@ -42,7 +43,7 @@ export const useAuthFormLogic = () => {
     );
 
     const handleReg = useCallback(
-        async (e: React.FormEvent) => {
+        (e: React.FormEvent) => {
             e.preventDefault();
             const isValid = validateForm();
             if (!isValid) {
@@ -53,7 +54,7 @@ export const useAuthFormLogic = () => {
                     resetForm();
                 })
                 .catch((err) => {
-                    setAuthError(`Error: ${err}`);
+                    setAuthError(`Ошибка: ${err}`);
                     console.log(err);
                 });
         },

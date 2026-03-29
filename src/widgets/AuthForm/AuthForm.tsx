@@ -26,6 +26,15 @@ export const AuthForm: FC<AuthFormProps> = ({registration}) => {
 
     return (
         <form className={styles.authForm} onSubmit={registration ? handleReg : handleAuth} noValidate>
+            <div style={{marginBottom: '16px'}}>
+                <h2 style={{
+                    margin: 0,
+                    fontSize: '22px',
+                    fontWeight: 700
+                }}>
+                    {registration ? 'Регистрация' : 'Вход'}
+                </h2>
+            </div>
             <TextField
                 required
                 id="login-input"
@@ -43,7 +52,33 @@ export const AuthForm: FC<AuthFormProps> = ({registration}) => {
                 autoFocus
                 sx={{
                     '& .MuiOutlinedInput-root': {
-                        borderRadius: '10px',
+                        borderRadius: '12px',
+                        backgroundColor: '#F6F7F8',
+                        color: '#1f1f1f',
+
+                        '& fieldset': {
+                            borderColor: 'transparent',
+                        },
+
+                        '&:hover fieldset': {
+                            borderColor: '#e5e7eb',
+                        },
+
+                        '&.Mui-focused fieldset': {
+                            borderColor: '#FFDD2D',
+                        },
+                    },
+                    '& .MuiInputLabel-root': {
+                        color: '#6b7280',
+                    },
+
+                    '& .MuiInputLabel-root.Mui-focused': {
+                        fontWeight: '500',
+                        color: '#000000',
+                    },
+
+                    '& .MuiInputBase-input': {
+                        color: '#1f1f1f',
                     },
                 }}
                 onKeyDown={(e) => handleKeyDown(e, 'password-input')}
@@ -71,7 +106,34 @@ export const AuthForm: FC<AuthFormProps> = ({registration}) => {
                 }}
                 sx={{
                     '& .MuiOutlinedInput-root': {
-                        borderRadius: '10px',
+                        borderRadius: '12px',
+                        backgroundColor: '#F6F7F8',
+                        color: '#1f1f1f',
+
+                        '& fieldset': {
+                            borderColor: 'transparent',
+                        },
+
+                        '&:hover fieldset': {
+                            borderColor: '#e5e7eb',
+                        },
+
+                        '&.Mui-focused fieldset': {
+                            borderColor: '#FFDD2D',
+                        },
+                    },
+
+                    '& .MuiInputLabel-root': {
+                        color: '#6b7280',
+                    },
+
+                    '& .MuiInputLabel-root.Mui-focused': {
+                        fontWeight: '500',
+                        color: '#000000',
+                    },
+
+                    '& .MuiInputBase-input': {
+                        color: '#1f1f1f',
                     },
                 }}
                 disabled={isLoadingAuth}
@@ -83,25 +145,30 @@ export const AuthForm: FC<AuthFormProps> = ({registration}) => {
                 disabled={hasErrors || isLoadingAuth}
                 fullWidth
                 sx={{
-                    marginTop: '20px',
-                    borderRadius: '10px',
+                    marginTop: '24px',
+                    borderRadius: '12px',
                     textTransform: 'none',
                     fontSize: '15px',
                     fontWeight: 600,
-                    padding: '10px',
+                    padding: '12px',
 
-                    background: 'linear-gradient(135deg, #2563eb, #3b82f6)',
+                    backgroundColor: '#FFDD2D',
+                    color: '#000',
 
-                    boxShadow: '0 4px 14px rgba(37, 99, 235, 0.4)',
+                    boxShadow: 'none',
 
                     '&:hover': {
-                        background: 'linear-gradient(135deg, #1d4ed8, #2563eb)',
-                        boxShadow: '0 6px 18px rgba(37, 99, 235, 0.5)',
+                        backgroundColor: '#ffd500',
+                        boxShadow: '0 6px 16px rgba(255, 221, 45, 0.4)',
+                    },
+
+                    '&:active': {
+                        transform: 'scale(0.98)',
                     },
 
                     '&:disabled': {
-                        background: '#9ca3af',
-                        boxShadow: 'none',
+                        background: '#E5E7EB',
+                        color: '#9CA3AF',
                     },
                 }}
             >

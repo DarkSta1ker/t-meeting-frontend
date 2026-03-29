@@ -1,13 +1,11 @@
 import {createApiClient} from '../../api/requestor';
-import {mockLoginUser} from '../../shared/mocks/authMocks';
 import {AuthData, UserData} from '../../shared/types/auth';
 
 const authApi = createApiClient('/api/auth');
 
 export const AuthService = {
     async loginUser(authData: AuthData) {
-        //return authApi('/login', {method: 'POST', body: authData});
-        return mockLoginUser(authData.email, authData.password);
+        return authApi('/login', {method: 'POST', body: authData});
     },
 
     async regUser(authData: AuthData) {

@@ -1,8 +1,8 @@
-import { FormHelperText } from '@mui/material';
-import { DateTimePicker, DateTimePickerProps } from '@mui/x-date-pickers/DateTimePicker';
-import { ruRU } from '@mui/x-date-pickers/locales';
-import { Dayjs } from 'dayjs';
-import React, { FC } from 'react';
+import {FormHelperText} from '@mui/material';
+import {DateTimePicker} from '@mui/x-date-pickers/DateTimePicker';
+import {ruRU} from '@mui/x-date-pickers/locales';
+import {Dayjs} from 'dayjs';
+import React, {FC} from 'react';
 import {getTZTimeAndDate} from '../../../shared/utils/formatTimeAndData';
 
 interface EventDateTimeFieldProps {
@@ -15,16 +15,22 @@ interface EventDateTimeFieldProps {
 
 export const EventDateTimeField: FC<EventDateTimeFieldProps> = (
     {value, errorText, touched, onChange, onBlur, ...props}) => (
-    <div style={{ width: '100%' }}>
+    <div style={{width: '100%'}}>
         <DateTimePicker
             localeText={ruRU.components.MuiLocalizationProvider.defaultProps.localeText}
-            label='Дата и время проведения (НСК)'
+            label="Дата и время проведения (НСК)"
             value={value}
             onChange={onChange}
-            sx={{ width: '100%' }}
+            sx={{
+                width: '100%',
+                '& .MuiInputLabel-root.Mui-focused': {
+
+                    color: '#000000',
+                }
+            }}
             ampm={false}
-            format='DD.MM.YYYY HH:mm'
-            timeSteps={{ minutes: 5 }}
+            format="DD.MM.YYYY HH:mm"
+            timeSteps={{minutes: 5}}
             minDate={getTZTimeAndDate().startOf('day')}
             maxDate={getTZTimeAndDate().add(2, 'year')}
             slotProps={{
@@ -40,14 +46,14 @@ export const EventDateTimeField: FC<EventDateTimeFieldProps> = (
         />
 
         {errorText && touched && (
-            <FormHelperText error sx={{ mt: 0.5 }}>
+            <FormHelperText error sx={{mt: 0.5}}>
                 {errorText}
             </FormHelperText>
         )}
 
         {value && !errorText && (
-            <FormHelperText sx={{ mt: 0.5, color: 'green' }}>
-                {value.format('dddd, D MMMM YYYY [в] HH:mm')}
+            <FormHelperText sx={{mt: 0.5, fontSize: '0.75rem', color: touched && errorText ? 'red' : '#333'}}>
+                {errorText || (value ? value.format('dddd, D MMMM YYYY [в] HH:mm') : '')}
             </FormHelperText>
         )}
     </div>

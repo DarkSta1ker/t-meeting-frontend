@@ -19,8 +19,8 @@ export const AuthPage: FC = () => {
                     {registration ? 'Авторизация' : 'Регистрация'}
                 </a>
                 <p>Тестовые учетные записи:</p>
-                <p>login1 / password</p>
-                <p>login2 / password</p>
+                <p>email1 / password</p>
+                <p>email2 / password</p>
             </div>
         </div>
     )

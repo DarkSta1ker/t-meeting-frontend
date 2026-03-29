@@ -1,71 +1,100 @@
-.editBlock {
-    width: 1232px;
+.container {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    background-color: white;
-    border: #E2E2E2 1px solid;
-    border-radius: 15px;
-    box-shadow: 2px 2px 8px #E2E2E2;
-    padding: 40px 60px;
-    box-sizing: border-box;
-    gap: 30px;
+    gap: 24px;
 }
 
-.blockBoard {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-
-}
-
-.timeLine {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-.nameAndTimeAndLocation {
-    width: 450px;
-    height: 100%;
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    flex-direction: column;
+* {
     box-sizing: border-box;
 }
 
-.description {
-    width: 450px;
-    height: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: column;
-    box-sizing: border-box;
-}
-
-.timeAndPlace {
+.section {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
-    box-sizing: border-box;
-    gap: 20px;
-    width: 100%;
-    justify-content: space-between;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
 }
 
-.buttonsBlock {
-    width: 1232px;
-    height: 96px;
+.section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+.sectionTitle {
+    margin-top: 0;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.actionButtonsWrapper {
+
     display: flex;
-    justify-content: right;
-    align-items: center;
-    gap: 30px;
-    box-sizing: border-box;
+    justify-content: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
-.mapBlock {
-    width: 100%;
+.actionButton {
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    border: none;
+}
+
+.primaryButton {
+    background: #FFD600;
+    color: #1c1c1c;
+}
+
+.primaryButton:hover {
+    background: #e6c200;
+}
+
+.secondaryButton {
+    background: #f5f5f5;
+    color: #1c1c1c;
+}
+
+.secondaryButton:hover {
+    background: #e0e0e0;
+}
+
+.dangerButton {
+    background: #ff4d4f;
+    color: #ffffff;
+}
+
+.dangerButton:hover {
+    background: #d9363e;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }

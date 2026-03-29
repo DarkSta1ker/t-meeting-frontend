@@ -134,6 +134,9 @@ export const defaultAuthContext: AuthContextType = {
         status: 'Error' as const,
         payload: 'Auth context not initialized',
     }),
+    authError: '',
+    setAuthError: () => {
+    },
     logoutUser: () => {
     },
 

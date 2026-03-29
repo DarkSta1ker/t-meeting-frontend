@@ -3,8 +3,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import React, { ChangeEvent, FC } from 'react';
+import React, {ChangeEvent, FC} from 'react';
 import {radioStyles} from '../../../shared/constants/constants';
+
 interface EventStatusRadioGroupProps {
     eventId?: string;
     value: string;
@@ -16,39 +17,54 @@ export const EventStatusRadioGroup: FC<EventStatusRadioGroupProps> = ({
                                                                           value,
                                                                           onChange
                                                                       }) => {
-    if (!eventId) { return null; }
+    if (!eventId) {
+        return null;
+    }
 
     return (
         <FormControl>
-            <FormLabel id='demo-radio-buttons-group-label'>
+            <FormLabel
+                id="demo-radio-buttons-group-label"
+                sx={{
+                    color: '#000000',
+                    fontWeight: 'bold',
+                    '&.Mui-focused': {
+                        color: '#000000',
+                        fontWeight: 'bold',
+                    },
+                    '&.MuiFormLabel-root': {
+                        color: '#000000',
+                        fontWeight: 'bold',
+                    }
+                }}>
                 Статус мероприятия
             </FormLabel>
             <RadioGroup
-                aria-labelledby='demo-radio-buttons-group-label'
-                defaultValue='Status'
-                name='radio-buttons-group'
+                aria-labelledby="demo-radio-buttons-group-label"
+                defaultValue="Status"
+                name="radio-buttons-group"
                 value={value}
                 onChange={onChange}
             >
                 <FormControlLabel
-                    value='published'
-                    control={<Radio sx={radioStyles.green} />}
-                    label='Опубликовано'
+                    value="published"
+                    control={<Radio sx={radioStyles.green}/>}
+                    label="Опубликовано"
                 />
                 <FormControlLabel
-                    value='draft'
-                    control={<Radio sx={radioStyles.yellow} />}
-                    label='Редактирование'
+                    value="draft"
+                    control={<Radio sx={radioStyles.yellow}/>}
+                    label="Редактирование"
                 />
                 <FormControlLabel
-                    value='archived'
-                    control={<Radio sx={radioStyles.blue} />}
-                    label='Архивировано'
+                    value="archived"
+                    control={<Radio sx={radioStyles.blue}/>}
+                    label="Архивировано"
                 />
                 <FormControlLabel
-                    value='cancelled'
-                    control={<Radio sx={radioStyles.red} />}
-                    label='Отменено'
+                    value="cancelled"
+                    control={<Radio sx={radioStyles.red}/>}
+                    label="Отменено"
                 />
             </RadioGroup>
         </FormControl>

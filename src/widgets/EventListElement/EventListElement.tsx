@@ -23,96 +23,97 @@ export const EventListElement: FC<EventListElementProps> = ({
                                                                 handleDeleteEvent
                                                             }) => {
     return (
-        <div className={styles.eventBlock}>
-            <div className={styles.eventBlockCardBox}>
+        <div className={styles.card}
+             onClick={() => handleEventPage(event.id)}
+        >
+            <div className={styles.topRow}>
                 <div
-                    className={styles.eventBlockCard}
+                    className={styles.mainInfo}
                 >
-                    <div
-                        className={styles.nameAndDescriptionListPage}
-                        onClick={() => handleEventPage(event.id)}
-                    >
-                        <Typography
-                            variant="h6"
-                            className={`${styles.textEllipsis} ${styles.flexCenter}`}
-                        >{event.name}</Typography>
-                        <Typography
-                            variant="body1"
-                            className={styles.textEllipsisMultiline}
-                        >
-                            {getDescription(event)}
-                        </Typography>
-                    </div>
-                    <div
-                        className={styles.dataAndPlace}
-                        onClick={() => handleEventPage(event.id)}
-                    >
-                        <div className={styles.dataBlock}>
-                            <Typography
-                                variant="body1"
-                                className={`${styles.textOverflow} ${styles.flexCenter}`}
-                            >
-                                {getTimeAndDateString(event.metadata.datetime)}
-                            </Typography>
-                            <Calendar/>
-                        </div>
-                        <div className={styles.placeBlock}>
-                            <Typography
-                                variant="body1"
-                                className={`${styles.textOverflow} ${styles.flexCenter}`}
-                            >{event.metadata.location}</Typography>
+                    <Typography className={styles.title}>
+                        {event.name}
+                    </Typography>
 
-                            <MapPinIcon/>
-                        </div>
-                    </div>
+                    <Typography className={styles.description}>
+                        {getDescription(event)}
+                    </Typography>
                 </div>
-                <div className={styles.dropDownMenu}>
-                    <DropdownMenu.Root>
-                        <DropdownMenu.Trigger asChild>
-                            <button className={styles.dropDownMenuButton}
-                                    aria-label="Actions">
-                                <EllipsisVertical/>
-                            </button>
-                        </DropdownMenu.Trigger>
 
-                        <DropdownMenu.Portal>
-                            <DropdownMenu.Content
-                                className={styles.dropdownMenuContent} side="left"
-                                sideOffset={5}>
-                                <DropdownMenu.Item
-                                    className={styles.dropdownMenuItem}
-                                    onSelect={() => handleEventPage(event.id)}>
-                                    Страница мероприятия
-                                </DropdownMenu.Item>
-                                <DropdownMenu.Item
-                                    className={styles.dropdownMenuItem}
-                                    onSelect={() => handleEditEvent(event.id)}>
-                                    Редактировать
-                                </DropdownMenu.Item>
-                                <DropdownMenu.Item
-                                    className={styles.dropdownMenuItem}
-                                    onSelect={() => handleDeleteEvent(event.id)}>
-                                    Удалить
-                                </DropdownMenu.Item>
-                                <DropdownMenu.Arrow
-                                    className={styles.dropdownMenuArrow}/>
+                <DropdownMenu.Root>
+                    <DropdownMenu.Trigger asChild>
+                        <button
+                            className={styles.menuButton}
+                            onClick={(e) => e.stopPropagation()}
+                        >
 
-                            </DropdownMenu.Content>
-                        </DropdownMenu.Portal>
-                    </DropdownMenu.Root>
+                            <EllipsisVertical size={20}/>
+                        </button>
+                    </DropdownMenu.Trigger>
 
+                    <DropdownMenu.Portal>
+                        <DropdownMenu.Content
+                            className={styles.dropdownMenuContent}
+                            side="left"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <DropdownMenu.Item
+                                className={styles.dropdownMenuItem}
+                                onSelect={(e) => {
+                                    e.stopPropagation();
+                                    handleEventPage(event.id);
+                                }}
+                            >
+                                Открыть
+                            </DropdownMenu.Item>
+
+                            <DropdownMenu.Item
+                                className={styles.dropdownMenuItem}
+                                onSelect={(e) => {
+                                    e.stopPropagation();
+                                    handleEditEvent(event.id);
+                                }}
+                            >
+                                Редактировать
+                            </DropdownMenu.Item>
+
+                            <DropdownMenu.Item
+                                className={styles.dropdownMenuItem}
+                                onSelect={(e) => {
+                                    e.stopPropagation();
+                                    handleDeleteEvent(event.id);
+                                }}
+                            >
+                                Удалить
+                            </DropdownMenu.Item>
+                        </DropdownMenu.Content>
+                    </DropdownMenu.Portal>
+                </DropdownMenu.Root>
+            </div>
+
+            <div
+                className={styles.metaRow}
+            >
+                <div className={styles.metaItem}>
+                    <Calendar size={16}/>
+                    {getTimeAndDateString(event.metadata.datetime)}
+                </div>
+
+                <div className={styles.metaItem}>
+                    <MapPinIcon size={16}/>
+                    {event.metadata.location}
                 </div>
             </div>
-            <div className={styles.infoBlock}>
-                <Typography
-                    variant="body2"
-                >Создано: {getTimeAndDateString(event.createdAt)} |
-                    Обновлено: {getTimeAndDateString(event.updatedAt)}</Typography>
+
+            <div className={styles.bottomRow}>
+                <Typography className={styles.secondary}>
+                    Создано: {getTimeAndDateString(event.createdAt)}
+                    {' • '}
+                    Обновлено: {getTimeAndDateString(event.updatedAt)}
+                </Typography>
+
                 <div className={styles.status}>
-                    <Typography
-                        variant="body2"
-                    >Cтатус: {getRuStatus(event.status)}</Typography>
                     <EventStatusCircle status={event.status}/>
+                    <span>{getRuStatus(event.status)}</span>
                 </div>
             </div>
         </div>

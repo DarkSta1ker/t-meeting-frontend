@@ -163,9 +163,12 @@ export const EventForm: FC<EventFormProps> = ({
     };
     return (
         <form onSubmit={handleSubmit}>
-            <div className={styles.editBlock}>
-                <div className={styles.blockBoard}>
-                    <div className={styles.nameAndTimeAndLocation}>
+            <div className={styles.container}>
+
+                <div className={styles.section}>
+                    <h3 className={styles.sectionTitle}>Основная информация</h3>
+
+                    <div className={styles.grid}>
                         <EventNameField
                             value={eventData.name}
                             error={touched.name && !!errors.name}
@@ -174,71 +177,66 @@ export const EventForm: FC<EventFormProps> = ({
                             onBlur={() => handleBlur('name')}
                         />
 
-                        <div className={styles.timeAndPlace}>
-                            <TextField
-                                id="location-input"
-                                label="Место проведения"
-                                variant="outlined"
-                                sx={{width: '100%'}}
-                                value={eventData.metadata.location}
-                                onChange={(e) => handleMetadataFieldChange('location', e.target.value)}
-                            />
-
-                            <EventDateTimeField
-                                value={eventData.metadata.datetime ? getTZTimeAndDate(eventData.metadata.datetime) : null}
-                                errorText={errors.date}
-                                touched={touched.date}
-                                onChange={handleDateTimeChange}
-                                onBlur={() => handleBlur('date')}
-                            />
-                            <EventStatusRadioGroup
-                                eventId={eventId}
-                                value={eventData.status}
-                                onChange={handleStatus}
-                            />
-                        </div>
-                    </div>
-
-                    <div className={styles.description}>
                         <TextField
-                            id="outlined-multiline-static"
-                            label="Описание мероприятия"
-                            multiline
-                            rows={16}
+                            label="Место проведения"
+                            fullWidth
                             sx={{
-                                height: '100%',
-                                width: '100%',
+                                '& .MuiInputLabel-root.Mui-focused': {
+                                    color: '#000000',
+                                }
                             }}
-                            value={eventData.content.find((block): block is PromoTextBlock => block.block === 'promo-text')?.payload.join('') || ''}
-                            onChange={(e) => {
-                                TextAreaChange(e.target.value);
-                            }}
+                            value={eventData.metadata.location}
+                            onChange={(e) => handleMetadataFieldChange('location', e.target.value)}
+                        />
+
+                        <EventDateTimeField
+                            value={eventData.metadata.datetime ? getTZTimeAndDate(eventData.metadata.datetime) : null}
+                            errorText={errors.date}
+                            touched={touched.date}
+                            onChange={handleDateTimeChange}
+                            onBlur={() => handleBlur('date')}
+                        />
+
+                        <EventStatusRadioGroup
+                            eventId={eventId}
+                            value={eventData.status}
+                            onChange={handleStatus}
                         />
                     </div>
                 </div>
 
-                <div className={styles.timeLine}>
-                    <EventTimePoints
-                        handleUpdateTimeLine={handleUpdateTimeLine}
-                        block={findTimeLineBlock(eventData.content)}
+                <div className={styles.section}>
+                    <h3 className={styles.sectionTitle}>Описание</h3>
+                    <TextField
+                        multiline
+                        fullWidth
+                        minRows={3}
+                        maxRows={14}
+                        inputProps={{maxLength: 1000}}
+                        value={eventData.content.find((block): block is PromoTextBlock => block.block === 'promo-text')?.payload.join('') || ''}
+                        onChange={(e) => TextAreaChange(e.target.value)}
                     />
                 </div>
-                <div className={styles.mapBlock}>
-                    <EventMap
-                        onUpdate={handleUpdateMapBlock}
-                        payload={findMapBlock(eventData.content)}
-                    />
-                </div>
+
+                <EventTimePoints
+                    handleUpdateTimeLine={handleUpdateTimeLine}
+                    block={findTimeLineBlock(eventData.content)}
+                />
+
+                <EventMap
+                    onUpdate={handleUpdateMapBlock}
+                    payload={findMapBlock(eventData.content)}
+                />
+                <EventActionButtons
+                    eventId={eventId}
+                    onCancel={handleCancel}
+                    onDelete={eventId ? handleDeleteEvent : undefined}
+                    onSubmit={handlePostOrUpdate}
+                    disabled={hasErrors}
+                    isLoading={isLoading}
+                />
             </div>
 
-            <EventActionButtons
-                eventId={eventId}
-                onCancel={handleCancel}
-                onDelete={eventId ? handleDeleteEvent : undefined}
-                onSubmit={handlePostOrUpdate}
-                disabled={hasErrors}
-                isLoading={isLoading}
-            />
         </form>
     );
 };

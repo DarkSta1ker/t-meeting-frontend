@@ -1,5 +1,5 @@
 import TextField from '@mui/material/TextField';
-import React, { ChangeEvent, FC } from 'react';
+import React, {ChangeEvent, FC} from 'react';
 
 interface EventNameFieldProps {
     value: string;
@@ -18,11 +18,17 @@ export const EventNameField: FC<EventNameFieldProps> = ({
                                                             ...props
                                                         }) => (
     <TextField
-        id='outlined-basic'
-        label='Название мероприятия'
-        variant='outlined'
+        id="outlined-basic"
+        label="Название мероприятия"
+        variant="outlined"
         required
-        sx={{ width: '100%' }}
+        sx={{
+            width: '100%',
+            '& .MuiInputLabel-root.Mui-focused': {
+
+                color: '#000000',
+            },
+        }}
         value={value}
         error={error}
         helperText={helperText}

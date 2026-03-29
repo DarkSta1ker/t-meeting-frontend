@@ -1,32 +1,92 @@
-.header{
-    height:64px;
-    margin:0;
-    width: 100%;
-    display:flex;
-    position:sticky;
+.header {
+    position: sticky;
     top: 0;
-    justify-content: center;
-    border-bottom: 1px solid;
-    border-bottom-color: #E2E2E2;
-    background-color: white;
     z-index: 1000;
-}
-.headerElementsBlock{
-    box-sizing: border-box;
-    padding-left: 4px;
-    padding-right: 4px;
-    width: 1440px;
-    display: flex;
-    justify-content: space-between;
-
-    align-items: center;
-}
-.headerElements{
-    box-sizing: border-box;
-    padding-left: 4px;
-    padding-right: 4px;
 
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+
+    transition: box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.inner {
+    width: 1200px;
+    height: 72px;
+
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+
+    padding: 0 16px;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.logo:hover {
+    opacity: 0.7;
+}
+
+.headerElements {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.userButton {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 8px 14px;
+    border-radius: 20px;
+
+    background: #f1f2f4;
+    border: none;
+
+    font-size: 14px;
+    color: #1f1f1f;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.userButton:hover {
+    background: #e6e7ea;
+}
+
+.logoutButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+
+    border-radius: 50%;
+    border: none;
+
+    background: #f1f2f4;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.logoutButton:hover {
+    background: #ff4d4f;
+    color: white;
 }

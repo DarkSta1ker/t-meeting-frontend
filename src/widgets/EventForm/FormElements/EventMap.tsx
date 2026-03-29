@@ -1,6 +1,7 @@
 import {Box, Button, IconButton, Paper, Stack, TextField, Typography} from '@mui/material';
 import {Pencil, Plus, Save, Trash, X} from 'lucide-react';
 import React, {useEffect, useRef, useState} from 'react';
+import styles from '../EventForm.module.css';
 
 export interface MapPoint {
     x: number;
@@ -139,12 +140,15 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
 
     if (points.length === 0) {
         return (
-            <Paper elevation={2} sx={{p: 3, borderRadius: 2, width: '100%', boxSizing: 'border-box'}}>
-                <Typography variant="h6" gutterBottom>
-                    Редактор карты
-                </Typography>
+            <div className={styles.section}>
+                <Typography
+                    variant="subtitle1"
+                    sx={{
+                        fontWeight: 600,
+                        marginBottom: 1
+                    }}
+                >Карта</Typography>
 
-                {/* Поле для URL фона (доступно всегда) */}
                 <Box sx={{mb: 2, display: 'flex', gap: 1, alignItems: 'center'}}>
                     <TextField
                         label="URL фоновой карты"
@@ -152,8 +156,13 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
                         onChange={handleBackgroundChange}
                         size="small"
                         fullWidth
+                        sx={{
+                            '& .MuiInputLabel-root.Mui-focused': {
+                                color: '#000000',
+                            }
+                        }}
                     />
-                    <Button variant="outlined" onClick={handleBackgroundUpdate} size="small">
+                    <Button variant="contained" onClick={handleBackgroundUpdate} size="small">
                         Применить фон
                     </Button>
                 </Box>
@@ -194,15 +203,20 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
                         </Typography>
                     )}
                 </Box>
-            </Paper>
+            </div>
+
         );
     }
 
     return (
-        <Paper elevation={2} sx={{p: 3, borderRadius: 2, width: '100%', boxSizing: 'border-box'}}>
-            <Typography variant="h6" gutterBottom>
-                Редактор карты
-            </Typography>
+        <div className={styles.section}>
+            <Typography
+                variant="subtitle1"
+                sx={{
+                    fontWeight: 600,
+                    marginBottom: 1
+                }}
+            >Карта</Typography>
 
             <Box sx={{mb: 2, display: 'flex', gap: 1, alignItems: 'center'}}>
                 <TextField
@@ -211,8 +225,13 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
                     onChange={handleBackgroundChange}
                     size="small"
                     fullWidth
+                    sx={{
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: '#000000',
+                        }
+                    }}
                 />
-                <Button variant="outlined" onClick={handleBackgroundUpdate} size="small">
+                <Button variant="contained" onClick={handleBackgroundUpdate} size="small">
                     Применить фон
                 </Button>
             </Box>
@@ -293,6 +312,11 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
                                 onChange={handleTextChange}
                                 fullWidth
                                 size="small"
+                                sx={{
+                                    '& .MuiInputLabel-root.Mui-focused': {
+                                        color: '#000000',
+                                    }
+                                }}
                             />
                             <Box sx={{display: 'flex', gap: 1}}>
                                 <Button
@@ -308,6 +332,15 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
                                     size="small"
                                     startIcon={<X/>}
                                     onClick={handleCancelEdit}
+                                    sx={{
+                                        color: '#000000',
+                                        borderColor: '#000000',
+                                        '&:hover': {
+                                            backgroundColor: 'red',
+                                            color: '#ffffff',
+                                            borderColor: 'transparent',
+                                        }
+                                    }}
                                 >
                                     Отмена
                                 </Button>
@@ -356,6 +389,6 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
                     </IconButton>
                 </Box>
             </Paper>
-        </Paper>
+        </div>
     );
 };

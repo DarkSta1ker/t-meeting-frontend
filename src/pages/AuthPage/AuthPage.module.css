@@ -1,18 +1,18 @@
 .formAndButtonBox {
     min-height: 100vh;
     width: 100%;
+
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 
-    /* красивый фон */
-    background: linear-gradient(135deg, #eef2ff, #f9fafb);
+    background: #F6F7F8;
 }
 
 /* блок под формой */
 .testCredentials {
-    margin-top: 20px;
+    margin-top: 24px;
     text-align: center;
     color: #6b7280;
     font-size: 14px;
@@ -23,35 +23,15 @@
 }
 
 .switchLink {
-    color: #2563eb;
+    color: #1f1f1f;
     cursor: pointer;
     font-weight: 500;
-    position: relative;
+    margin-bottom: 12px;
     display: inline-block;
-    margin-bottom: 10px;
 
-    transition: color 0.2s ease;
-}
-
-.switchLink::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -2px;
-    width: 0%;
-    height: 2px;
-    background: currentColor;
-    transition: width 0.25s ease;
+    transition: opacity 0.2s ease;
 }
 
 .switchLink:hover {
-    color: #1d4ed8;
-}
-
-.switchLink:hover::after {
-    width: 100%;
-}
-
-.switchLink:focus {
-    outline: none;
+    opacity: 0.6;
 }

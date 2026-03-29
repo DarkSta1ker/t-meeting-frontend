@@ -21,6 +21,8 @@ export interface AuthContextType {
     userData: UserData | null;
     authUser: (authData: AuthData) => Promise<any>;
     regUser: (authData: AuthData) => Promise<any>;
+    authError: string;
+    setAuthError: (error: string) => void;
     logoutUser: () => void;
 }
 

@@ -1,27 +1,21 @@
 .authForm {
     display: flex;
     flex-direction: column;
-    width: 420px;
-
-    padding: 32px;
+    max-width: 420px;
+    width: 100%;
+    padding: 40px 32px;
     border-radius: 20px;
 
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
+    background: #ffffff;
 
-    border: 1px solid rgba(255, 255, 255, 0.3);
-
-    /* мягкая современная тень */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08),
-    0 4px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .authForm:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.1),
-    0 6px 12px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
 }
 
 .errorContainer {

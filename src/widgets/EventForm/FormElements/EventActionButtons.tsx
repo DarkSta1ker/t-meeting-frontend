@@ -1,7 +1,6 @@
-import Button from '@mui/material/Button';
-import React, { FC } from 'react';
-import {buttonStyles} from '../../../shared/constants/constants';
+import React, {FC} from 'react';
 import styles from '../EventForm.module.css';
+
 interface EventActionButtonsProps {
     eventId?: string;
     onCancel: () => void;
@@ -12,38 +11,33 @@ interface EventActionButtonsProps {
 }
 
 export const EventActionButtons: FC<EventActionButtonsProps> = (
-    {eventId, onCancel, onDelete, onSubmit, disabled, isLoading})=> (
-    <div className={styles.buttonsBlock}>
-        <Button
-            variant='outlined'
+    {eventId, onCancel, onDelete, onSubmit, disabled, isLoading}) => (
+    <div className={styles.actionButtonsWrapper}>
+        <button
+            type="button"
             onClick={onCancel}
-            size='large'
-            disabled={isLoading}
-            sx={buttonStyles.cancel}
+            className={`${styles.actionButton} ${styles.secondaryButton}`}
         >
             Отмена
-        </Button>
+        </button>
 
         {eventId && onDelete && (
-            <Button
-                variant='outlined'
-                disabled={isLoading}
+            <button
+                type="button"
                 onClick={onDelete}
-                size='large'
-                sx={buttonStyles.delete}
+                className={`${styles.actionButton} ${styles.dangerButton}`}
             >
                 Удалить
-            </Button>
+            </button>
         )}
 
-        <Button
-            variant='outlined'
-            disabled={disabled || isLoading}
+        <button
+            type="submit"
             onClick={onSubmit}
-            size='large'
-            sx={buttonStyles.submit}
+            disabled={disabled || isLoading}
+            className={`${styles.actionButton} ${styles.primaryButton}`}
         >
-            {eventId ? 'Сохранить' : 'Отправить'}
-        </Button>
+            {isLoading ? 'Сохраняем...' : 'Сохранить'}
+        </button>
     </div>
 );

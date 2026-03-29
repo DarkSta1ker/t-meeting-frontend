@@ -1,21 +1,11 @@
-import {
-    Box,
-    Button,
-    FormControlLabel,
-    IconButton,
-    Paper,
-    Radio,
-    RadioGroup,
-    Stack,
-    TextField,
-    Typography,
-} from '@mui/material';
+import {Button, IconButton, Radio, RadioGroup, Stack, TextField, Typography,} from '@mui/material';
 import {TimeField} from '@mui/x-date-pickers';
 import {Dayjs} from 'dayjs';
 import {Pencil, Plus, Save, Trash, X} from 'lucide-react';
 import React, {FC, useEffect, useState} from 'react';
 import {TimeLineBlock} from '../../../shared/types/event';
 import {getTimeString, stringToTime, timeToString} from '../../../shared/utils/formatTimeAndData';
+import styles from '../EventForm.module.css';
 
 interface EventTimePointsProps {
     block: TimeLineBlock['payload'];
@@ -39,16 +29,20 @@ export const EventTimePoints: FC<EventTimePointsProps> = ({block = [], handleUpd
     };
 
     const handleAddTimePoint = () => {
-        const newTimePoint = {
-            time: `00:00:00Z`,
-            name: `Новая точка ${timePoints.length + 1}`
-        };
-        const newTimePoints = [...timePoints, newTimePoint];
-        setTimePoints(newTimePoints);
-        setSelectedIndex(newTimePoints.length - 1);
-        setEditTime(stringToTime(newTimePoint.time));
-        setEditName(newTimePoint.name);
-        setIsEditing(true);
+        if (timePoints.length > 25) {
+            console.log('Нельзя делать больше 25 точек');
+        } else {
+            const newTimePoint = {
+                time: `00:00:00Z`,
+                name: `Новая точка ${timePoints.length + 1}`
+            };
+            const newTimePoints = [...timePoints, newTimePoint];
+            setTimePoints(newTimePoints);
+            setSelectedIndex(newTimePoints.length - 1);
+            setEditTime(stringToTime(newTimePoint.time));
+            setEditName(newTimePoint.name);
+            setIsEditing(true);
+        }
     };
 
     const handleDeleteTimePoint = () => {
@@ -103,178 +97,196 @@ export const EventTimePoints: FC<EventTimePointsProps> = ({block = [], handleUpd
         setEditName(event.target.value);
     };
 
-    if (timePoints.length === 0) {
-        return (
-            <Paper elevation={0} sx={{p: 3, textAlign: 'center'}}>
-                <Typography color="text.secondary" gutterBottom>
-                    Таймлайн не настроен
-                </Typography>
-                <Button
-                    variant="contained"
-                    startIcon={<Plus/>}
-                    onClick={handleAddTimePoint}
-                >
-                    Добавить первую точку
-                </Button>
-            </Paper>
-        );
-    }
-
-    //TODO Либо разобраться с paper и box, либо забить и переделать под нормальные стили
     return (
-        <Paper elevation={2} sx={{p: 3, borderRadius: 2, width: '100%'}}>
-            <Typography variant="h6" gutterBottom sx={{mb: 3}}>
-                Таймлайн события
-            </Typography>
-
-            {/* Радио кнопки*/}
-            <Box sx={{position: 'relative', mb: 3}}>
-                <RadioGroup
-                    row
-                    value={selectedIndex}
-                    onChange={handleChange}
+        <div className={styles.section}>
+            <div style={{marginBottom: 16}}>
+                <Typography
+                    variant="subtitle1"
                     sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        position: 'relative',
-                        zIndex: 1,
+                        fontWeight: 600,
+                        marginBottom: 1
                     }}
-                >
-                    {timePoints.map((point, index) => (
-                        <Box
-                            key={index}
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                position: 'relative',
-                            }}
+                >Таймлайн</Typography>
+                {timePoints.length === 0 ? (
+                    <div style={{textAlign: 'center', padding: 12}}>
+                        <Typography
+                            color="text.secondary"
+                            gutterBottom
                         >
-                            <FormControlLabel
-                                value={index}
-                                control={
-                                    <Radio
-                                        sx={{
-                                            '& .MuiSvgIcon-root': {
-                                                width: 28,
-                                                height: 28,
-                                            },
-                                        }}
-                                    />
-                                }
-                                label=""
-                                sx={{
-                                    m: 0,
-                                    '& .MuiFormControlLabel-label': {display: 'none'},
-                                }}
-                            />
-                            <Typography
-                                variant="caption"
-                                sx={{
-                                    mt: 1,
-                                    fontWeight: selectedIndex === index ? 'bold' : 'normal',
-                                    fontSize: '0.75rem',
+                            Таймлайн не настроен
+                        </Typography>
+                        <Button
+                            variant="contained"
+                            onClick={handleAddTimePoint}
+                            startIcon={<Plus/>}
+                        >
+                            Добавить первую точку
+                        </Button>
+                    </div>
+                ) : (
+                    <RadioGroup
+                        row value={selectedIndex}
+                        onChange={handleChange}
+                        sx={{
+                            justifyContent: 'space-between',
+                            marginBottom: 16
+                        }}
+                    >
+                        {timePoints.map((point, idx) => (
+                            <div
+                                key={idx}
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center'
                                 }}
                             >
-                                {getTimeString(point.time)}
-                            </Typography>
-                        </Box>
-                    ))}
-                </RadioGroup>
-            </Box>
+                                <Radio
+                                    value={idx}
+                                    sx={{
+                                        '& .MuiSvgIcon-root':
+                                            {width: 24, height: 24}
+                                    }}/>
+                                <Typography
+                                    variant="caption"
+                                    sx={{
+                                        mt: 0.5,
+                                        fontWeight: selectedIndex === idx ? 'bold' : 'normal'
+                                    }}
+                                >
+                                    {getTimeString(point.time)}
+                                </Typography>
+                            </div>
+                        ))}
+                    </RadioGroup>
+                )}
+            </div>
 
-            {/*Основной блок с инструментами и доп информацией */}
-            <Paper
-                elevation={0}
-                sx={{
-                    p: 3,
-                    borderRadius: 1,
-                    transition: 'all 0.3s ease',
+            {timePoints.length > 0 && (
+                <div style={{
+                    border: '1px solid rgba(0,0,0,0.05)',
+                    borderRadius: 12,
+                    padding: 12,
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'flex-start',
-                    gap: 2,
-                }}
-            >
-                {/*Блок отвечающий за редактирование/предоставленеи информации о поинте */}
-                <Box sx={{flex: 1}}>
-                    {/*Если в режиме редактирования, то видно окно редактирования */}
-                    {isEditing ? (
-                        <Stack spacing={2}>
-                            <TextField
-                                fullWidth
-                                label="Название"
-                                value={editName}
-                                onChange={handleNameChange}
-                                variant="outlined"
-                                size="small"
-                            />
-                            {/* Заменить на часы*/}
-                            <TimeField
-                                label="Время (HH:MM)"
-                                value={editTime}
-                                onChange={handleTimeChange}
-                                format="HH:mm"
-                            />
-                            <Box sx={{display: 'flex', gap: 1}}>
-                                <Button
-                                    variant="contained"
+                    background: '#fafafa'
+                }}>
+                    <div style={{flex: 1}}>
+                        {isEditing ? (
+                            <Stack spacing={1}>
+                                <TextField
+                                    fullWidth
+                                    label="Название"
                                     size="small"
-                                    startIcon={<Save/>}
-                                    onClick={handleSaveEdit}
-                                >
-                                    Сохранить
-                                </Button>
-                                <Button
-                                    variant="outlined"
+                                    value={editName}
+                                    sx={{
+                                        '& .MuiInputLabel-root.Mui-focused': {
+                                            color: '#000000',
+                                        }
+                                    }}
+                                    onChange={(e) => setEditName(e.target.value)}
+                                />
+                                <TimeField
+                                    label="Время (HH:MM)"
                                     size="small"
-                                    startIcon={<X/>}
-                                    onClick={handleCancelEdit}
+                                    value={editTime}
+                                    sx={{
+                                        '& .MuiInputLabel-root.Mui-focused': {
+                                            color: '#000000',
+                                        }
+                                    }}
+                                    onChange={setEditTime}
+                                    format="HH:mm"
+                                />
+                                <Stack
+                                    direction="row"
+                                    spacing={1}>
+                                    <Button
+                                        variant="contained"
+                                        size="small"
+                                        startIcon={<Save/>}
+                                        sx={{
+                                            color: '#000000',
+                                            '&.Mui-focused': {
+                                                color: '#000000',
+                                            },
+                                            '&.MuiButtonBase-root': {
+                                                color: '#000000',
+                                            }
+                                        }}
+                                        onClick={handleSaveEdit}
+                                    >
+                                        Сохранить
+                                    </Button>
+                                    <Button
+                                        variant="outlined"
+                                        size="small"
+                                        startIcon={<X/>}
+                                        sx={{
+                                            color: '#000000',
+                                            borderColor: '#000000',
+                                            '&:hover': {
+                                                backgroundColor: 'red',
+                                                color: '#ffffff',
+                                                borderColor: 'transparent',
+                                            }
+                                        }}
+                                        onClick={handleCancelEdit}
+                                    >
+                                        Отмена
+                                    </Button>
+                                </Stack>
+                            </Stack>
+                        ) : (
+                            <>
+                                <Typography
+                                    variant="subtitle2"
+                                    sx={{
+                                        fontWeight: 600,
+                                        mb: 0.5
+                                    }}
                                 >
-                                    Отмена
-                                </Button>
-                            </Box>
-                        </Stack>
-                    ) : (
-                        <>
-                            {/*Если не в режиме редактирования, то вывод инфы о поинте */}
-                            <Typography variant="subtitle1" sx={{fontWeight: 'bold', mb: 1}}>
-                                {timePoints[selectedIndex].name}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                Время: {getTimeString(timePoints[selectedIndex].time)}
-                            </Typography>
-                        </>
-                    )}
-                </Box>
-                {/*Блок управляющих кнопок */}
-                <Box sx={{display: 'flex', flexDirection: 'column', gap: 1, ml: 2}}>
-                    <IconButton
-                        color="primary"
-                        onClick={handleStartEdit}
-                        disabled={isEditing}
-                        title="Редактировать"
-                    >
-                        <Pencil/>
-                    </IconButton>
-                    <IconButton
-                        color="primary"
-                        onClick={handleAddTimePoint}
-                        title="Добавить точку"
-                    >
-                        <Plus/>
-                    </IconButton>
-                    <IconButton
-                        color="error"
-                        onClick={handleDeleteTimePoint}
-                        disabled={timePoints.length <= 1}
-                        title="Удалить точку"
-                    >
-                        <Trash/>
-                    </IconButton>
-                </Box>
-            </Paper>
-        </Paper>
+                                    {timePoints[selectedIndex].name}
+                                </Typography>
+                                <Typography
+                                    variant="body2"
+                                    color="text.secondary"
+                                >
+                                    Время: {getTimeString(timePoints[selectedIndex].time)}
+                                </Typography>
+                            </>
+                        )}
+                    </div>
+
+                    <Stack spacing={1}>
+                        <IconButton
+                            color="primary"
+                            onClick={handleStartEdit}
+                            disabled={isEditing}
+                            title="Редактировать"
+                        >
+                            <Pencil/>
+                        </IconButton>
+                        <IconButton
+                            color="primary"
+                            onClick={handleAddTimePoint}
+                            title="Добавить точку"
+                        >
+                            <Plus/>
+                        </IconButton>
+                        <IconButton
+                            color="error"
+                            onClick={handleDeleteTimePoint}
+                            disabled={timePoints.length <= 1}
+                            title="Удалить точку"
+                        >
+                            <Trash/>
+                        </IconButton>
+                    </Stack>
+                </div>
+            )}
+        </div>
     );
 };
 

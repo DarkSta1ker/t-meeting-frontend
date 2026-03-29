@@ -81,20 +81,27 @@ export const EventsListPage: FC = () => {
                                 Пока что тут нет мероприятий, вы можете добавить их с помощью кнопки ниже.
                             </div>
                     }
-                    <IconButton onClick={() => nav(ROUTES.CREATE_EVENT)}
-                                sx={{
-                                    '&:hover': {
-                                        backgroundColor: '#cfd0d5',
-                                        borderRadius: '25px',
-                                    },
-                                    'backgroundColor': 'transparent',
-                                    'bottom': '15px',
-                                    'color': '#757575',
-                                    'position': 'absolute',
-                                    'right': '56px',
-                                }}
+                    <IconButton
+                        onClick={() => nav(ROUTES.CREATE_EVENT)}
+                        sx={{
+                            position: 'fixed',
+                            bottom: '32px',
+                            right: '32px',
+
+                            width: '56px',
+                            height: '56px',
+
+                            backgroundColor: '#FFDD2D',
+                            color: '#000',
+
+                            boxShadow: '0 8px 20px rgba(0,0,0,0.15)',
+
+                            '&:hover': {
+                                backgroundColor: '#ffd500',
+                            },
+                        }}
                     >
-                        <CirclePlus size={30}/>
+                        <CirclePlus size={28}/>
                     </IconButton>
                 </div>
             </div>

@@ -15,7 +15,7 @@ export const useAuthLogic = () => {
     const authUser = useCallback(async (authData: AuthData) => {
         setIsLoadingAuth(true);
         setAuthError('');
-        AuthService.loginUser(authData)
+        return AuthService.loginUser(authData)
             .then((res) => {
                 console.log('User logged in successfully');
                 setIsAuth(true);
@@ -38,7 +38,7 @@ export const useAuthLogic = () => {
             .catch((err) => {
                 console.log('Error while fetching login user: ', err);
                 setAuthError(err);
-                return err;
+                throw err;
             })
             .finally(() => {
                 setIsLoadingAuth(false);
@@ -48,7 +48,7 @@ export const useAuthLogic = () => {
     const regUser = useCallback(async (authData: AuthData) => {
         setIsLoadingAuth(true);
         setAuthError('');
-        AuthService.regUser(authData)
+        return AuthService.regUser(authData)
             .then((res) => {
                 console.log('User registered successfully');
                 setIsAuth(true);
@@ -65,7 +65,7 @@ export const useAuthLogic = () => {
             .catch((err) => {
                 console.log('Error while fetching register user: ', err);
                 setAuthError(err);
-                return err;
+                throw err;
             })
             .finally(() => {
                 setIsLoadingAuth(false);
