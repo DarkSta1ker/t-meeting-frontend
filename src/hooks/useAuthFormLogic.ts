@@ -31,7 +31,7 @@ export const useAuthFormLogic = () => {
             }
             authUser(authData)
                 .then(() => {
-                    console.log('вход типа норм');
+                    console.log('Вход выполнен успешно');
                     resetForm();
                 })
                 .catch((err) => {

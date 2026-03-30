@@ -51,6 +51,9 @@ export const AuthForm: FC<AuthFormProps> = ({registration}) => {
                 autoComplete="username"
                 autoFocus
                 sx={{
+                    '& .MuiFormHelperText-root': {
+                        marginLeft: '0',
+                    },
                     '& .MuiOutlinedInput-root': {
                         borderRadius: '12px',
                         backgroundColor: '#F6F7F8',
@@ -105,6 +108,9 @@ export const AuthForm: FC<AuthFormProps> = ({registration}) => {
                     }
                 }}
                 sx={{
+                    '& .MuiFormHelperText-root': {
+                        marginLeft: '0',
+                    },
                     '& .MuiOutlinedInput-root': {
                         borderRadius: '12px',
                         backgroundColor: '#F6F7F8',

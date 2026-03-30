@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
+    margin-top: 16px;
 }
 
 * {
@@ -12,7 +13,7 @@
     background: #ffffff;
     border-radius: 16px;
     padding: 20px;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
@@ -26,7 +27,7 @@
 
 .sectionTitle {
     margin-top: 0;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 600;
     margin-bottom: 16px;
 }

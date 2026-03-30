@@ -4,7 +4,7 @@
     border-radius: 16px;
 
     background: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.2);
 
     transition: all 0.2s ease;
     cursor: pointer;
@@ -27,7 +27,7 @@
 }
 
 .title {
-    font-size: 18px;
+    font-size: 24px;
     font-weight: 600;
     margin-bottom: 6px;
 }
@@ -70,13 +70,14 @@
 }
 
 .secondary {
-    font-size: 13px;
+    font-size: 12px;
     color: #9ca3af;
 }
 
 .status {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
 }
 

@@ -1,15 +1,14 @@
+import {SelectChangeEvent} from '@mui/material';
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import React, {ChangeEvent, FC} from 'react';
-import {radioStyles} from '../../../shared/constants/constants';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import React, {FC} from 'react';
 
 interface EventStatusRadioGroupProps {
     eventId?: string;
     value: string;
-    onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    onChange: (e: SelectChangeEvent) => void;
 }
 
 export const EventStatusRadioGroup: FC<EventStatusRadioGroupProps> = ({
@@ -23,50 +22,29 @@ export const EventStatusRadioGroup: FC<EventStatusRadioGroupProps> = ({
 
     return (
         <FormControl>
-            <FormLabel
-                id="demo-radio-buttons-group-label"
+            <InputLabel
+                id="demo-simple-select-label"
                 sx={{
-                    color: '#000000',
-                    fontWeight: 'bold',
                     '&.Mui-focused': {
                         color: '#000000',
-                        fontWeight: 'bold',
                     },
-                    '&.MuiFormLabel-root': {
-                        color: '#000000',
-                        fontWeight: 'bold',
-                    }
-                }}>
+                }}
+            >
                 Статус мероприятия
-            </FormLabel>
-            <RadioGroup
-                aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue="Status"
-                name="radio-buttons-group"
+            </InputLabel>
+            <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
                 value={value}
+                label="Статус мероприятия"
                 onChange={onChange}
             >
-                <FormControlLabel
-                    value="published"
-                    control={<Radio sx={radioStyles.green}/>}
-                    label="Опубликовано"
-                />
-                <FormControlLabel
-                    value="draft"
-                    control={<Radio sx={radioStyles.yellow}/>}
-                    label="Редактирование"
-                />
-                <FormControlLabel
-                    value="archived"
-                    control={<Radio sx={radioStyles.blue}/>}
-                    label="Архивировано"
-                />
-                <FormControlLabel
-                    value="cancelled"
-                    control={<Radio sx={radioStyles.red}/>}
-                    label="Отменено"
-                />
-            </RadioGroup>
+                <MenuItem value="published">Опубликовано</MenuItem>
+                <MenuItem value="draft">Редактирование</MenuItem>
+                <MenuItem value="archived">Архивировано</MenuItem>
+                <MenuItem value="cancelled">Отменено</MenuItem>
+            </Select>
+
         </FormControl>
     );
 };

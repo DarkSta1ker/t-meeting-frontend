@@ -145,7 +145,8 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
                     variant="subtitle1"
                     sx={{
                         fontWeight: 600,
-                        marginBottom: 1
+                        marginBottom: 1,
+                        fontSize: 20,
                     }}
                 >Карта</Typography>
 

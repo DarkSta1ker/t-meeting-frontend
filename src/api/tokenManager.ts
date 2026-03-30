@@ -10,11 +10,12 @@ class TokenManager {
         if (this.isRefreshing) {
             return this.refreshPromise;
         }
+        console.log('Попытка обновить токен');
         this.isRefreshing = true;
         this.refreshPromise = (async () => {
             AuthService.refresh().catch((error) => {
                 this.stopRefresh();
-                throw error;
+                console.log(error);
             }).finally(() => {
                     this.isRefreshing = false;
                     this.refreshPromise = null;

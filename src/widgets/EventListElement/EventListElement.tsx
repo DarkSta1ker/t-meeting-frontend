@@ -105,15 +105,25 @@ export const EventListElement: FC<EventListElementProps> = ({
             </div>
 
             <div className={styles.bottomRow}>
-                <Typography className={styles.secondary}>
-                    Создано: {getTimeAndDateString(event.createdAt)}
-                    {' • '}
+                <Typography
+                    className={styles.secondary}
+                    sx={{
+                        fontSize: 12,
+                    }}
+                >
                     Обновлено: {getTimeAndDateString(event.updatedAt)}
                 </Typography>
 
                 <div className={styles.status}>
                     <EventStatusCircle status={event.status}/>
-                    <span>{getRuStatus(event.status)}</span>
+                    <Typography
+                        className={styles.secondary}
+                        sx={{
+                            fontSize: 12,
+                        }}
+                    >
+                        {getRuStatus(event.status)}
+                    </Typography>
                 </div>
             </div>
         </div>

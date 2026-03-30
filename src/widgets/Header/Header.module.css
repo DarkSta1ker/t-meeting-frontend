@@ -10,6 +10,7 @@
     backdrop-filter: blur(10px);
 
     transition: box-shadow 0.2s ease, background 0.2s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .scrolled {
@@ -18,14 +19,14 @@
 }
 
 .inner {
-    width: 1200px;
     height: 72px;
-
+    width: 100%;
+    max-width: 900px;
+    padding: 24px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    padding: 0 16px;
 }
 
 .logo {

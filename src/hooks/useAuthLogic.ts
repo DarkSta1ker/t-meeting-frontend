@@ -11,7 +11,6 @@ export const useAuthLogic = () => {
     const [isLoadingAuth, setIsLoadingAuth] = useState(false);
     const [userData, setUserData] = useState<UserData | null>(null);
     const [authError, setAuthError] = useState('');
-
     const authUser = useCallback(async (authData: AuthData) => {
         setIsLoadingAuth(true);
         setAuthError('');
@@ -31,12 +30,16 @@ export const useAuthLogic = () => {
                 const backUrl = urlParams.get('back');
 
                 if (backUrl) {
-                    window.location.href = decodeURIComponent(backUrl);
+                    console.log(backUrl);
+                    console.log(window.location.href);
+                    navigate(decodeURIComponent(backUrl), {replace: true});
+                    console.log(window.location.href);
                 }
                 return (res);
             })
             .catch((err) => {
                 console.log('Error while fetching login user: ', err);
+                setIsAuth(false);
                 setAuthError(err);
                 throw err;
             })

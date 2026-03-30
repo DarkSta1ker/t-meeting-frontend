@@ -1,3 +1,4 @@
+import {SelectChangeEvent} from '@mui/material';
 import TextField from '@mui/material/TextField';
 import {Dayjs} from 'dayjs';
 import React, {ChangeEvent, FC, useCallback, useEffect} from 'react';
@@ -48,7 +49,7 @@ export const EventForm: FC<EventFormProps> = ({
     const {eventId} = useParams<{ eventId: string }>();
     const nav = useNavigate();
     const {deleteEvent, isLoading} = useEvent();
-
+    const maxSimbols = 2000;
     const {
         errors,
         touched,
@@ -130,7 +131,7 @@ export const EventForm: FC<EventFormProps> = ({
         handleBaseFieldChange('name', value);
     }, [validateName, handleBaseFieldChange, setErrors, setTouched]);
 
-    const handleStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const handleStatus = useCallback((e: SelectChangeEvent) => {
         handleChangeStatus(e.target.value);
     }, [handleChangeStatus]);
 
@@ -212,9 +213,15 @@ export const EventForm: FC<EventFormProps> = ({
                         fullWidth
                         minRows={3}
                         maxRows={14}
-                        inputProps={{maxLength: 1000}}
+                        sx={{
+                            '& .MuiFormHelperText-root': {
+                                marginLeft: 0,
+                            }
+                        }}
+                        inputProps={{maxLength: maxSimbols}}
                         value={eventData.content.find((block): block is PromoTextBlock => block.block === 'promo-text')?.payload.join('') || ''}
                         onChange={(e) => TextAreaChange(e.target.value)}
+                        helperText={`${eventData.content.find((block): block is PromoTextBlock => block.block === 'promo-text')?.payload.join('').length}/${maxSimbols}`}
                     />
                 </div>
 
@@ -235,6 +242,7 @@ export const EventForm: FC<EventFormProps> = ({
                     disabled={hasErrors}
                     isLoading={isLoading}
                 />
+
             </div>
 
         </form>

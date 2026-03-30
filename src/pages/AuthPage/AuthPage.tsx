@@ -11,13 +11,21 @@ export const AuthPage: FC = () => {
     const changeForm = () => {
         setRegistration((prev) => !prev);
     };
+    const forgetPassword = () => {
+
+    };
     return (
         <div className={styles.formAndButtonBox}>
             <AuthForm registration={registration}/>
             <div className={styles.testCredentials}>
-                <a className={styles.switchLink} onClick={changeForm} role="button">
-                    {registration ? 'Авторизация' : 'Регистрация'}
-                </a>
+                <div className={styles.links}>
+                    <a className={styles.switchLink} onClick={changeForm} role="button">
+                        {registration ? 'Авторизация' : 'Регистрация'}
+                    </a>
+                    <a className={styles.switchLink} onClick={forgetPassword} role="button">
+                        Забыли пароль?
+                    </a>
+                </div>
                 <p>Тестовые учетные записи:</p>
                 <p>email1 / password</p>
                 <p>email2 / password</p>
