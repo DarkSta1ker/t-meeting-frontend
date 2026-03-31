@@ -12,6 +12,7 @@ import {
     EventListItem,
     EventMetadataField,
     EventNew,
+    InteractivePoints,
     MapBlock,
     PromoTextBlock,
     TimeLineBlock
@@ -24,6 +25,7 @@ import {EventMap} from './FormElements/EventMap';
 import {EventNameField} from './FormElements/EventNameField';
 import {EventStatusRadioGroup} from './FormElements/EventStatusRadioGroup';
 import {EventTimePoints} from './FormElements/EventTimePoints';
+import {InteractivePointsBlock} from './FormElements/InteractivePoints';
 
 interface EventFormProps {
     eventData: EventListItem | EventNew;
@@ -34,6 +36,18 @@ interface EventFormProps {
     handlePostOrUpdate: () => void;
     handleUpdateTimeLine: (block: { name: string, time: string }[]) => void;
     handleUpdateMapBlock: (block: { background: string, points: { x: number; y: number; text: string }[] }) => void;
+    handleUpdateInteractivePointsBlock: (block: {
+        background: string,
+        points: {
+            x: number;
+            y: number;
+            text: string;
+            timeline?: {
+                name: string;
+                time: string;
+            }[]
+        }[]
+    }) => void;
 }
 
 export const EventForm: FC<EventFormProps> = ({
@@ -45,6 +59,7 @@ export const EventForm: FC<EventFormProps> = ({
                                                   handlePostOrUpdate,
                                                   handleUpdateTimeLine,
                                                   handleUpdateMapBlock,
+                                                  handleUpdateInteractivePointsBlock,
                                               }) => {
     const {eventId} = useParams<{ eventId: string }>();
     const nav = useNavigate();
@@ -162,6 +177,12 @@ export const EventForm: FC<EventFormProps> = ({
         );
         return block?.payload || {background: '', points: []};
     };
+    const findInteractivePointsBlock = (content: EventContentBlock[]): InteractivePoints['payload'] => {
+        const block = content.find((item): item is InteractivePoints =>
+            item.block === 'interactive-points'
+        );
+        return block?.payload || {background: '', points: []};
+    };
     return (
         <form onSubmit={handleSubmit}>
             <div className={styles.container}>
@@ -234,6 +255,12 @@ export const EventForm: FC<EventFormProps> = ({
                     onUpdate={handleUpdateMapBlock}
                     payload={findMapBlock(eventData.content)}
                 />
+
+                <InteractivePointsBlock
+                    onUpdate={handleUpdateInteractivePointsBlock}
+                    payload={findInteractivePointsBlock(eventData.content)}
+                />
+
                 <EventActionButtons
                     eventId={eventId}
                     onCancel={handleCancel}

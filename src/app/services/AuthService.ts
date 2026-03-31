@@ -1,7 +1,7 @@
 import {createApiClient} from '../../api/requestor';
 import {AuthData, UserData} from '../../shared/types/auth';
 
-const authApi = createApiClient('/api/auth');
+const authApi = createApiClient('http://localhost:33/auth');
 
 export const AuthService = {
     async loginUser(authData: AuthData) {

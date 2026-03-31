@@ -75,6 +75,27 @@ export const useNewEventForm = () => {
             });
         });
     }, []);
+    const handleUpdateInteractivePointsBlock = useCallback((block: {
+        background: string,
+        points: {
+            x: number; y: number; text: string; timeline?: {
+                name: string;
+                time: string;
+            }[]
+        }[]
+    }) => {
+        setEventData((prev) => {
+            const content = prev.content.map((contentBlock) => contentBlock.block === 'interactive-points' ? {
+                ...contentBlock,
+                payload: block
+            } : contentBlock);
+
+            return ({
+                ...prev,
+                content,
+            });
+        });
+    }, []);
     return {
         eventData,
         handleBaseFieldChange,
@@ -82,6 +103,7 @@ export const useNewEventForm = () => {
         handleDescriptionChange,
         handleMetadataFieldChange,
         handleUpdateMapBlock,
+        handleUpdateInteractivePointsBlock,
         handleUpdateTimeLine,
         resetForm,
         setEventData

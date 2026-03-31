@@ -19,6 +19,7 @@ export const EditEventPage: FC = () => {
         handleBaseFieldChange,
         handleUpdateTimeLine,
         handleChangeStatus,
+        handleUpdateInteractivePointsBlock,
         handleUpdateMapBlock
     } = useEventForm(eventId);
     const handleUpdateEvent = useCallback(() => {
@@ -47,6 +48,7 @@ export const EditEventPage: FC = () => {
                             handleChangeStatus={handleChangeStatus}
                             handlePostOrUpdate={handleUpdateEvent}
                             handleUpdateMapBlock={handleUpdateMapBlock}
+                            handleUpdateInteractivePointsBlock={handleUpdateInteractivePointsBlock}
                         />
                 }
             </div>

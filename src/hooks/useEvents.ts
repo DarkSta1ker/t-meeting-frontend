@@ -10,11 +10,11 @@ export const useEvents = () => {
         setIsLoading(true);
         return EventService.getAllEvents()
             .then((res) => {
-                setEvents(res);
+                setEvents(Array.isArray(res) ? res : []);
             })
             .catch((err) => {
-                console.log('Error while fetching addEvent: ', err);
-                throw err;
+                console.log('Error while fetching getAllEvent: ', err);
+                setEvents([]);
             })
             .finally(() => setIsLoading(false));
     }, []);
