@@ -71,7 +71,11 @@ const mockEventsDB: EventListItem[] = [
                                 {
                                     name: 'string',
                                     time: '03:24:44.726Z'
-                                }
+                                },
+                                {
+                                    name: 'string',
+                                    time: '03:24:44.726Z'
+                                },
                             ]
                         },
                     ]

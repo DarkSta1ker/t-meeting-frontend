@@ -4,7 +4,7 @@ class TokenManager {
     private isRefreshing = false;
     private refreshPromise: Promise<void> | null = null;
     private refreshTimer: NodeJS.Timeout | null = null;
-    private refreshInterval = 10 * 60 * 1000;
+    private refreshInterval = 60 * 1000;
 
     async refreshToken() {
         if (this.isRefreshing) {

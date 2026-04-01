@@ -13,18 +13,14 @@ import {
     EventMetadataField,
     EventNew,
     InteractivePoints,
-    MapBlock,
     PromoTextBlock,
-    TimeLineBlock
 } from '../../shared/types/event';
 import {getTZTimeAndDate} from '../../shared/utils/formatTimeAndData';
 import styles from './EventForm.module.css';
 import {EventActionButtons} from './FormElements/EventActionButtons';
 import {EventDateTimeField} from './FormElements/EventDateTimeField';
-import {EventMap} from './FormElements/EventMap';
 import {EventNameField} from './FormElements/EventNameField';
 import {EventStatusRadioGroup} from './FormElements/EventStatusRadioGroup';
-import {EventTimePoints} from './FormElements/EventTimePoints';
 import {InteractivePointsBlock} from './FormElements/InteractivePoints';
 
 interface EventFormProps {
@@ -34,8 +30,6 @@ interface EventFormProps {
     TextAreaChange: (payload: string) => void;
     handleChangeStatus: (paramName: string) => void;
     handlePostOrUpdate: () => void;
-    handleUpdateTimeLine: (block: { name: string, time: string }[]) => void;
-    handleUpdateMapBlock: (block: { background: string, points: { x: number; y: number; text: string }[] }) => void;
     handleUpdateInteractivePointsBlock: (block: {
         background: string,
         points: {
@@ -57,8 +51,6 @@ export const EventForm: FC<EventFormProps> = ({
                                                   TextAreaChange,
                                                   handleChangeStatus,
                                                   handlePostOrUpdate,
-                                                  handleUpdateTimeLine,
-                                                  handleUpdateMapBlock,
                                                   handleUpdateInteractivePointsBlock,
                                               }) => {
     const {eventId} = useParams<{ eventId: string }>();
@@ -165,18 +157,6 @@ export const EventForm: FC<EventFormProps> = ({
         handlePostOrUpdate();
     }, [eventData, validateForm, handlePostOrUpdate]);
 
-    const findTimeLineBlock = (content: EventContentBlock[]): TimeLineBlock['payload'] => {
-        const block = content.find((item): item is TimeLineBlock =>
-            item.block === 'timeline'
-        );
-        return block?.payload || [];
-    };
-    const findMapBlock = (content: EventContentBlock[]): MapBlock['payload'] => {
-        const block = content.find((item): item is MapBlock =>
-            item.block === 'map'
-        );
-        return block?.payload || {background: '', points: []};
-    };
     const findInteractivePointsBlock = (content: EventContentBlock[]): InteractivePoints['payload'] => {
         const block = content.find((item): item is InteractivePoints =>
             item.block === 'interactive-points'
@@ -245,16 +225,6 @@ export const EventForm: FC<EventFormProps> = ({
                         helperText={`${eventData.content.find((block): block is PromoTextBlock => block.block === 'promo-text')?.payload.join('').length}/${maxSimbols}`}
                     />
                 </div>
-
-                <EventTimePoints
-                    handleUpdateTimeLine={handleUpdateTimeLine}
-                    block={findTimeLineBlock(eventData.content)}
-                />
-
-                <EventMap
-                    onUpdate={handleUpdateMapBlock}
-                    payload={findMapBlock(eventData.content)}
-                />
 
                 <InteractivePointsBlock
                     onUpdate={handleUpdateInteractivePointsBlock}

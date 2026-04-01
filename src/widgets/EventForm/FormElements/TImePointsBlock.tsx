@@ -8,15 +8,16 @@ import styles from '../EventForm.module.css';
 import {TimePoint} from './InteractivePoints';
 
 interface TimePointsProps {
-    timeline?: {
+    timeline?: Array<{
         name: string;
         time: string;
-    }[];
+    }>;
     onUpdate: (timePoints: TimePoint[]) => void;
 }
 
+const MAX_TIME_POINTS = 15;
 export const TimePointsBlock: FC<TimePointsProps> = ({timeline = [], onUpdate}) => {
-    const [selectedIndex, setSelectedIndex] = useState<number>(0);
+    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [timePoints, setTimePoints] = useState(timeline);
     const [isEditing, setIsEditing] = useState(false);
     const [editTime, setEditTime] = useState<Dayjs | null>(null);
@@ -24,7 +25,13 @@ export const TimePointsBlock: FC<TimePointsProps> = ({timeline = [], onUpdate}) 
 
     useEffect(() => {
         console.log('юзэфект у блока таймпоинтов');
-        setTimePoints(timeline);
+        if (timeline && timeline.length > 0) {
+            setTimePoints(timeline);
+            setSelectedIndex(null);
+        } else {
+            setTimePoints([]);
+        }
+        setIsEditing(false);
     }, [timeline]);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,8 +40,8 @@ export const TimePointsBlock: FC<TimePointsProps> = ({timeline = [], onUpdate}) 
     };
 
     const handleAddTimePoint = () => {
-        if (timePoints.length > 25) {
-            console.log('Нельзя делать больше 25 точек');
+        if (timePoints.length >= MAX_TIME_POINTS) {
+            console.log('Нельзя делать больше 10 точек');
         } else {
             const newTimePoint = {
                 time: `00:00:00Z`,
@@ -51,25 +58,33 @@ export const TimePointsBlock: FC<TimePointsProps> = ({timeline = [], onUpdate}) 
 
     const handleDeleteTimePoint = () => {
         if (timePoints.length <= 1) {
+            setTimePoints([]);
+            setSelectedIndex(null);
+            onUpdate([]);
             return;
         }
-        setTimePoints((prev) => {
-            const filtered = prev.filter((_, index) => index !== selectedIndex);
-            setSelectedIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
-            setIsEditing(false);
-            onUpdate(filtered);
-            return filtered;
-        });
+        if (selectedIndex !== null) {
+            setTimePoints((prev) => {
+                const filtered = prev.filter((_, index) => index !== selectedIndex);
+                setSelectedIndex((prevIndex) => (prevIndex && prevIndex > 0 ? prevIndex - 1 : 0));
+                setIsEditing(false);
+                onUpdate(filtered);
+                return filtered;
+            });
+        }
     };
 
     const handleStartEdit = () => {
         if (timePoints.length === 0) {
             return;
         }
-
-        setEditTime(stringToTime(timePoints[selectedIndex].time));
-        setEditName(timePoints[selectedIndex].name);
-        setIsEditing(true);
+        if (selectedIndex !== null) {
+            setEditTime(stringToTime(timePoints[selectedIndex].time));
+            setEditName(timePoints[selectedIndex].name);
+            setIsEditing(true);
+        } else {
+            console.log('Не выбрана точка для редактирования');
+        }
     };
 
     const handleSaveEdit = () => {
@@ -78,31 +93,120 @@ export const TimePointsBlock: FC<TimePointsProps> = ({timeline = [], onUpdate}) 
         }
 
         const newTimePoints = [...timePoints];
-        newTimePoints[selectedIndex] = {
-            ...newTimePoints[selectedIndex],
-            time: timeToString(editTime),
-            name: editName
-        };
-        newTimePoints.sort((a, b) => a.time.localeCompare(b.time));
-        setTimePoints(newTimePoints);
-        setIsEditing(false);
-        onUpdate(newTimePoints);
+        if (selectedIndex !== null) {
+            newTimePoints[selectedIndex] = {
+                ...newTimePoints[selectedIndex],
+                time: timeToString(editTime),
+                name: editName
+            };
+            newTimePoints.sort((a, b) => a.time.localeCompare(b.time));
+            setTimePoints(newTimePoints);
+            setIsEditing(false);
+            onUpdate(newTimePoints);
+        } else {
+            console.log('Не выбрана точка для сохранения');
+        }
     };
 
     const handleCancelEdit = () => {
         setIsEditing(false);
     };
+    const getEditPannel = () => {
+        if (selectedIndex !== null) {
+            if (isEditing) {
+                return (
+                    <Stack spacing={1}>
+                        <TextField
+                            fullWidth
+                            label="Название"
+                            size="small"
+                            value={editName}
+                            sx={{
+                                '& .MuiInputLabel-root.Mui-focused': {
+                                    color: '#000000',
+                                }
+                            }}
+                            onChange={(e) => setEditName(e.target.value)}
+                        />
+                        <TimeField
+                            label="Время (HH:MM)"
+                            size="small"
+                            value={editTime}
+                            sx={{
+                                '& .MuiInputLabel-root.Mui-focused': {
+                                    color: '#000000',
+                                }
+                            }}
+                            onChange={setEditTime}
+                            format="HH:mm"
+                        />
+                        <Stack
+                            direction="row"
+                            spacing={1}>
+                            <Button
+                                variant="contained"
+                                size="small"
+                                startIcon={<Save/>}
+                                sx={{
+                                    'color': '#000000',
+                                    '&.Mui-focused': {
+                                        color: '#000000',
+                                    },
+                                    '&.MuiButtonBase-root': {
+                                        color: '#000000',
+                                    }
+                                }}
+                                onClick={handleSaveEdit}
+                            >
+                                Сохранить
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                size="small"
+                                startIcon={<X/>}
+                                sx={{
+                                    'color': '#000000',
+                                    'borderColor': '#000000',
+                                    '&:hover': {
+                                        backgroundColor: 'red',
+                                        color: '#ffffff',
+                                        borderColor: 'transparent',
+                                    }
+                                }}
+                                onClick={handleCancelEdit}
+                            >
+                                Отмена
+                            </Button>
+                        </Stack>
+                    </Stack>
+                );
+            }
+            return (
+                <>
+                    <Typography
+                        variant="subtitle2"
+                        sx={{
+                            fontWeight: 600,
+                            mb: 0.5
+                        }}
+                    >
+                        {timePoints[selectedIndex].name}
+                    </Typography>
+                    <Typography
+                        variant="body2"
+                        color="text.secondary"
+                    >
+                        Время: {getTimeString(timePoints[selectedIndex].time)}
+                    </Typography>
+                </>
+            );
+        } else {
+            return null;
+        }
 
-    const handleTimeChange = (newValue: Dayjs | null) => {
-        setEditTime(newValue);
     };
-
-    const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setEditName(event.target.value);
-    };
-
     return (
-        <div className={styles.section}>
+        <div className={styles.innerSection}>
             <div style={{marginBottom: 16}}>
                 <Typography
                     variant="subtitle1"
@@ -111,14 +215,18 @@ export const TimePointsBlock: FC<TimePointsProps> = ({timeline = [], onUpdate}) 
                         marginBottom: 1,
                         fontSize: 20,
                     }}
-                >Таймлайн</Typography>
+                >{`Таймлайн ${timePoints.length}/${MAX_TIME_POINTS} `}</Typography>
                 {timePoints.length === 0 ? (
-                    <div style={{textAlign: 'center', padding: 12}}>
+                    <div style={{
+                        textAlign: 'center',
+                        padding: 12,
+                        marginTop: 60,
+                    }}>
                         <Typography
                             color="text.secondary"
                             gutterBottom
                         >
-                            Таймлайн не настроен
+                            Таймлайн для данной точки не настроен
                         </Typography>
                         <Button
                             variant="contained"
@@ -134,8 +242,8 @@ export const TimePointsBlock: FC<TimePointsProps> = ({timeline = [], onUpdate}) 
                         onChange={handleChange}
                         sx={{
                             justifyContent: 'space-between',
-                            marginBottom: 16
                         }}
+
                     >
                         {timePoints.map((point, idx) => (
                             <div
@@ -178,103 +286,24 @@ export const TimePointsBlock: FC<TimePointsProps> = ({timeline = [], onUpdate}) 
                     background: '#fafafa'
                 }}>
                     <div style={{flex: 1}}>
-                        {isEditing ? (
-                            <Stack spacing={1}>
-                                <TextField
-                                    fullWidth
-                                    label="Название"
-                                    size="small"
-                                    value={editName}
-                                    sx={{
-                                        '& .MuiInputLabel-root.Mui-focused': {
-                                            color: '#000000',
-                                        }
-                                    }}
-                                    onChange={(e) => setEditName(e.target.value)}
-                                />
-                                <TimeField
-                                    label="Время (HH:MM)"
-                                    size="small"
-                                    value={editTime}
-                                    sx={{
-                                        '& .MuiInputLabel-root.Mui-focused': {
-                                            color: '#000000',
-                                        }
-                                    }}
-                                    onChange={setEditTime}
-                                    format="HH:mm"
-                                />
-                                <Stack
-                                    direction="row"
-                                    spacing={1}>
-                                    <Button
-                                        variant="contained"
-                                        size="small"
-                                        startIcon={<Save/>}
-                                        sx={{
-                                            color: '#000000',
-                                            '&.Mui-focused': {
-                                                color: '#000000',
-                                            },
-                                            '&.MuiButtonBase-root': {
-                                                color: '#000000',
-                                            }
-                                        }}
-                                        onClick={handleSaveEdit}
-                                    >
-                                        Сохранить
-                                    </Button>
-                                    <Button
-                                        variant="outlined"
-                                        size="small"
-                                        startIcon={<X/>}
-                                        sx={{
-                                            color: '#000000',
-                                            borderColor: '#000000',
-                                            '&:hover': {
-                                                backgroundColor: 'red',
-                                                color: '#ffffff',
-                                                borderColor: 'transparent',
-                                            }
-                                        }}
-                                        onClick={handleCancelEdit}
-                                    >
-                                        Отмена
-                                    </Button>
-                                </Stack>
-                            </Stack>
-                        ) : (
-                            <>
-                                <Typography
-                                    variant="subtitle2"
-                                    sx={{
-                                        fontWeight: 600,
-                                        mb: 0.5
-                                    }}
-                                >
-                                    {timePoints[selectedIndex].name}
-                                </Typography>
-                                <Typography
-                                    variant="body2"
-                                    color="text.secondary"
-                                >
-                                    Время: {getTimeString(timePoints[selectedIndex].time)}
-                                </Typography>
-                            </>
-                        )}
+                        {getEditPannel()}
                     </div>
 
                     <Stack spacing={1}>
                         <IconButton
-                            color="primary"
                             onClick={handleStartEdit}
+                            sx={{
+                                color: 'black'
+                            }}
                             disabled={isEditing}
                             title="Редактировать"
                         >
                             <Pencil/>
                         </IconButton>
                         <IconButton
-                            color="primary"
+                            sx={{
+                                color: 'black'
+                            }}
                             onClick={handleAddTimePoint}
                             title="Добавить точку"
                         >
@@ -283,7 +312,7 @@ export const TimePointsBlock: FC<TimePointsProps> = ({timeline = [], onUpdate}) 
                         <IconButton
                             color="error"
                             onClick={handleDeleteTimePoint}
-                            disabled={timePoints.length <= 1}
+                            disabled={timePoints.length == 0}
                             title="Удалить точку"
                         >
                             <Trash/>

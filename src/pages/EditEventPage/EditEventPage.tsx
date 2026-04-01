@@ -17,10 +17,8 @@ export const EditEventPage: FC = () => {
         handleDesriptionChange,
         handleMetadataFieldChange,
         handleBaseFieldChange,
-        handleUpdateTimeLine,
         handleChangeStatus,
         handleUpdateInteractivePointsBlock,
-        handleUpdateMapBlock
     } = useEventForm(eventId);
     const handleUpdateEvent = useCallback(() => {
         updateEvent(eventData)
@@ -44,10 +42,8 @@ export const EditEventPage: FC = () => {
                             handleMetadataFieldChange={handleMetadataFieldChange}
                             handleBaseFieldChange={handleBaseFieldChange}
                             TextAreaChange={handleDesriptionChange}
-                            handleUpdateTimeLine={handleUpdateTimeLine}
                             handleChangeStatus={handleChangeStatus}
                             handlePostOrUpdate={handleUpdateEvent}
-                            handleUpdateMapBlock={handleUpdateMapBlock}
                             handleUpdateInteractivePointsBlock={handleUpdateInteractivePointsBlock}
                         />
                 }

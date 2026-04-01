@@ -66,36 +66,6 @@ export const useEventForm = (eventId?: string) => {
         }));
     }, [setEventData]);
 
-    const handleUpdateTimeLine = useCallback((block: { name: string, time: string }[]) => {
-        setEventData((prev) => {
-            const content = prev.content.map((contentBlock) => contentBlock.block === 'timeline' ? {
-                ...contentBlock,
-                payload: block
-            } : contentBlock);
-
-            return ({
-                ...prev,
-                content,
-            });
-        });
-    }, []);
-
-    const handleUpdateMapBlock = useCallback((block: {
-        background: string,
-        points: { x: number; y: number; text: string }[]
-    }) => {
-        setEventData((prev) => {
-            const content = prev.content.map((contentBlock) => contentBlock.block === 'map' ? {
-                ...contentBlock,
-                payload: block
-            } : contentBlock);
-
-            return ({
-                ...prev,
-                content,
-            });
-        });
-    }, []);
     const handleUpdateInteractivePointsBlock = useCallback((block: {
         background: string,
         points: {
@@ -124,8 +94,6 @@ export const useEventForm = (eventId?: string) => {
         handleMetadataFieldChange,
         handleDesriptionChange,
         handleUpdateInteractivePointsBlock,
-        handleUpdateMapBlock,
-        handleUpdateTimeLine,
         resetForm,
         setEventData
     };

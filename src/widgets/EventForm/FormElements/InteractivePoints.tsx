@@ -8,10 +8,10 @@ export interface MapPoint {
     x: number;
     y: number;
     text: string;
-    timeline?: {
+    timeline?: Array<{
         name: string;
         time: string;
-    }[];
+    }>;
 }
 
 export interface TimePoint {
@@ -42,11 +42,22 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
     const containerRef = useRef<HTMLDivElement>(null);
     const [timePoints, setTimePoints] = useState<TimePoint[]>([]);
     const onTimePointUpdate = (payload: TimePoint[]) => {
-        if (selectedIndex) {
+        if (selectedIndex !== null) {
+            if (isEditing) {
+                setTimePoints(payload);
+                setEditingPoint((prev) => {
+                    if (prev !== null) {
+                        prev.timeline = payload;
+                        return prev;
+                    } else {
+                        return null;
+                    }
+                });
+            }
             setTimePoints(payload);
-            setPoints(prev => prev.map((point, i) => {
+            setPoints((prev) => prev.map((point, i) => {
                 if (i === selectedIndex) {
-                    point.timeline = timePoints;
+                    point.timeline = payload;
                 }
                 return point;
             }));
@@ -66,6 +77,7 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
     }, [payload]);
 
     const handleAddMode = () => {
+        setSelectedIndex(null);
         if (points.length >= MAX_POINTS) {
             alert(`Достигнут лимит точек (максимум ${MAX_POINTS})`);
             return;
@@ -74,15 +86,18 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
     };
 
     const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!isAddingMode) {
-            return;
-        }
         if (points.length >= MAX_POINTS) {
             alert(`Достигнут лимит точек (максимум ${MAX_POINTS})`);
             setIsAddingMode(false);
+            setSelectedIndex(null);
+            return;
+        }
+        if (!isAddingMode) {
+            console.log('нажали на контейнер но без режима добавления кода');
             return;
         }
         if (!containerRef.current) {
+            setSelectedIndex(null);
             return;
         }
         const rect = containerRef.current.getBoundingClientRect();
@@ -91,6 +106,7 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
         const clampedX = Math.min(1, Math.max(0, x));
         const clampedY = Math.min(1, Math.max(0, y));
 
+        console.log('нажали на контейнер с режимом добавления новой точки');
         const newPoint: MapPoint = {
             x: clampedX,
             y: clampedY,
@@ -99,17 +115,30 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
         };
         const newPoints = [...points, newPoint];
         setPoints(newPoints);
-        setSelectedIndex(newPoints.length - 1);
         setEditingPoint({...newPoint});
+        setSelectedIndex(newPoints.length - 1);
         setIsEditing(true);
         setIsAddingMode(false);
-        onUpdate({background, points: newPoints});
+        console.log(points);
     };
 
     const handlePointClick = (index: number) => {
+        if (isEditing) {
+            handleSaveEdit();
+        }
         setSelectedIndex(index);
         setIsEditing(false);
         setIsAddingMode(false);
+        console.log(points, index);
+        const newPoints = points[index].timeline;
+        console.log(newPoints, 'это новые');
+        if (newPoints && newPoints.length > 0) {
+            setTimePoints(newPoints);
+            console.log('удалось загрузить точки');
+        } else {
+            setTimePoints([]);
+            console.log('не удалось загрузить точки');
+        }
     };
 
     const handleStartEdit = () => {
@@ -162,12 +191,13 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
     const handleBackgroundUpdate = () => {
         onUpdate({background, points});
     };
-
     if (points.length === 0) {
         return (
-            <div className={styles.section}>
+            <div
+                className={styles.section}
+            >
                 <Typography
-                    variant="subtitle1"
+                    variant='subtitle1'
                     sx={{
                         fontWeight: 600,
                         marginBottom: 1,
@@ -177,10 +207,10 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
 
                 <Box sx={{mb: 2, display: 'flex', gap: 1, alignItems: 'center'}}>
                     <TextField
-                        label="URL фоновой карты"
+                        label='URL фоновой карты'
                         value={background}
                         onChange={handleBackgroundChange}
-                        size="small"
+                        size='small'
                         fullWidth
                         sx={{
                             '& .MuiInputLabel-root.Mui-focused': {
@@ -188,16 +218,22 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                             }
                         }}
                     />
-                    <Button variant="contained" onClick={handleBackgroundUpdate} size="small">
+                    <Button variant='contained' onClick={handleBackgroundUpdate} size='small'>
                         Применить фон
                     </Button>
                 </Box>
                 {
-                    selectedIndex ?
-                        <TimePointsBlock
-                            timeline={points[selectedIndex]?.timeline}
-                            onUpdate={onTimePointUpdate}
-                        />
+                    (selectedIndex !== null) && !isAddingMode ?
+                        <div
+                            onClick={(e) => {
+                                e.stopPropagation();
+                            }}
+                        >
+                            <TimePointsBlock
+                                timeline={timePoints}
+                                onUpdate={onTimePointUpdate}
+                            />
+                        </div>
                         : null
                 }
                 <Box
@@ -224,14 +260,14 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                 <Box sx={{textAlign: 'center'}}>
                     {!isAddingMode ? (
                         <Button
-                            variant="contained"
+                            variant='contained'
                             startIcon={<Plus/>}
                             onClick={handleAddMode}
                         >
                             Добавить первую точку
                         </Button>
                     ) : (
-                        <Typography color="primary" variant="body2">
+                        <Typography color='primary' variant='body2'>
                             Кликните по карте, чтобы разместить точку
                         </Typography>
                     )}
@@ -242,21 +278,24 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
     }
 
     return (
-        <div className={styles.section}>
+        <div
+            className={styles.section}
+        >
             <Typography
-                variant="subtitle1"
+                variant='subtitle1'
                 sx={{
                     fontWeight: 600,
-                    marginBottom: 1
+                    marginBottom: 1,
+                    fontSize: 20,
                 }}
             >Карта</Typography>
 
             <Box sx={{mb: 2, display: 'flex', gap: 1, alignItems: 'center'}}>
                 <TextField
-                    label="URL фоновой карты"
+                    label='URL фоновой карты'
                     value={background}
                     onChange={handleBackgroundChange}
-                    size="small"
+                    size='small'
                     fullWidth
                     sx={{
                         '& .MuiInputLabel-root.Mui-focused': {
@@ -264,23 +303,40 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                         }
                     }}
                 />
-                <Button variant="contained" onClick={handleBackgroundUpdate} size="small">
+                <Button variant='contained' onClick={handleBackgroundUpdate} size='small'>
                     Применить фон
                 </Button>
             </Box>
             {
-                selectedIndex ?
-                    <TimePointsBlock
-                        timeline={points[selectedIndex]?.timeline}
-                        onUpdate={onTimePointUpdate}
-                    />
+                (selectedIndex !== null) && !isAddingMode ?
+                    <div
+                        onClick={(e) => {
+                            e.stopPropagation();
+                        }}
+                    >
+                        <TimePointsBlock
+                            timeline={timePoints}
+                            onUpdate={onTimePointUpdate}
+                        />
+                    </div>
                     : null
             }
-            {isAddingMode && (
-                <Typography color="primary" variant="body2" sx={{mb: 1}}>
-                    Режим добавления: кликните по карте, чтобы создать точку
-                </Typography>
-            )}
+            <Typography
+                color='black'
+                variant='body2'
+                sx={{
+                    height: '40px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    fontSize: 16,
+                }}
+            >
+                {
+                    isAddingMode ?
+                        'Режим добавления: кликните по карте, чтобы создать точку'
+                        : `Точек поставлено: ${points.length}/${MAX_POINTS}`
+                }
+            </Typography>
 
             <Box
                 ref={containerRef}
@@ -302,7 +358,7 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'center',
                     border: '1px solid #ccc',
-                    cursor: 'crosshair',
+                    cursor: isAddingMode ? 'crosshair' : 'default',
                     mb: 2,
                 }}
             >
@@ -347,11 +403,11 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                     {isEditing && editingPoint ? (
                         <Stack spacing={2}>
                             <TextField
-                                label="Текст"
+                                label='Текст'
                                 value={editingPoint?.text}
                                 onChange={handleTextChange}
                                 fullWidth
-                                size="small"
+                                size='small'
                                 sx={{
                                     '& .MuiInputLabel-root.Mui-focused': {
                                         color: '#000000',
@@ -360,21 +416,21 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                             />
                             <Box sx={{display: 'flex', gap: 1}}>
                                 <Button
-                                    variant="contained"
-                                    size="small"
+                                    variant='contained'
+                                    size='small'
                                     startIcon={<Save/>}
                                     onClick={handleSaveEdit}
                                 >
                                     Сохранить
                                 </Button>
                                 <Button
-                                    variant="outlined"
-                                    size="small"
+                                    variant='outlined'
+                                    size='small'
                                     startIcon={<X/>}
                                     onClick={handleCancelEdit}
                                     sx={{
-                                        color: '#000000',
-                                        borderColor: '#000000',
+                                        'color': '#000000',
+                                        'borderColor': '#000000',
                                         '&:hover': {
                                             backgroundColor: 'red',
                                             color: '#ffffff',
@@ -388,15 +444,15 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                         </Stack>
                     ) : selectedIndex !== null ? (
                         <>
-                            <Typography variant="subtitle1" sx={{fontWeight: 'bold', mb: 1}}>
+                            <Typography variant='subtitle1' sx={{fontWeight: 'bold', mb: 1}}>
                                 {points[selectedIndex].text}
                             </Typography>
-                            <Typography variant="body2" color="text.secondary">
+                            <Typography variant='body2' color='text.secondary'>
                                 Координаты: ({points[selectedIndex].x.toFixed(2)}, {points[selectedIndex].y.toFixed(2)})
                             </Typography>
                         </>
                     ) : (
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant='body2' color='text.secondary'>
                             Точка не выбрана
                         </Typography>
                     )}
@@ -404,26 +460,30 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
 
                 <Box sx={{display: 'flex', flexDirection: 'column', gap: 1, ml: 2}}>
                     <IconButton
-                        color="primary"
+                        sx={{
+                            color: 'black'
+                        }}
                         onClick={handleStartEdit}
                         disabled={isEditing || selectedIndex === null}
-                        title="Редактировать"
+                        title='Редактировать'
                     >
                         <Pencil/>
                     </IconButton>
                     <IconButton
-                        color="primary"
+                        sx={{
+                            color: 'black'
+                        }}
                         onClick={handleAddMode}
                         disabled={isAddingMode || points.length >= MAX_POINTS}
-                        title="Добавить точку"
+                        title='Добавить точку'
                     >
                         <Plus/>
                     </IconButton>
                     <IconButton
-                        color="error"
+                        color='error'
                         onClick={handleDelete}
                         disabled={points.length < 1 || selectedIndex === null}
-                        title="Удалить точку"
+                        title='Удалить точку'
                     >
                         <Trash/>
                     </IconButton>

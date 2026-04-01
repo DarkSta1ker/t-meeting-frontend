@@ -1,9 +1,9 @@
-//не моки import {createApiClient} from '../../api/requestor';
-import {mockApiClient} from '../../shared/mocks/eventsMocks'; // моки
+import {createApiClient} from '../../api/requestor'; //не моки
+//import {mockApiClient} from '../../shared/mocks/eventsMocks'; // моки
 import {EventBase, EventListItem} from '../../shared/types/event';
 
-const eventApi = mockApiClient; // моки
-//не моки  const eventApi = createApiClient('http://localhost:33');
+//const eventApi = mockApiClient; // моки
+const eventApi = createApiClient('http://localhost:33');//не моки
 
 export const EventService = {
     async addEvent(eventPayload: EventBase) {

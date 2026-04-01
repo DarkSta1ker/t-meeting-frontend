@@ -17,8 +17,6 @@ export const CreateEventPage: FC = () => {
         handleDescriptionChange,
         handleMetadataFieldChange,
         handleBaseFieldChange,
-        handleUpdateTimeLine,
-        handleUpdateMapBlock,
         handleUpdateInteractivePointsBlock,
         handleChangeStatus
     } = useNewEventForm();
@@ -42,9 +40,7 @@ export const CreateEventPage: FC = () => {
                         :
                         <>
                             <EventForm
-                                handleUpdateTimeLine={handleUpdateTimeLine}
                                 eventData={eventData}
-                                handleUpdateMapBlock={handleUpdateMapBlock}
                                 handleMetadataFieldChange={handleMetadataFieldChange}
                                 handleBaseFieldChange={handleBaseFieldChange}
                                 TextAreaChange={handleDescriptionChange}
