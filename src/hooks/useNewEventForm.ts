@@ -22,7 +22,7 @@ export const useNewEventForm = () => {
         }));
     }, [setEventData]);
 
-    const handleDesriptionChange = useCallback((value: string) => {
+    const handleDescriptionChange = useCallback((value: string) => {
         setEventData((prev) => {
             const content = prev.content.map((contentBlock) => contentBlock.block === 'promo-text' ? {
                 ...contentBlock,
@@ -46,25 +46,18 @@ export const useNewEventForm = () => {
             status
         }));
     }, [setEventData]);
-    const handleUpdateTimeLine = useCallback((block: { name: string, time: string }[]) => {
-        setEventData((prev) => {
-            const content = prev.content.map((contentBlock) => contentBlock.block === 'timeline' ? {
-                ...contentBlock,
-                payload: block
-            } : contentBlock);
 
-            return ({
-                ...prev,
-                content,
-            });
-        });
-    }, []);
-    const handleUpdateMapBlock = useCallback((block: {
+    const handleUpdateInteractivePointsBlock = useCallback((block: {
         background: string,
-        points: { x: number; y: number; text: string }[]
+        points: {
+            x: number; y: number; text: string; timeline?: {
+                name: string;
+                time: string;
+            }[]
+        }[]
     }) => {
         setEventData((prev) => {
-            const content = prev.content.map((contentBlock) => contentBlock.block === 'map' ? {
+            const content = prev.content.map((contentBlock) => contentBlock.block === 'interactive-points' ? {
                 ...contentBlock,
                 payload: block
             } : contentBlock);
@@ -79,10 +72,9 @@ export const useNewEventForm = () => {
         eventData,
         handleBaseFieldChange,
         handleChangeStatus,
+        handleDescriptionChange,
         handleMetadataFieldChange,
-        handleDesriptionChange,
-        handleUpdateMapBlock,
-        handleUpdateTimeLine,
+        handleUpdateInteractivePointsBlock,
         resetForm,
         setEventData
     };

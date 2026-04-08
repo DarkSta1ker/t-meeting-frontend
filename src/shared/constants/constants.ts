@@ -18,6 +18,13 @@ export const defaultNewEvent: EventNew = {
                 background: '',
                 points: []
             }
+        },
+        {
+            block: 'interactive-points',
+            payload: {
+                background: '',
+                points: []
+            }
         }
     ],
     metadata: {
@@ -35,6 +42,24 @@ export const defaultEditEvent: EventListItem = {
         {
             block: 'promo-text',
             payload: [],
+        },
+        {
+            block: 'timeline',
+            payload: [],
+        },
+        {
+            block: 'map',
+            payload: {
+                background: '',
+                points: []
+            }
+        },
+        {
+            block: 'interactive-points',
+            payload: {
+                background: '',
+                points: []
+            }
         }
     ],
     id: '',
@@ -130,6 +155,14 @@ export const defaultAuthContext: AuthContextType = {
         status: 'Error' as const,
         payload: 'Auth context not initialized',
     }),
+    regUser: async () => ({
+        status: 'Error' as const,
+        payload: 'Auth context not initialized',
+    }),
+    authError: '',
+    setAuthError: () => {
+    },
     logoutUser: () => {
     },
+
 };

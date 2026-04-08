@@ -13,3 +13,9 @@ export interface ResultError<T> {
     status: 'Error';
     payload: T;
 }
+
+export type HTTPMethods =
+    | 'POST' | 'GET' | 'PUT'
+    | 'DELETE' | 'HEAD' | 'PATCH'
+    | 'get' | 'post' | 'put'
+    | 'delete' | 'head' | 'patch'

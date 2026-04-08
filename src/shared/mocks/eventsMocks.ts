@@ -1,7 +1,6 @@
-import {ApiData} from '../types/api';
 import {EventListItem} from '../types/event';
 
-const mockEventsDB = [
+const mockEventsDB: EventListItem[] = [
     {
         id: '5378afbf-e87b-411f-95df-b1aeeb5b770f',
         name: 'Новогодний корпоратив',
@@ -31,34 +30,56 @@ const mockEventsDB = [
                 block: 'map',
                 payload: {
                     background: process.env.PUBLIC_URL + '/images/map1.jpg',
-                    points:
-                        [
-                            {
-                                x: 0.2,
-                                y: 0.2,
-                                text: 'почти левый верхний угол'
-                            },
-                            {
-                                x: 0.8,
-                                y: 0.8,
-                                text: 'почти правый верхний угол'
-                            },
-                            {
-                                x: 0.5,
-                                y: 0.5,
-                                text: 'центр'
-                            }
-                        ]
+                    points: [
+                        {x: 0.2, y: 0.2, text: 'почти левый верхний угол'},
+                        {x: 0.8, y: 0.8, text: 'почти правый верхний угол'},
+                        {x: 0.5, y: 0.5, text: 'центр'}
+                    ]
                 }
             },
             {
                 block: 'timeline',
-                payload: [
-                    {
-                        name: 'string',
-                        time: '03:24:44.726Z'
-                    }
-                ]
+                payload: [{name: 'string', time: '03:24:44.726Z'}]
+            },
+            {
+                block: 'interactive-points',
+                payload: {
+                    background: process.env.PUBLIC_URL + '/images/map1.jpg',
+                    points: [
+                        {
+                            x: 0.2,
+                            y: 0.2,
+                            text: 'почти левый верхний угол',
+                            timeline: [
+                                {
+                                    name: 'string',
+                                    time: '03:24:44.726Z'
+                                },
+                                {
+                                    name: 'string',
+                                    time: '03:50:44.726Z'
+                                },
+                                {
+                                    name: 'string',
+                                    time: '04:20:44.726Z'
+                                }
+                            ]
+                        },
+                        {x: 0.8, y: 0.8, text: 'почти правый верхний угол', timeline: []},
+                        {
+                            x: 0.5, y: 0.5, text: 'центр', timeline: [
+                                {
+                                    name: 'string',
+                                    time: '03:24:44.726Z'
+                                },
+                                {
+                                    name: 'string',
+                                    time: '03:24:44.726Z'
+                                },
+                            ]
+                        },
+                    ]
+                }
             }
         ],
         status: 'published',
@@ -108,50 +129,53 @@ const mockEventsDB = [
                 block: 'map',
                 payload: {
                     background: process.env.PUBLIC_URL + '/images/map2.jpg',
-                    points:
-                        [
-                            {
-                                x: 0.2,
-                                y: 0.2,
-                                text: 'почти левый верхний угол'
-                            },
-                            {
-                                x: 0.8,
-                                y: 0.8,
-                                text: 'почти правый верхний угол'
-                            },
-                            {
-                                x: 0.5,
-                                y: 0.5,
-                                text: 'центр'
-                            }
-                        ]
+                    points: [
+                        {x: 0.2, y: 0.2, text: 'почти левый верхний угол'},
+                        {x: 0.8, y: 0.8, text: 'почти правый верхний угол'},
+                        {x: 0.5, y: 0.5, text: 'центр'}
+                    ]
                 }
             },
             {
                 block: 'timeline',
                 payload: [
-                    {
-                        name: 'Первый поинт',
-                        time: '06:30:44.726Z'
-                    },
-                    {
-                        name: 'Второй поинт',
-                        time: '07:45:44.726Z'
-                    }, {
-                        name: 'Третий поинт',
-                        time: '08:30:44.726Z'
-                    }, {
-                        name: 'Четвертый поинт',
-                        time: '10:55:44.726Z'
-                    }, {
-                        name: 'Пятый поинт',
-                        time: '12:30:44.726Z'
-                    }, {
-                        name: 'Шестой поинт',
-                        time: '19:00:44.726Z'
-                    },
+                    {name: 'Первый поинт', time: '06:30:44.726Z'},
+                    {name: 'Второй поинт', time: '07:45:44.726Z'},
+                    {name: 'Третий поинт', time: '08:30:44.726Z'},
+                    {name: 'Четвертый поинт', time: '10:55:44.726Z'},
+                    {name: 'Пятый поинт', time: '12:30:44.726Z'},
+                    {name: 'Шестой поинт', time: '19:00:44.726Z'},
                 ]
+            },
+            {
+                block: 'interactive-points',
+                payload: {
+                    background: process.env.PUBLIC_URL + '/images/map2.jpg',
+                    points: [
+                        {
+                            x: 0.2,
+                            y: 0.2,
+                            text: 'почти левый верхний угол',
+                            timeline: [
+                                {name: 'Первый поинт', time: '06:30:44.726Z'},
+                                {name: 'Второй поинт', time: '07:45:44.726Z'},
+                                {name: 'Третий поинт', time: '08:30:44.726Z'},
+                                {name: 'Четвертый поинт', time: '10:55:44.726Z'},
+                                {name: 'Пятый поинт', time: '12:30:44.726Z'},
+                                {name: 'Шестой поинт', time: '19:00:44.726Z'},
+                            ]
+                        },
+                        {x: 0.8, y: 0.8, text: 'почти правый верхний угол', timeline: []},
+                        {
+                            x: 0.5, y: 0.5, text: 'центр', timeline: [
+                                {
+                                    name: 'string',
+                                    time: '03:24:44.726Z'
+                                }
+                            ]
+                        },
+                    ]
+                }
             }
         ],
         status: 'draft',
@@ -204,34 +228,52 @@ const mockEventsDB = [
                 block: 'map',
                 payload: {
                     background: process.env.PUBLIC_URL + '/images/map3.jpg',
-                    points:
-                        [
-                            {
-                                x: 0.2,
-                                y: 0.2,
-                                text: 'почти левый верхний угол'
-                            },
-                            {
-                                x: 0.8,
-                                y: 0.8,
-                                text: 'почти правый верхний угол'
-                            },
-                            {
-                                x: 0.5,
-                                y: 0.5,
-                                text: 'центр'
-                            }
-                        ]
+                    points: [
+                        {x: 0.2, y: 0.2, text: 'почти левый верхний угол'},
+                        {x: 0.8, y: 0.8, text: 'почти правый верхний угол'},
+                        {x: 0.5, y: 0.5, text: 'центр'}
+                    ]
                 }
             },
             {
                 block: 'timeline',
-                payload: [
-                    {
-                        name: 'string',
-                        time: '03:24:44.726Z'
-                    }
-                ]
+                payload: [{name: 'string', time: '03:24:44.726Z'}]
+            },
+            {
+                block: 'interactive-points',
+                payload: {
+                    background: process.env.PUBLIC_URL + '/images/map3.jpg',
+                    points: [
+                        {
+                            x: 0.2,
+                            y: 0.2,
+                            text: 'почти левый верхний угол',
+                            timeline: [
+                                {
+                                    name: 'string',
+                                    time: '03:24:44.726Z'
+                                },
+                                {
+                                    name: 'string',
+                                    time: '03:50:44.726Z'
+                                },
+                                {
+                                    name: 'string',
+                                    time: '04:20:44.726Z'
+                                }
+                            ]
+                        },
+                        {x: 0.8, y: 0.8, text: 'почти правый верхний угол', timeline: []},
+                        {
+                            x: 0.5, y: 0.5, text: 'центр', timeline: [
+                                {
+                                    name: 'string',
+                                    time: '03:24:44.726Z'
+                                }
+                            ]
+                        },
+                    ]
+                }
             }
         ],
         status: 'draft',
@@ -244,137 +286,102 @@ const generateId = (): string => {
     return Math.random().toString(36).substring(2) + Date.now().toString(36);
 };
 
-const simulateNetworkDelay = () => {
+const simulateNetworkDelay = (): Promise<void> => {
     const delay = Math.random() * 500 + 200; // 200-700ms
     return new Promise((resolve) => setTimeout(resolve, delay));
 };
 
-export const mockRequestApi = async <T = Record<string, unknown>>(data: ApiData<T>): Promise<Response> => {
-    console.log(`[Mock API] ${data.method} ${data.url}`, data.payload || '');
+/**
+ * Мок-клиент, имитирующий API запросы.
+ * Использование: const responseData = await mockApiClient('/events', { method: 'GET' });
+ */
+export const mockApiClient = async <T = any>(
+    url: string,
+    options?: { method?: string; body?: any }
+): Promise<T> => {
+    const method = options?.method || 'GET';
+    const body = options?.body;
+
+    console.log(`[Mock API] ${method} ${url}`, body || '');
 
     await simulateNetworkDelay();
 
-    const url = data.url;
-
-    try {
-        if (data.method === 'GET' && url === '/api/events') {
-            return new Response(JSON.stringify(mockEventsDB), {
-                status: 200,
-                statusText: 'OK',
-                headers: {'Content-Type': 'application/json'}
-            });
-        }
-        if (data.method === 'GET' && url.startsWith('/api/event/')) {
-            const eventId = url.replace('/api/event/', '');
-            const event = mockEventsDB.find((e) => e.id === eventId);
-
-            if (!event) {
-                return new Response(JSON.stringify({error: 'Event not found'}), {
-                    status: 404,
-                    statusText: 'Not Found',
-                    headers: {'Content-Type': 'application/json'}
-                });
-            }
-
-            return new Response(JSON.stringify(event), {
-                status: 200,
-                statusText: 'OK',
-                headers: {'Content-Type': 'application/json'}
-            });
-        }
-
-        if (data.method === 'POST' && url === '/api/event') {
-            const newEvent = data.payload as EventListItem;
-
-            const eventToAdd = {
-                ...newEvent,
-                id: generateId(),
-                status: newEvent.status || 'draft',
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString()
-            };
-
-            mockEventsDB.push(eventToAdd);
-            console.log('[Mock API] Event added:', eventToAdd);
-
-            return new Response(JSON.stringify(eventToAdd), {
-                status: 201,
-                statusText: 'Created',
-                headers: {'Content-Type': 'application/json'}
-            });
-        }
-
-        if (data.method === 'PUT' && url.startsWith('/api/event/')) {
-            const eventId = url.replace('/api/event/', '');
-            const updatedEvent = data.payload as Event;
-
-            const eventIndex = mockEventsDB.findIndex((e) => e.id === eventId);
-
-            if (eventIndex === -1) {
-                return new Response(JSON.stringify({error: 'Event not found'}), {
-                    status: 404,
-                    statusText: 'Not Found',
-                    headers: {'Content-Type': 'application/json'}
-                });
-            }
-
-            const oldEvent = mockEventsDB[eventIndex];
-            const finalEvent = {
-                ...oldEvent,
-                ...updatedEvent,
-                id: eventId, // Защищаем от изменения ID
-                updatedAt: new Date().toISOString()
-            };
-
-            mockEventsDB[eventIndex] = finalEvent;
-            console.log('[Mock API] Event updated:', finalEvent);
-
-            return new Response(JSON.stringify(finalEvent), {
-                status: 200,
-                statusText: 'OK',
-                headers: {'Content-Type': 'application/json'}
-            });
-        }
-
-        if (data.method === 'DELETE' && url.startsWith('/api/event/')) {
-            const eventId = url.replace('/api/event/', '');
-
-            const eventIndex = mockEventsDB.findIndex((e) => e.id === eventId);
-
-            if (eventIndex === -1) {
-                return new Response(JSON.stringify({error: 'Event not found'}), {
-                    status: 404,
-                    statusText: 'Not Found',
-                    headers: {'Content-Type': 'application/json'}
-                });
-            }
-
-            const [deletedEvent] = mockEventsDB.splice(eventIndex, 1);
-            console.log('[Mock API] Event deleted:', deletedEvent);
-
-            return new Response(JSON.stringify({
-                success: true,
-                message: 'Event deleted successfully',
-                deletedEvent
-            }), {
-                status: 200,
-                statusText: 'OK',
-                headers: {'Content-Type': 'application/json'}
-            });
-        }
-
-        return new Response(JSON.stringify({error: 'Endpoint not found'}), {
-            status: 404,
-            statusText: 'Not Found',
-            headers: {'Content-Type': 'application/json'}
-        });
-
-    } catch (error) {
-        console.error('[Mock API Error]:', error);
-        return new Response(JSON.stringify({error: 'Internal server error'}), {
-            status: 500,
-            statusText: 'Internal Server Error',
-            headers: {'Content-Type': 'application/json'}
-        });
+    // GET /events
+    if (method === 'GET' && url === '/events') {
+        return mockEventsDB as T;
     }
+
+    // GET /event/:id
+    if (method === 'GET' && url.startsWith('/event/')) {
+        const eventId = url.replace('/event/', '');
+        const event = mockEventsDB.find((e) => e.id === eventId);
+
+        if (!event) {
+            throw new Error('Event not found');
+        }
+
+        return event as T;
+    }
+
+    // POST /event
+    if (method === 'POST' && url === '/event') {
+        const newEvent = body as Partial<EventListItem>;
+
+        const eventToAdd: EventListItem = {
+            ...newEvent,
+            id: generateId(),
+            status: newEvent.status || 'draft',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        } as EventListItem;
+
+        mockEventsDB.push(eventToAdd);
+        console.log('[Mock API] Event added:', eventToAdd);
+
+        return eventToAdd as T;
+    }
+
+    // PUT /event/:id
+    if (method === 'PUT' && url.startsWith('/event/')) {
+        const eventId = url.replace('/event/', '');
+        const updatedEvent = body as Partial<EventListItem>;
+
+        const eventIndex = mockEventsDB.findIndex((e) => e.id === eventId);
+
+        if (eventIndex === -1) {
+            throw new Error('Event not found');
+        }
+
+        const oldEvent = mockEventsDB[eventIndex];
+        const finalEvent: EventListItem = {
+            ...oldEvent,
+            ...updatedEvent,
+            id: eventId, // защита от изменения ID
+            updatedAt: new Date().toISOString(),
+        };
+
+        mockEventsDB[eventIndex] = finalEvent;
+        console.log('[Mock API] Event updated:', finalEvent);
+
+        return finalEvent as T;
+    }
+
+    // DELETE /event/:id
+    if (method === 'DELETE' && url.startsWith('/event/')) {
+        const eventId = url.replace('/event/', '');
+
+        const eventIndex = mockEventsDB.findIndex((e) => e.id === eventId);
+
+        if (eventIndex === -1) {
+            throw new Error('Event not found');
+        }
+
+        const [deletedEvent] = mockEventsDB.splice(eventIndex, 1);
+        console.log('[Mock API] Event deleted:', deletedEvent);
+
+        return {success: true, message: 'Event deleted successfully', deletedEvent} as T;
+    }
+
+    // Если ничего не подошло
+    throw new Error(`Endpoint not found: ${method} ${url}`);
 };

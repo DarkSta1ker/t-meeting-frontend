@@ -1,5 +1,6 @@
-import {Navigate, Outlet} from "react-router-dom";
-import {useAuth} from "../../contexts/AuthContext";
+import {Navigate, Outlet} from 'react-router-dom';
+import {useAuth} from '../../contexts/AuthContext';
+import {ROUTES} from '../../shared/constants/constants';
 
 export const PrivateRoute = () => {
     const {isAuth, isLoadingAuth} = useAuth();
@@ -9,6 +10,6 @@ export const PrivateRoute = () => {
     if (isAuth) {
         return <Outlet/>;
     } else {
-        return <Navigate to="/"/>;
+        return <Navigate to={ROUTES.AUTH}/>;
     }
 };

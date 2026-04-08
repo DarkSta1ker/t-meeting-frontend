@@ -2,11 +2,21 @@ import {Box, Button, IconButton, Paper, Stack, TextField, Typography} from '@mui
 import {Pencil, Plus, Save, Trash, X} from 'lucide-react';
 import React, {useEffect, useRef, useState} from 'react';
 import styles from '../EventForm.module.css';
+import {TimePointsBlock} from './TImePointsBlock';
 
 export interface MapPoint {
     x: number;
     y: number;
     text: string;
+    timeline?: Array<{
+        name: string;
+        time: string;
+    }>;
+}
+
+export interface TimePoint {
+    name: string;
+    time: string;
 }
 
 export interface MapBlockPayload {
@@ -14,14 +24,14 @@ export interface MapBlockPayload {
     points: MapPoint[];
 }
 
-interface MapBlockEditorProps {
+interface InteractivePointsEditorProps {
     payload: MapBlockPayload;
     onUpdate: (newPayload: MapBlockPayload) => void;
 }
 
 const MAX_POINTS = 25;
 
-export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => {
+export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({payload, onUpdate}) => {
     const [background, setBackground] = useState('');
     const [points, setPoints] = useState<MapPoint[]>([]);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -30,7 +40,32 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
     const [isAddingMode, setIsAddingMode] = useState(false);
     const [imageDimensions, setImageDimensions] = useState<{ width: number; height: number } | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const [timePoints, setTimePoints] = useState<TimePoint[]>([]);
+    const onTimePointUpdate = (payload: TimePoint[]) => {
+        if (selectedIndex !== null) {
+            if (isEditing) {
+                setTimePoints(payload);
+                setEditingPoint((prev) => {
+                    if (prev !== null) {
+                        prev.timeline = payload;
+                        return prev;
+                    } else {
+                        return null;
+                    }
+                });
+            }
+            setTimePoints(payload);
+            setPoints((prev) => prev.map((point, i) => {
+                if (i === selectedIndex) {
+                    point.timeline = payload;
+                }
+                return point;
+            }));
+        } else {
+            console.log('Ошибка, не выбрана ни одна точка на карте.');
+        }
 
+    };
     useEffect(() => {
         setBackground(payload.background);
         setPoints(payload.points);
@@ -42,6 +77,7 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
     }, [payload]);
 
     const handleAddMode = () => {
+        setSelectedIndex(null);
         if (points.length >= MAX_POINTS) {
             alert(`Достигнут лимит точек (максимум ${MAX_POINTS})`);
             return;
@@ -50,15 +86,18 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
     };
 
     const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!isAddingMode) {
-            return;
-        }
         if (points.length >= MAX_POINTS) {
             alert(`Достигнут лимит точек (максимум ${MAX_POINTS})`);
             setIsAddingMode(false);
+            setSelectedIndex(null);
+            return;
+        }
+        if (!isAddingMode) {
+            console.log('нажали на контейнер но без режима добавления кода');
             return;
         }
         if (!containerRef.current) {
+            setSelectedIndex(null);
             return;
         }
         const rect = containerRef.current.getBoundingClientRect();
@@ -67,24 +106,39 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
         const clampedX = Math.min(1, Math.max(0, x));
         const clampedY = Math.min(1, Math.max(0, y));
 
+        console.log('нажали на контейнер с режимом добавления новой точки');
         const newPoint: MapPoint = {
             x: clampedX,
             y: clampedY,
             text: `Точка ${points.length + 1}`,
+            timeline: []
         };
         const newPoints = [...points, newPoint];
         setPoints(newPoints);
-        setSelectedIndex(newPoints.length - 1);
         setEditingPoint({...newPoint});
+        setSelectedIndex(newPoints.length - 1);
         setIsEditing(true);
         setIsAddingMode(false);
-        onUpdate({background, points: newPoints});
+        console.log(points);
     };
 
     const handlePointClick = (index: number) => {
+        if (isEditing) {
+            handleSaveEdit();
+        }
         setSelectedIndex(index);
         setIsEditing(false);
         setIsAddingMode(false);
+        console.log(points, index);
+        const newPoints = points[index].timeline;
+        console.log(newPoints, 'это новые');
+        if (newPoints && newPoints.length > 0) {
+            setTimePoints(newPoints);
+            console.log('удалось загрузить точки');
+        } else {
+            setTimePoints([]);
+            console.log('не удалось загрузить точки');
+        }
     };
 
     const handleStartEdit = () => {
@@ -137,10 +191,11 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
     const handleBackgroundUpdate = () => {
         onUpdate({background, points});
     };
-
     if (points.length === 0) {
         return (
-            <div className={styles.section}>
+            <div
+                className={styles.section}
+            >
                 <Typography
                     variant="subtitle1"
                     sx={{
@@ -167,7 +222,20 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
                         Применить фон
                     </Button>
                 </Box>
-
+                {
+                    (selectedIndex !== null) && !isAddingMode ?
+                        <div
+                            onClick={(e) => {
+                                e.stopPropagation();
+                            }}
+                        >
+                            <TimePointsBlock
+                                timeline={timePoints}
+                                onUpdate={onTimePointUpdate}
+                            />
+                        </div>
+                        : null
+                }
                 <Box
                     ref={containerRef}
                     onClick={handleContainerClick}
@@ -210,12 +278,15 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
     }
 
     return (
-        <div className={styles.section}>
+        <div
+            className={styles.section}
+        >
             <Typography
                 variant="subtitle1"
                 sx={{
                     fontWeight: 600,
-                    marginBottom: 1
+                    marginBottom: 1,
+                    fontSize: 20,
                 }}
             >Карта</Typography>
 
@@ -236,12 +307,36 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
                     Применить фон
                 </Button>
             </Box>
-
-            {isAddingMode && (
-                <Typography color="primary" variant="body2" sx={{mb: 1}}>
-                    Режим добавления: кликните по карте, чтобы создать точку
-                </Typography>
-            )}
+            {
+                (selectedIndex !== null) && !isAddingMode ?
+                    <div
+                        onClick={(e) => {
+                            e.stopPropagation();
+                        }}
+                    >
+                        <TimePointsBlock
+                            timeline={timePoints}
+                            onUpdate={onTimePointUpdate}
+                        />
+                    </div>
+                    : null
+            }
+            <Typography
+                color="black"
+                variant="body2"
+                sx={{
+                    height: '40px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    fontSize: 16,
+                }}
+            >
+                {
+                    isAddingMode ?
+                        'Режим добавления: кликните по карте, чтобы создать точку'
+                        : `Точек поставлено: ${points.length}/${MAX_POINTS}`
+                }
+            </Typography>
 
             <Box
                 ref={containerRef}
@@ -263,7 +358,7 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'center',
                     border: '1px solid #ccc',
-                    cursor: 'crosshair',
+                    cursor: isAddingMode ? 'crosshair' : 'default',
                     mb: 2,
                 }}
             >
@@ -308,10 +403,14 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
                     {isEditing && editingPoint ? (
                         <Stack spacing={2}>
                             <TextField
-                                label="Текст"
+                                label="Описание"
                                 value={editingPoint?.text}
                                 onChange={handleTextChange}
                                 fullWidth
+                                multiline
+                                maxRows={6}
+                                helperText={editingPoint.text.length > 500 ? `${editingPoint.text.length}/1000` : ''}
+                                inputProps={{maxLength: 1000}}
                                 size="small"
                                 sx={{
                                     '& .MuiInputLabel-root.Mui-focused': {
@@ -334,8 +433,8 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
                                     startIcon={<X/>}
                                     onClick={handleCancelEdit}
                                     sx={{
-                                        color: '#000000',
-                                        borderColor: '#000000',
+                                        'color': '#000000',
+                                        'borderColor': '#000000',
                                         '&:hover': {
                                             backgroundColor: 'red',
                                             color: '#ffffff',
@@ -365,7 +464,9 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
 
                 <Box sx={{display: 'flex', flexDirection: 'column', gap: 1, ml: 2}}>
                     <IconButton
-                        color="primary"
+                        sx={{
+                            color: 'black'
+                        }}
                         onClick={handleStartEdit}
                         disabled={isEditing || selectedIndex === null}
                         title="Редактировать"
@@ -373,7 +474,9 @@ export const EventMap: React.FC<MapBlockEditorProps> = ({payload, onUpdate}) => 
                         <Pencil/>
                     </IconButton>
                     <IconButton
-                        color="primary"
+                        sx={{
+                            color: 'black'
+                        }}
                         onClick={handleAddMode}
                         disabled={isAddingMode || points.length >= MAX_POINTS}
                         title="Добавить точку"

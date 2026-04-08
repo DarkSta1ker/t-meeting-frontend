@@ -14,20 +14,21 @@ export const CreateEventPage: FC = () => {
     const {addEvent, isLoading} = useEvent();
     const {
         eventData,
-        handleDesriptionChange,
+        handleDescriptionChange,
         handleMetadataFieldChange,
         handleBaseFieldChange,
-        handleUpdateTimeLine,
-        handleUpdateMapBlock,
+        handleUpdateInteractivePointsBlock,
         handleChangeStatus
     } = useNewEventForm();
-    const handleAddEvent = useCallback(async () => {
-        const resp = await addEvent(eventData);
-        if (resp.status === 'Success') {
-            nav(ROUTES.EVENTS_LIST);
-        } else {
-            console.log(`${resp.status} | ${resp.payload}`);
-        }
+    const handleAddEvent = useCallback(() => {
+        addEvent(eventData)
+            .then(() => {
+                console.log('Event added successfully');
+                nav(ROUTES.EVENTS_LIST);
+            })
+            .catch((err) => {
+                console.log('Error while fetching addEvent: ', err);
+            });
     }, [addEvent, eventData, nav]);
 
     return (
@@ -39,14 +40,13 @@ export const CreateEventPage: FC = () => {
                         :
                         <>
                             <EventForm
-                                handleUpdateTimeLine={handleUpdateTimeLine}
                                 eventData={eventData}
-                                handleUpdateMapBlock={handleUpdateMapBlock}
                                 handleMetadataFieldChange={handleMetadataFieldChange}
                                 handleBaseFieldChange={handleBaseFieldChange}
-                                TextAreaChange={handleDesriptionChange}
+                                TextAreaChange={handleDescriptionChange}
                                 handleChangeStatus={handleChangeStatus}
                                 handlePostOrUpdate={handleAddEvent}
+                                handleUpdateInteractivePointsBlock={handleUpdateInteractivePointsBlock}
                             />
                         </>
                 }

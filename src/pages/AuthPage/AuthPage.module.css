@@ -1,10 +1,42 @@
-.formAndButtonBox{
-    margin: auto;
-    margin-top: 200px;
-    height: 100%;
+.formAndButtonBox {
+    min-height: 100vh;
     width: 100%;
+
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    background: #F6F7F8;
+}
+
+/* блок под формой */
+.testCredentials {
+    margin-top: 24px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.testCredentials p {
+    margin: 4px 0;
+}
+
+.switchLink {
+    color: #1f1f1f;
+    cursor: pointer;
+    font-weight: 500;
+    margin-bottom: 12px;
+    display: inline-block;
+
+    transition: opacity 0.2s ease;
+}
+
+.switchLink:hover {
+    opacity: 0.6;
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
 }

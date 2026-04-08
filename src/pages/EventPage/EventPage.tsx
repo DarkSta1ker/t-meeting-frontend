@@ -7,7 +7,7 @@ import {useEventForm} from '../../hooks/useEventForm';
 import {Loader} from '../../shared/loader/Loader';
 import {ReadOnlyTextField} from '../../shared/ui/ReadOnlyTextField/ReadOnlyTextField';
 import {getTimeAndDateString} from '../../shared/utils/formatTimeAndData';
-import {getDescription} from '../../shared/utils/helpFunks';
+import {getDescription} from '../../shared/utils/helpFunctions';
 import styles from './EventPage.module.css';
 
 export const EventPage: FC = () => {
@@ -20,13 +20,14 @@ export const EventPage: FC = () => {
                 console.log('No eventId found');
                 return;
             }
-            const result = await getEvent(eventId);
-            if (result.status === 'Success') {
-                console.log('Event loaded');
-                setEventData(result.payload);
-            } else {
-                console.log(`Error ${result.payload}`);
-            }
+            getEvent(eventId)
+                .then((res) => {
+                    setEventData(res);
+                    console.log('Event loaded');
+                })
+                .catch(err => {
+                    console.log('Error while fetching getEvent: ', err);
+                });
         };
         loadEvent();
     }, [getEvent, eventId, setEventData]);

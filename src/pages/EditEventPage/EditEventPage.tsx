@@ -17,18 +17,18 @@ export const EditEventPage: FC = () => {
         handleDesriptionChange,
         handleMetadataFieldChange,
         handleBaseFieldChange,
-        handleUpdateTimeLine,
         handleChangeStatus,
-        handleUpdateMapBlock
+        handleUpdateInteractivePointsBlock,
     } = useEventForm(eventId);
-    const handleUpdateEvent = useCallback(async () => {
-        const result = await updateEvent(eventData);
-        if (result.status === 'Success') {
-            console.log('Event updated');
-            nav(ROUTES.EVENTS_LIST);
-        } else {
-            console.log(`Error ${result.payload}`);
-        }
+    const handleUpdateEvent = useCallback(() => {
+        updateEvent(eventData)
+            .then(() => {
+                console.log('Event updated');
+                nav(ROUTES.EVENTS_LIST);
+            })
+            .catch((err) => {
+                console.log('Error while fetching addEvent: ', err);
+            });
     }, [updateEvent, eventData, nav]);
 
     return (
@@ -42,10 +42,9 @@ export const EditEventPage: FC = () => {
                             handleMetadataFieldChange={handleMetadataFieldChange}
                             handleBaseFieldChange={handleBaseFieldChange}
                             TextAreaChange={handleDesriptionChange}
-                            handleUpdateTimeLine={handleUpdateTimeLine}
                             handleChangeStatus={handleChangeStatus}
                             handlePostOrUpdate={handleUpdateEvent}
-                            handleUpdateMapBlock={handleUpdateMapBlock}
+                            handleUpdateInteractivePointsBlock={handleUpdateInteractivePointsBlock}
                         />
                 }
             </div>

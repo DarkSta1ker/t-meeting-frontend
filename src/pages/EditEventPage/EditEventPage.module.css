@@ -6,7 +6,9 @@
 }
 
 .board {
-    width: 1232px;
+    width: 100%;
+    max-width: 900px;
+    padding: 24px 16px 60px;
     margin: auto;
     display: flex;
     flex-direction: column;
@@ -22,3 +24,4 @@
     gap: 30px;
     box-sizing: border-box;
 }
+

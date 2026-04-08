@@ -1,7 +1,7 @@
 import {ReactNode} from 'react';
 
 export interface AuthData {
-    login: string;
+    email: string;
     password: string;
 }
 
@@ -11,8 +11,8 @@ export interface ValidationErrors {
 }
 
 export interface UserData {
-    token: string;
-    login: string;
+    email: string;
+    role: string;
 }
 
 export interface AuthContextType {
@@ -20,6 +20,9 @@ export interface AuthContextType {
     isLoadingAuth: boolean;
     userData: UserData | null;
     authUser: (authData: AuthData) => Promise<any>;
+    regUser: (authData: AuthData) => Promise<any>;
+    authError: string;
+    setAuthError: (error: string) => void;
     logoutUser: () => void;
 }
 

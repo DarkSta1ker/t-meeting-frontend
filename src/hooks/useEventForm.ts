@@ -12,13 +12,14 @@ export const useEventForm = (eventId?: string) => {
             return;
         }
         const loadEvent = async () => {
-            const result = await getEvent(eventId);
-            if (result.status === 'Success') {
-                console.log('Event loaded');
-                setEventData(result.payload);
-            } else {
-                console.log(`Error ${result.payload}`);
-            }
+            getEvent(eventId)
+                .then((res) => {
+                    setEventData(res);
+                    console.log('Event loaded');
+                })
+                .catch(err => {
+                    console.log('Error while loading event: ', err);
+                });
         };
         loadEvent();
     }, [eventId, getEvent]);
@@ -65,26 +66,17 @@ export const useEventForm = (eventId?: string) => {
         }));
     }, [setEventData]);
 
-    const handleUpdateTimeLine = useCallback((block: { name: string, time: string }[]) => {
-        setEventData((prev) => {
-            const content = prev.content.map((contentBlock) => contentBlock.block === 'timeline' ? {
-                ...contentBlock,
-                payload: block
-            } : contentBlock);
-
-            return ({
-                ...prev,
-                content,
-            });
-        });
-    }, []);
-
-    const handleUpdateMapBlock = useCallback((block: {
+    const handleUpdateInteractivePointsBlock = useCallback((block: {
         background: string,
-        points: { x: number; y: number; text: string }[]
+        points: {
+            x: number; y: number; text: string; timeline?: {
+                name: string;
+                time: string;
+            }[]
+        }[]
     }) => {
         setEventData((prev) => {
-            const content = prev.content.map((contentBlock) => contentBlock.block === 'map' ? {
+            const content = prev.content.map((contentBlock) => contentBlock.block === 'interactive-points' ? {
                 ...contentBlock,
                 payload: block
             } : contentBlock);
@@ -95,15 +87,13 @@ export const useEventForm = (eventId?: string) => {
             });
         });
     }, []);
-
     return {
         eventData,
         handleBaseFieldChange,
         handleChangeStatus,
         handleMetadataFieldChange,
         handleDesriptionChange,
-        handleUpdateMapBlock,
-        handleUpdateTimeLine,
+        handleUpdateInteractivePointsBlock,
         resetForm,
         setEventData
     };

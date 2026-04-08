@@ -4,7 +4,7 @@ import {validateLogin, validatePassword} from '../widgets/AuthForm/validationErr
 
 export const useAuthForm = () => {
     const [authData, setAuthData] = useState<AuthData>({
-        login: '',
+        email: '',
         password: '',
     });
 
@@ -12,7 +12,7 @@ export const useAuthForm = () => {
     const [touched, setTouched] = useState<Partial<Record<keyof AuthData, boolean>>>({});
 
     const validateField = useCallback((field: keyof AuthData, value: string): string => {
-        if (field === 'login') {
+        if (field === 'email') {
             return validateLogin(value);
         } else {
             return validatePassword(value);
@@ -20,13 +20,13 @@ export const useAuthForm = () => {
     }, []);
 
     const handleLoginFieldChange = useCallback((value: string) => {
-        setAuthData(prev => ({...prev, login: value}));
+        setAuthData(prev => ({...prev, email: value}));
 
-        if (touched.login) {
-            const error = validateField('login', value);
-            setErrors(prev => ({...prev, login: error}));
+        if (touched.email) {
+            const error = validateField('email', value);
+            setErrors(prev => ({...prev, email: error}));
         }
-    }, [touched.login, validateField]);
+    }, [touched.email, validateField]);
 
     const handlePasswordFieldChange = useCallback((value: string) => {
         setAuthData(prev => ({...prev, password: value}));
@@ -46,23 +46,23 @@ export const useAuthForm = () => {
 
     const validateForm = useCallback((): boolean => {
         const newErrors = {
-            login: validateField('login', authData.login),
+            login: validateField('email', authData.email),
             password: validateField('password', authData.password),
         };
 
         setErrors(newErrors);
-        setTouched({login: true, password: true});
+        setTouched({email: true, password: true});
 
         return !newErrors.login && !newErrors.password;
     }, [authData, validateField]);
 
     const resetForm = useCallback(() => {
-        setAuthData({login: '', password: ''});
+        setAuthData({email: '', password: ''});
         setErrors({});
         setTouched({});
     }, []);
 
-    const hasErrors = !!errors.login || !!errors.password;
+    const hasErrors = !!errors.email || !!errors.password;
 
     return {
         authData,

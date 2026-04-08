@@ -1,5 +1,6 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {tokenManager} from '../api/tokenManager';
 import {AuthService} from '../app/services/AuthService';
 import {ROUTES} from '../shared/constants/constants';
 import {AuthData, UserData} from '../shared/types/auth';
@@ -7,61 +8,79 @@ import {AuthData, UserData} from '../shared/types/auth';
 export const useAuthLogic = () => {
     const navigate = useNavigate();
     const [isAuth, setIsAuth] = useState(false);
-    const [isLoadingAuth, setIsLoadingAuth] = useState(true);
+    const [isLoadingAuth, setIsLoadingAuth] = useState(false);
     const [userData, setUserData] = useState<UserData | null>(null);
     const [authError, setAuthError] = useState('');
-
-    const checkAuth = useCallback(() => {
-        const token = localStorage.getItem('token');
-        const login = localStorage.getItem('login');
-        if (token && login) {
-            setUserData({token, login});
-            setIsAuth(true);
-        }
-        setIsLoadingAuth(false);
-    }, []);
-
-    useEffect(() => {
-        checkAuth();
-    }, [checkAuth]);
-
     const authUser = useCallback(async (authData: AuthData) => {
         setIsLoadingAuth(true);
         setAuthError('');
-
-        try {
-            const result = await AuthService.loginUser(authData);
-
-            if (result.status === 'Success') {
+        return AuthService.loginUser(authData)
+            .then((res) => {
+                console.log('User logged in successfully');
                 setIsAuth(true);
-                const userData = {
-                    token: result.payload.token,
-                    login: result.payload.login,
-                };
-                setUserData(userData);
-                localStorage.setItem('token', result.payload.token);
-                localStorage.setItem('login', result.payload.login);
-            } else {
-                setAuthError(result.payload);
-            }
+                tokenManager.startRefresh();
+                AuthService.getUserData()
+                    .then((resp) => {
+                        setUserData(resp);
+                    })
+                    .catch((err) => {
+                        console.log('Error while getting user data: ', err);
+                    });
+                const urlParams = new URLSearchParams(window.location.search);
+                const backUrl = urlParams.get('back');
 
-            return result;
-        } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Произошла ошибка';
-            setAuthError(errorMessage);
-            return {status: 'Error', payload: errorMessage};
-        } finally {
-            setIsLoadingAuth(false);
-        }
+                if (backUrl) {
+                    console.log(backUrl);
+                    console.log(window.location.href);
+                    navigate(decodeURIComponent(backUrl), {replace: true});
+                    console.log(window.location.href);
+                }
+                return (res);
+            })
+            .catch((err) => {
+                console.log('Error while fetching login user: ', err);
+                setIsAuth(false);
+                setAuthError(err);
+                throw err;
+            })
+            .finally(() => {
+                setIsLoadingAuth(false);
+            });
+    }, []);
+
+    const regUser = useCallback(async (authData: AuthData) => {
+        setIsLoadingAuth(true);
+        setAuthError('');
+        return AuthService.regUser(authData)
+            .then((res) => {
+                console.log('User registered successfully');
+                setIsAuth(true);
+                tokenManager.startRefresh();
+                AuthService.getUserData()
+                    .then((resp) => {
+                        setUserData(resp);
+                    })
+                    .catch((err) => {
+                        console.log('Error while getting user data: ', err);
+                    });
+                return (res);
+            })
+            .catch((err) => {
+                console.log('Error while fetching register user: ', err);
+                setAuthError(err);
+                throw err;
+            })
+            .finally(() => {
+                setIsLoadingAuth(false);
+            });
     }, []);
 
     const logoutUser = useCallback(() => {
         setIsLoadingAuth(true);
-        localStorage.removeItem('token');
-        localStorage.removeItem('login');
         setIsAuth(false);
         setUserData(null);
         setIsLoadingAuth(false);
+        tokenManager.stopRefresh();
         navigate(ROUTES.AUTH);
     }, [navigate]);
 
@@ -75,8 +94,9 @@ export const useAuthLogic = () => {
         userData,
         authError,
         authUser,
+        regUser,
         logoutUser,
         clearAuthError,
-        checkAuth,
+        setAuthError
     };
 };

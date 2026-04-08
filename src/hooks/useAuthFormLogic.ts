@@ -3,7 +3,8 @@ import {useAuth} from '../contexts/AuthContext';
 import {useAuthForm} from './useAuthForm';
 
 export const useAuthFormLogic = () => {
-    const {authUser, isLoadingAuth} = useAuth();
+    const {authUser, regUser, isLoadingAuth} = useAuth();
+    const [authError, setAuthError] = useState<string | null>(null);
     const {
         authData,
         errors,
@@ -15,30 +16,49 @@ export const useAuthFormLogic = () => {
         handleBlur,
         resetForm,
     } = useAuthForm();
-    const [authError, setAuthError] = useState<string | null>(null);
     useEffect(() => {
         if (authError) {
             setAuthError('');
         }
-    }, [authData.login, authData.password]);
+    }, [authData.email, authData.password]);
 
     const handleAuth = useCallback(
-        async (e: React.FormEvent) => {
+        (e: React.FormEvent) => {
             e.preventDefault();
             const isValid = validateForm();
             if (!isValid) {
                 return;
             }
-
-            const result = await authUser(authData);
-            if (result.status === 'Success') {
-                resetForm();
-            } else {
-                setAuthError(result.payload);
-                console.log(result.payload);
-            }
+            authUser(authData)
+                .then(() => {
+                    console.log('Вход выполнен успешно');
+                    resetForm();
+                })
+                .catch((err) => {
+                    setAuthError(`Ошибка: ${err}`);
+                    console.log(err);
+                });
         },
         [authData, authUser, validateForm, resetForm]
+    );
+
+    const handleReg = useCallback(
+        (e: React.FormEvent) => {
+            e.preventDefault();
+            const isValid = validateForm();
+            if (!isValid) {
+                return;
+            }
+            regUser(authData)
+                .then(() => {
+                    resetForm();
+                })
+                .catch((err) => {
+                    setAuthError(`Ошибка: ${err}`);
+                    console.log(err);
+                });
+        },
+        [authData, regUser, validateForm, resetForm]
     );
 
     const handleKeyDown = useCallback((e: React.KeyboardEvent, nextFieldId?: string) => {
@@ -63,6 +83,7 @@ export const useAuthFormLogic = () => {
         handlePasswordFieldChange,
         handleBlur,
         handleAuth,
+        handleReg,
         handleKeyDown,
         clearAuthError,
     };

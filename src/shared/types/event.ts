@@ -40,7 +40,23 @@ export interface MapBlock {
     payload: { background: string, points: { x: number; y: number; text: string }[] };
 }
 
-export type EventContentBlock = | PromoTextBlock | TimeLineBlock | MapBlock;
+export interface InteractivePoints {
+    block: 'interactive-points';
+    payload: {
+        background: string;
+        points: {
+            x: number;
+            y: number;
+            text: string;
+            timeline?: {
+                name: string;
+                time: string;
+            }[]
+        }[]
+    };
+}
+
+export type EventContentBlock = | PromoTextBlock | TimeLineBlock | MapBlock | InteractivePoints;
 
 export type EventBaseField = 'name';
 export type EventMetadataField = keyof EventBase['metadata'];

@@ -4,11 +4,11 @@ import React, {type FC, useCallback, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEvents} from '../../hooks/useEvents';
+import {buildEditEventRoute, buildEventRoute, ROUTES} from '../../shared/constants/constants';
 import {Loader} from '../../shared/loader/Loader';
 import {PageTitle} from '../../shared/ui/PageTitle/PageTitle';
 import {EventListElement} from '../../widgets/EventListElement/EventListElement';
 import styles from './EventsListPage.module.css';
-import {ROUTES, buildEditEventRoute, buildEventRoute} from '../../shared/constants/constants';
 
 export const EventsListPage: FC = () => {
 
@@ -20,23 +20,25 @@ export const EventsListPage: FC = () => {
         getAllEvents();
     }, []);
 
-    const handleUpdateEventList = useCallback(async () => {
-        const result = await getAllEvents();
-        if (result.status === 'Success') {
-            console.log('Events list updated');
-        } else {
-            console.log(`Error ${result.payload}`);
-        }
+    const handleUpdateEventList = useCallback(() => {
+        getAllEvents()
+            .then(() => {
+                console.log('Events list updated');
+            })
+            .catch((err) => {
+                console.log('Error while fetching getAllEvents: ', err);
+            });
     }, [getAllEvents]);
 
-    const handleDeleteEvent = useCallback(async (eventId: string) => {
-        const result = await deleteEvent(eventId);
-        if (result.status === 'Success') {
-            console.log('Event deleted');
-        } else {
-            console.log(`Error ${result.payload}`);
-        }
-        await handleUpdateEventList();
+    const handleDeleteEvent = useCallback((eventId: string) => {
+        deleteEvent(eventId)
+            .then(() => {
+                console.log('Event deleted');
+            })
+            .catch((err) => {
+                console.log('Error while fetching deleteEvent: ', err);
+            });
+        handleUpdateEventList();
     }, [deleteEvent, handleUpdateEventList]);
 
     const handleEditEvent = (eventId: string) => {
@@ -47,7 +49,7 @@ export const EventsListPage: FC = () => {
         nav(buildEventRoute(eventId));
     };
     if (isLoading) {
-        return(
+        return (
             <div className={styles.eventsListPage}>
                 <div className={styles.board}>
                     <PageTitle>Список мероприятий</PageTitle>
@@ -79,20 +81,27 @@ export const EventsListPage: FC = () => {
                                 Пока что тут нет мероприятий, вы можете добавить их с помощью кнопки ниже.
                             </div>
                     }
-                    <IconButton onClick={() => nav(ROUTES.CREATE_EVENT)}
-                                sx={{
-                                    '&:hover': {
-                                        backgroundColor: '#cfd0d5',
-                                        borderRadius: '25px',
-                                    },
-                                    'backgroundColor': 'transparent',
-                                    'bottom': '15px',
-                                    'color': '#757575',
-                                    'position': 'absolute',
-                                    'right': '56px',
-                                }}
+                    <IconButton
+                        onClick={() => nav(ROUTES.CREATE_EVENT)}
+                        sx={{
+                            position: 'fixed',
+                            bottom: '32px',
+                            right: '32px',
+
+                            width: '56px',
+                            height: '56px',
+
+                            backgroundColor: '#FFDD2D',
+                            color: '#000',
+
+                            boxShadow: '0 8px 20px rgba(0,0,0,0.15)',
+
+                            '&:hover': {
+                                backgroundColor: '#ffd500',
+                            },
+                        }}
                     >
-                        <CirclePlus size={30}/>
+                        <CirclePlus size={28}/>
                     </IconButton>
                 </div>
             </div>

@@ -1,0 +1,415 @@
+openapi: 3.1.2
+info:
+  title: T-meeting
+  version: '1.0.4'
+tags:
+  - name: event
+    description: Взаимодействие с мероприятием
+  - name: user
+    description: Взаимодействие с пользователем
+  - name: auth
+    description: Авторизация и токены
+servers:
+  - url: http://localhost:33
+    description: Local dev server
+security:
+  - cookieAuth: [ ]
+paths:
+  /event:
+    post:
+      tags:
+        - event
+      summary: Добавить новое мероприятие
+      operationId: addEvent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewEvent'
+      responses:
+        '201':
+          description: Успешная операция
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Некорректный запрос
+  /events:
+    get:
+      tags:
+        - event
+      summary: Получить все мероприятия
+      operationId: getEvents
+      responses:
+        '200':
+          description: Успешная операция
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+  /event/{eventId}:
+    get:
+      tags:
+        - event
+      summary: Получить мероприятие по Id
+      operationId: getEvent
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+      responses:
+        '200':
+          description: Успешная операция
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Предоставлен некорректный Id
+        '404':
+          description: Мероприятие не найдено
+    put:
+      tags:
+        - event
+      summary: Изменить существующее мероприятие
+      operationId: updateEvent
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        '200':
+          description: Успешная операция
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Некорректный запрос
+        '404':
+          description: Мероприятие не найдено
+    delete:
+      tags:
+        - event
+      summary: Удалить мероприятие
+      operationId: deleteEvent
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+      responses:
+        '200':
+          description: Успешная операция
+        '400':
+          description: Предоставлен некорректный Id
+  /user:
+    get:
+      tags:
+        - user
+      summary: Получить данные пользователя
+      operationId: getUser
+      parameters:
+        - name: userId
+          in: header
+          schema:
+            $ref: '#/components/schemas/Id'
+      responses:
+        '200':
+          description: Успешная операция
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Предоставлен некорректный Id
+        '404':
+          description: Пользователь не существует
+  /auth/register:
+    post:
+      tags:
+        - auth
+      summary: Зарегистрировать пользователя
+      security: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthCredentials'
+      responses:
+        '201':
+          description: Успешная операция
+          headers:
+            Set-Cookie:
+              description:
+                Пара access и refresh токенов, каждый в новом заголовке
+              schema:
+                $ref: '#/components/schemas/CookieToken'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Некорректный запрос
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Авторизовать пользователя
+      operationId: authLogin
+      security: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthCredentials'
+      responses:
+        '200':
+          description: Успешная операция
+          headers:
+            Set-Cookie:
+              description:
+                Пара access и refresh токенов, каждый в новом заголовке
+              schema:
+                $ref: '#/components/schemas/CookieToken'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Неверные учетные данные
+  /auth/refresh:
+    post:
+      tags:
+        - auth
+      summary: Обновить токен
+      security: [ ]
+      parameters:
+        - name: refresh_token
+          in: cookie
+          schema:
+            $ref: '#/components/schemas/CookieToken'
+          required: true
+      responses:
+        '200':
+          description: Успешная операция
+          headers:
+            Set-Cookie:
+              description:
+                Пара access и refresh токенов, каждый в новом заголовке
+              schema:
+                $ref: '#/components/schemas/CookieToken'
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: access_token
+  schemas:
+    Role:
+      type: string
+      enum:
+        - admin
+        - organizer
+        - member
+        - viewer
+    Id:
+      type: string
+      format: uuid
+      examples:
+        - 5378afbf-e87b-411f-95df-b1aeeb5b770f
+    NewEvent:
+      type: object
+      required:
+        - name
+        - metadata
+        - content
+      properties:
+        name:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/EventMetadata'
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentBlock'
+        status:
+          type: string
+    Event:
+      type: object
+      required:
+        - id
+        - name
+        - metadata
+        - content
+        - status
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        name:
+          type: string
+          examples:
+            - Очень классное мероприятие
+        metadata:
+          $ref: '#/components/schemas/EventMetadata'
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentBlock'
+        status:
+          type: string
+          description: Статус мероприятия
+          examples:
+            - draft
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    User:
+      type: object
+      required:
+        - email
+        - role
+      properties:
+        email:
+          type: string
+          format: email
+          examples:
+            - anyemail@gmail.com
+        role:
+          $ref: '#/components/schemas/Role'
+    EventMetadata:
+      type: object
+      properties:
+        datetime:
+          type: string
+          format: date-time
+        location:
+          type: string
+    ContentBlock:
+      type: object
+      required:
+        - block
+        - payload
+      properties:
+        block:
+          type: string
+          description: Тип содержимого
+      oneOf:
+        - $ref: '#/components/schemas/PromoTextBlock'
+        - $ref: '#/components/schemas/MapBlock'
+        - $ref: '#/components/schemas/TimelineBlock'
+      discriminator:
+        propertyName: block
+        mapping:
+          promo-text: '#/components/schemas/PromoTextBlock'
+          map: '#/components/schemas/MapBlock'
+          timeline: '#/components/schemas/TimelineBlock'
+    PromoTextBlock:
+      type: object
+      properties:
+        block:
+          const: promo-text
+        payload:
+          type: array
+          items:
+            type: string
+    MapBlock:
+      type: object
+      properties:
+        block:
+          const: map
+        payload:
+          type: object
+          properties:
+            background:
+              type: string
+            points:
+              type: array
+              items:
+                type: object
+                properties:
+                  x:
+                    type: number
+                  y:
+                    type: number
+                  text:
+                    type: string
+    TimelineBlock:
+      type: object
+      properties:
+        block:
+          const: timeline
+        payload:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              time:
+                type: string
+                format: time
+    AuthCredentials:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
+    TokenPair:
+      type: object
+      required:
+        - access_token
+        - refresh_token
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+    AuthResponse:
+      type: object
+      required:
+        - access_token
+        - refresh_token
+        - user
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+    RefreshRequest:
+      type: object
+      required:
+        - refresh_token
+      properties:
+        refresh_token:
+          type: string
+    CookieToken:
+      type: string
+      examples:
+        - access_token=ab.cd12.34; Path=/; HttpOnly
+        - refresh_token=ef.gh56.78; Path=/; HttpOnly
+  parameters:
+    EventId:
+      name: eventId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Id'

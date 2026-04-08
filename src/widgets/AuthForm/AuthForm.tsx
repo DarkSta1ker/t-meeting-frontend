@@ -3,7 +3,11 @@ import React, {FC} from 'react';
 import {useAuthFormLogic} from '../../hooks/useAuthFormLogic';
 import styles from './AuthForm.module.css';
 
-export const AuthForm: FC = () => {
+interface AuthFormProps {
+    registration: boolean;
+}
+
+export const AuthForm: FC<AuthFormProps> = ({registration}) => {
     const {
         authData,
         errors,
@@ -15,27 +19,71 @@ export const AuthForm: FC = () => {
         handlePasswordFieldChange,
         handleBlur,
         handleAuth,
+        handleReg,
         handleKeyDown,
         clearAuthError
     } = useAuthFormLogic();
 
     return (
-        <form className={styles.authForm} onSubmit={handleAuth} noValidate>
+        <form className={styles.authForm} onSubmit={registration ? handleReg : handleAuth} noValidate>
+            <div style={{marginBottom: '16px'}}>
+                <h2 style={{
+                    margin: 0,
+                    fontSize: '22px',
+                    fontWeight: 700
+                }}>
+                    {registration ? 'Регистрация' : 'Вход'}
+                </h2>
+            </div>
             <TextField
                 required
                 id="login-input"
                 label="Логин"
                 variant="outlined"
-                value={authData.login}
+                value={authData.email}
                 onChange={(e) => handleLoginFieldChange(e.target.value)}
-                onBlur={() => handleBlur('login')}
+                onBlur={() => handleBlur('email')}
                 onFocus={clearAuthError}
-                error={touched.login && !!errors.login}
-                helperText={touched.login ? errors.login : ' '}
+                error={touched.email && !!errors.email}
+                helperText={touched.email ? errors.email : ' '}
                 fullWidth
                 margin="normal"
                 autoComplete="username"
                 autoFocus
+                sx={{
+                    '& .MuiFormHelperText-root': {
+                        marginLeft: '0',
+                    },
+                    '& .MuiOutlinedInput-root': {
+                        borderRadius: '12px',
+                        backgroundColor: '#F6F7F8',
+                        color: '#1f1f1f',
+
+                        '& fieldset': {
+                            borderColor: 'transparent',
+                        },
+
+                        '&:hover fieldset': {
+                            borderColor: '#e5e7eb',
+                        },
+
+                        '&.Mui-focused fieldset': {
+                            borderColor: '#FFDD2D',
+                        },
+                    },
+                    '& .MuiInputLabel-root': {
+                        color: '#6b7280',
+                    },
+
+                    '& .MuiInputLabel-root.Mui-focused': {
+                        fontWeight: '500',
+                        color: '#000000',
+                    },
+
+                    '& .MuiInputBase-input': {
+                        color: '#1f1f1f',
+                    },
+                }}
                 onKeyDown={(e) => handleKeyDown(e, 'password-input')}
                 disabled={isLoadingAuth}
             />
@@ -59,25 +107,79 @@ export const AuthForm: FC = () => {
                         handleAuth(e);
                     }
                 }}
+                sx={{
+                    '& .MuiFormHelperText-root': {
+                        marginLeft: '0',
+                    },
+                    '& .MuiOutlinedInput-root': {
+                        borderRadius: '12px',
+                        backgroundColor: '#F6F7F8',
+                        color: '#1f1f1f',
+
+                        '& fieldset': {
+                            borderColor: 'transparent',
+                        },
+
+                        '&:hover fieldset': {
+                            borderColor: '#e5e7eb',
+                        },
+
+                        '&.Mui-focused fieldset': {
+                            borderColor: '#FFDD2D',
+                        },
+                    },
+
+                    '& .MuiInputLabel-root': {
+                        color: '#6b7280',
+                    },
+
+                    '& .MuiInputLabel-root.Mui-focused': {
+                        fontWeight: '500',
+                        color: '#000000',
+                    },
+
+                    '& .MuiInputBase-input': {
+                        color: '#1f1f1f',
+                    },
+                }}
                 disabled={isLoadingAuth}
             />
 
             <Button
                 type="submit"
-                variant="outlined"
+                variant="contained"
                 disabled={hasErrors || isLoadingAuth}
-                sx={{
-                    '&:hover:not(:disabled)': {
-                        backgroundColor: '#cfd0d5',
-                        borderRadius: '5px',
-                    },
-                    backgroundColor: 'transparent',
-                    borderRadius: '5px',
-                    marginTop: '16px',
-                }}
                 fullWidth
+                sx={{
+                    marginTop: '24px',
+                    borderRadius: '12px',
+                    textTransform: 'none',
+                    fontSize: '15px',
+                    fontWeight: 600,
+                    padding: '12px',
+
+                    backgroundColor: '#FFDD2D',
+                    color: '#000',
+
+                    boxShadow: 'none',
+
+                    '&:hover': {
+                        backgroundColor: '#ffd500',
+                        boxShadow: '0 6px 16px rgba(255, 221, 45, 0.4)',
+                    },
+
+                    '&:active': {
+                        transform: 'scale(0.98)',
+                    },
+
+                    '&:disabled': {
+                        background: '#E5E7EB',
+                        color: '#9CA3AF',
+                    },
+                }}
             >
-                {isLoadingAuth ? 'Вход...' : 'Войти'}
+                {isLoadingAuth ? (registration ? 'Регистрация' : 'Вход...') :
+                    (registration ? 'Зарегистрироваться' : 'Войти')}
             </Button>
 
             {authError && (

@@ -8,15 +8,15 @@ export const useEvents = () => {
 
     const getAllEvents = useCallback(async () => {
         setIsLoading(true);
-        const response = await EventService.getAllEvents();
-        if (response.status === 'Success') {
-            setEvents(response.payload);
-        } else {
-            console.log(`Ошибка при выполнении handleGetAllEvents ${response.payload}`);
-        }
-        setIsLoading(false);
-        return response;
-
+        return EventService.getAllEvents()
+            .then((res) => {
+                setEvents(Array.isArray(res) ? res : []);
+            })
+            .catch((err) => {
+                console.log('Error while fetching getAllEvent: ', err);
+                setEvents([]);
+            })
+            .finally(() => setIsLoading(false));
     }, []);
 
     return {

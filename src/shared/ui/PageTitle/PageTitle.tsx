@@ -1,12 +1,14 @@
 import Typography from '@mui/material/Typography';
 import React, {FC} from 'react';
+
 interface PageTitleProps {
     children: React.ReactNode;
 }
+
 export const PageTitle: FC<PageTitleProps> = ({children}) => {
-    return(
+    return (
         <Typography
-            variant='h5'
+            variant="h4"
             sx={{
                 alignItems: 'center',
                 display: 'flex',
@@ -14,4 +16,4 @@ export const PageTitle: FC<PageTitleProps> = ({children}) => {
             }}
         >{children}</Typography>
     );
-}
+};
