@@ -118,7 +118,11 @@ export const TimePointsBlock: FC<TimePointsProps> = ({timeline = [], onUpdate}) 
                     <Stack spacing={1}>
                         <TextField
                             fullWidth
-                            label="Название"
+                            multiline
+                            maxRows={6}
+                            helperText={editName.length > 100 ? `${editName.length}/300` : ''}
+                            inputProps={{maxLength: 300}}
+                            label="Описание"
                             size="small"
                             value={editName}
                             sx={{

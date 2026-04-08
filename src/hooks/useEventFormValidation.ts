@@ -1,6 +1,7 @@
 import {Dayjs} from 'dayjs';
 import {useCallback, useMemo, useState} from 'react';
 import {dateRange, max, min, required} from '../shared/utils/validationFunctions';
+import {maxSimbols} from '../widgets/EventForm/FormElements/EventNameField';
 
 interface UseEventFormValidationProps {
     initialName?: string;
@@ -26,7 +27,11 @@ export const useEventFormValidation = ({initialName = '', initialDate = null}: U
     const validateName = useCallback((login: string): string => {
         return required({value: login, message: 'Поле названия не может быть пустым'})
             || min({value: login, conditions: 3, message: 'Минимальная длина названия - 3 символа'})
-            || max({value: login, conditions: 100, message: 'Максимальная длина названия - 100 символов'});
+            || max({
+                value: login,
+                conditions: maxSimbols,
+                message: `Максимальная длина названия - ${maxSimbols} символов`
+            });
     }, []);
 
     const validateDate = useCallback((date: Dayjs | null): string => {

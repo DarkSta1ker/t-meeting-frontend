@@ -197,7 +197,7 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                 className={styles.section}
             >
                 <Typography
-                    variant='subtitle1'
+                    variant="subtitle1"
                     sx={{
                         fontWeight: 600,
                         marginBottom: 1,
@@ -207,10 +207,10 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
 
                 <Box sx={{mb: 2, display: 'flex', gap: 1, alignItems: 'center'}}>
                     <TextField
-                        label='URL фоновой карты'
+                        label="URL фоновой карты"
                         value={background}
                         onChange={handleBackgroundChange}
-                        size='small'
+                        size="small"
                         fullWidth
                         sx={{
                             '& .MuiInputLabel-root.Mui-focused': {
@@ -218,7 +218,7 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                             }
                         }}
                     />
-                    <Button variant='contained' onClick={handleBackgroundUpdate} size='small'>
+                    <Button variant="contained" onClick={handleBackgroundUpdate} size="small">
                         Применить фон
                     </Button>
                 </Box>
@@ -260,14 +260,14 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                 <Box sx={{textAlign: 'center'}}>
                     {!isAddingMode ? (
                         <Button
-                            variant='contained'
+                            variant="contained"
                             startIcon={<Plus/>}
                             onClick={handleAddMode}
                         >
                             Добавить первую точку
                         </Button>
                     ) : (
-                        <Typography color='primary' variant='body2'>
+                        <Typography color="primary" variant="body2">
                             Кликните по карте, чтобы разместить точку
                         </Typography>
                     )}
@@ -282,7 +282,7 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
             className={styles.section}
         >
             <Typography
-                variant='subtitle1'
+                variant="subtitle1"
                 sx={{
                     fontWeight: 600,
                     marginBottom: 1,
@@ -292,10 +292,10 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
 
             <Box sx={{mb: 2, display: 'flex', gap: 1, alignItems: 'center'}}>
                 <TextField
-                    label='URL фоновой карты'
+                    label="URL фоновой карты"
                     value={background}
                     onChange={handleBackgroundChange}
-                    size='small'
+                    size="small"
                     fullWidth
                     sx={{
                         '& .MuiInputLabel-root.Mui-focused': {
@@ -303,7 +303,7 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                         }
                     }}
                 />
-                <Button variant='contained' onClick={handleBackgroundUpdate} size='small'>
+                <Button variant="contained" onClick={handleBackgroundUpdate} size="small">
                     Применить фон
                 </Button>
             </Box>
@@ -322,8 +322,8 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                     : null
             }
             <Typography
-                color='black'
-                variant='body2'
+                color="black"
+                variant="body2"
                 sx={{
                     height: '40px',
                     display: 'flex',
@@ -403,11 +403,15 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                     {isEditing && editingPoint ? (
                         <Stack spacing={2}>
                             <TextField
-                                label='Текст'
+                                label="Описание"
                                 value={editingPoint?.text}
                                 onChange={handleTextChange}
                                 fullWidth
-                                size='small'
+                                multiline
+                                maxRows={6}
+                                helperText={editingPoint.text.length > 500 ? `${editingPoint.text.length}/1000` : ''}
+                                inputProps={{maxLength: 1000}}
+                                size="small"
                                 sx={{
                                     '& .MuiInputLabel-root.Mui-focused': {
                                         color: '#000000',
@@ -416,16 +420,16 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                             />
                             <Box sx={{display: 'flex', gap: 1}}>
                                 <Button
-                                    variant='contained'
-                                    size='small'
+                                    variant="contained"
+                                    size="small"
                                     startIcon={<Save/>}
                                     onClick={handleSaveEdit}
                                 >
                                     Сохранить
                                 </Button>
                                 <Button
-                                    variant='outlined'
-                                    size='small'
+                                    variant="outlined"
+                                    size="small"
                                     startIcon={<X/>}
                                     onClick={handleCancelEdit}
                                     sx={{
@@ -444,15 +448,15 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                         </Stack>
                     ) : selectedIndex !== null ? (
                         <>
-                            <Typography variant='subtitle1' sx={{fontWeight: 'bold', mb: 1}}>
+                            <Typography variant="subtitle1" sx={{fontWeight: 'bold', mb: 1}}>
                                 {points[selectedIndex].text}
                             </Typography>
-                            <Typography variant='body2' color='text.secondary'>
+                            <Typography variant="body2" color="text.secondary">
                                 Координаты: ({points[selectedIndex].x.toFixed(2)}, {points[selectedIndex].y.toFixed(2)})
                             </Typography>
                         </>
                     ) : (
-                        <Typography variant='body2' color='text.secondary'>
+                        <Typography variant="body2" color="text.secondary">
                             Точка не выбрана
                         </Typography>
                     )}
@@ -465,7 +469,7 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                         }}
                         onClick={handleStartEdit}
                         disabled={isEditing || selectedIndex === null}
-                        title='Редактировать'
+                        title="Редактировать"
                     >
                         <Pencil/>
                     </IconButton>
@@ -475,15 +479,15 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                         }}
                         onClick={handleAddMode}
                         disabled={isAddingMode || points.length >= MAX_POINTS}
-                        title='Добавить точку'
+                        title="Добавить точку"
                     >
                         <Plus/>
                     </IconButton>
                     <IconButton
-                        color='error'
+                        color="error"
                         onClick={handleDelete}
                         disabled={points.length < 1 || selectedIndex === null}
-                        title='Удалить точку'
+                        title="Удалить точку"
                     >
                         <Trash/>
                     </IconButton>
