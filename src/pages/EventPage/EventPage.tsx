@@ -1,16 +1,14 @@
-import {Chip, Typography} from '@mui/material';
+import {Typography} from '@mui/material';
 import {Calendar, MapPinIcon} from 'lucide-react';
 import React, {type FC, useEffect, useMemo} from 'react';
 import {useParams} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEventForm} from '../../hooks/useEventForm';
-import {getRuStatus} from '../../shared/constants/constants';
 import {Loader} from '../../shared/loader/Loader';
-import {MapBlock, TimeLineBlock,} from '../../shared/types/event';
+import {InteractivePoints, MapBlock, TimeLineBlock,} from '../../shared/types/event';
 import {getTimeAndDateString} from '../../shared/utils/formatTimeAndData';
 import {getDescription} from '../../shared/utils/helpFunctions';
 import {ReadOnlyMapBlock} from '../../widgets/ReadOnlyMapBlock/ReadOnlyMapBlock';
-import {ReadOnlyTimeline} from '../../widgets/ReadOnlyTimeLine/ReadOnlyTimeLine';
 import styles from './EventPage.module.css';
 
 export const EventPage: FC = () => {
@@ -47,7 +45,7 @@ export const EventPage: FC = () => {
 
     const mapBlock = useMemo(() => {
         const block = eventData.content.find(
-            (item): item is MapBlock => item.block === 'map'
+            (item): item is InteractivePoints => item.block === 'interactive-points'
         );
         return block?.payload ?? {background: '', points: []};
     }, [eventData.content]);
@@ -78,11 +76,6 @@ export const EventPage: FC = () => {
                                 {getDescription(eventData)}
                             </Typography>
                         </div>
-
-                        <Chip
-                            label={getRuStatus(eventData.status)}
-                            className={styles.statusChip}
-                        />
                     </div>
 
                     <div className={styles.heroMeta}>
@@ -96,11 +89,6 @@ export const EventPage: FC = () => {
                             <span>{eventData.metadata.location || 'Место не указано'}</span>
                         </div>
                     </div>
-
-                    <div className={styles.timestamps}>
-                        <span>Создано: {getTimeAndDateString(eventData.createdAt)}</span>
-                        <span>Обновлено: {getTimeAndDateString(eventData.updatedAt)}</span>
-                    </div>
                 </section>
 
                 <section className={styles.sectionCard}>
@@ -113,14 +101,6 @@ export const EventPage: FC = () => {
                             {getDescription(eventData)}
                         </Typography>
                     </div>
-                </section>
-
-                <section className={styles.sectionCard}>
-                    <Typography className={styles.sectionTitle}>
-                        Таймлайн
-                    </Typography>
-
-                    <ReadOnlyTimeline items={timeline}/>
                 </section>
 
                 <section className={styles.sectionCard}>

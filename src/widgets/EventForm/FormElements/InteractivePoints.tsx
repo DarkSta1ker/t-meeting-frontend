@@ -93,7 +93,6 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
             return;
         }
         if (!isAddingMode) {
-            console.log('нажали на контейнер но без режима добавления кода');
             return;
         }
         if (!containerRef.current) {
@@ -105,8 +104,6 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
         const y = (e.clientY - rect.top) / rect.height;
         const clampedX = Math.min(1, Math.max(0, x));
         const clampedY = Math.min(1, Math.max(0, y));
-
-        console.log('нажали на контейнер с режимом добавления новой точки');
         const newPoint: MapPoint = {
             x: clampedX,
             y: clampedY,
@@ -129,9 +126,9 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
         setSelectedIndex(index);
         setIsEditing(false);
         setIsAddingMode(false);
-        console.log(points, index);
+
         const newPoints = points[index].timeline;
-        console.log(newPoints, 'это новые');
+
         if (newPoints && newPoints.length > 0) {
             setTimePoints(newPoints);
             console.log('удалось загрузить точки');
