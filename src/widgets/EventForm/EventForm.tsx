@@ -1,7 +1,7 @@
-import {debounce, SelectChangeEvent} from '@mui/material';
+import {SelectChangeEvent} from '@mui/material';
 import TextField from '@mui/material/TextField';
 import {Dayjs} from 'dayjs';
-import React, {ChangeEvent, FC, useCallback, useEffect, useMemo} from 'react';
+import React, {ChangeEvent, FC, useCallback, useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEventFormValidation} from '../../hooks/useEventFormValidation';
@@ -163,10 +163,7 @@ export const EventForm: FC<EventFormProps> = ({
         );
         return block?.payload || {background: '', points: []};
     };
-    const debounceTextAreaChange = useMemo(
-        () => debounce((e: ChangeEvent<HTMLInputElement>) => TextAreaChange(e.target.value), 500),
-        [TextAreaChange]
-    );
+
     return (
         <form onSubmit={handleSubmit}>
             <div className={styles.container}>
