@@ -1,11 +1,12 @@
 import React, {FC, useState} from 'react';
-import {InteractivePoints, MapBlock} from '../../shared/types/event';
+import {InteractivePoints} from '../../shared/types/event';
 import {ReadOnlyTimeline} from '../ReadOnlyTimeLine/ReadOnlyTimeLine';
 import styles from './ReadOnlyMapBlock.module.css';
 
 interface ReadOnlyMapBlockProps {
     payload: InteractivePoints['payload'];
 }
+
 export interface TimePoint {
     name: string;
     time: string;
@@ -18,70 +19,75 @@ export const ReadOnlyMapBlock: FC<ReadOnlyMapBlockProps> = ({payload}) => {
         return <div className={styles.emptyState}>Карта пока не добавлена</div>;
     }
     const handlePointClick = (index: number) => {
-        setActivePointIndex((prev) => (prev === index ? null : index));
-        if(activePointIndex){
-            const newTimePoints = payload.points[activePointIndex].timeline;
-            if(newTimePoints&&newTimePoints.length>0) {
+        const newActiveIndex = activePointIndex === index ? null : index;
+        setActivePointIndex(newActiveIndex);
+        if (newActiveIndex !== null) {
+            const newTimePoints = payload.points[newActiveIndex].timeline;
+            if (newTimePoints && newTimePoints.length > 0) {
                 setTimePoints(newTimePoints);
+            } else {
+                setTimePoints([]);
             }
+        } else {
+            setTimePoints([]);
         }
 
-    }
+    };
     return (
-       <div>
-           <div className={styles.mapWrapper}>
-               <img
-                   src={payload.background}
-                   alt="Карта мероприятия"
-                   className={styles.mapImage}
-               />
+        <div>
+            <div className={styles.mapWrapper}>
+                <img
+                    src={payload.background}
+                    alt="Карта мероприятия"
+                    className={styles.mapImage}
+                />
 
-               {payload.points.map((point, index) => {
-                   const isActive = activePointIndex === index;
+                {payload.points.map((point, index) => {
+                    const isActive = activePointIndex === index;
 
-                   return (
-                       <button
-                           key={`${point.x}-${point.y}-${index}`}
-                           type="button"
-                           className={styles.mapPoint}
-                           style={{
-                               left: `${point.x * 100}%`,
-                               top: `${point.y * 100}%`,
-                           }}
-                           onClick={(e) => {
-                               e.stopPropagation();
-                               handlePointClick(index);
-                           }}
-                       >
-                           <span className={styles.pointInner}/>
+                    return (
+                        <button
+                            key={index}
+                            type="button"
+                            className={styles.mapPoint}
+                            style={{
+                                left: `${point.x * 100}%`,
+                                top: `${point.y * 100}%`,
+                            }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handlePointClick(index);
+                            }}
+                        >
+                            <span className={styles.pointInner}/>
 
-                           {isActive && (
-                               <div
-                                   className={styles.pointTooltip}
-                                   onClick={(e) => e.stopPropagation()}
-                               >
-                                   {point.text || 'Без описания'}
-                               </div>
-                           )}
-                       </button>
-                   );
-               })}
+                            {isActive && (
+                                <div
+                                    className={styles.pointTooltip}
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    {point.text || 'Без описания'}
+                                </div>
+                            )}
+                        </button>
+                    );
+                })}
 
-               <button
-                   type="button"
-                   className={styles.overlayButton}
-                   onClick={() => setActivePointIndex(null)}
-                   aria-label="Скрыть описание точки"
-               />
-           </div>
-           {
-               timePoints.length>0 &&
-               <div className={styles.timeline}>
-                   <ReadOnlyTimeline items={timePoints} />
-               </div>
-           }
+                <button
+                    type="button"
+                    className={styles.overlayButton}
+                    onClick={() => setActivePointIndex(null)}
+                    aria-label="Скрыть описание точки"
+                />
+            </div>
+            {
+                timePoints.length > 0 &&
+                <div className={styles.timeline}>
+                    <ReadOnlyTimeline items={timePoints}/>
+                </div>
+            }
 
 
-       </div>
+        </div>
     );
 };

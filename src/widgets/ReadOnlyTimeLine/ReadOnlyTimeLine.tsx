@@ -1,5 +1,5 @@
 import {CalendarDays} from 'lucide-react';
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {TimeLineBlock} from '../../shared/types/event';
 import styles from './ReadOnlyTimeLine.module.css';
 
@@ -30,6 +30,11 @@ const formatTime = (time: string) => {
 };
 
 export const ReadOnlyTimeline: FC<ReadOnlyTimelineProps> = ({items}) => {
+
+    useEffect(() => {
+        console.log(items);
+    }, []);
+
     if (!items.length) {
         return <div className={styles.emptyState}>Таймлайн пока не заполнен</div>;
     }

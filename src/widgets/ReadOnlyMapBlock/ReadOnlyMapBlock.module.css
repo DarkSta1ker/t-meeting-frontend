@@ -2,7 +2,6 @@
     position: relative;
     width: 100%;
     border-radius: 18px;
-    overflow: hidden;
     background: #f3f4f6;
     border: 1px solid rgba(0, 0, 0, 0.06);
 }
@@ -44,18 +43,19 @@
     position: absolute;
     left: 50%;
     bottom: calc(100% + 12px);
-    transform: translateX(-50%);
+    transform: translateX(-46.5%);
+    width: auto;
     min-width: 160px;
-    max-width: 240px;
+    max-width: 300px;
     padding: 10px 12px;
     border-radius: 12px;
     background: rgba(31, 31, 31, 0.96);
     color: white;
     font-size: 13px;
     line-height: 1.4;
-    text-align: center;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
     white-space: normal;
+    word-break: break-word;
 }
 
 .pointTooltip::after {
@@ -63,7 +63,7 @@
     position: absolute;
     left: 50%;
     top: 100%;
-    transform: translateX(-50%);
+    transform: translateX(-47%);
     border-width: 8px 7px 0 7px;
     border-style: solid;
     border-color: rgba(31, 31, 31, 0.96) transparent transparent transparent;

@@ -5,7 +5,7 @@ import {useParams} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEventForm} from '../../hooks/useEventForm';
 import {Loader} from '../../shared/loader/Loader';
-import {InteractivePoints, MapBlock, TimeLineBlock,} from '../../shared/types/event';
+import {InteractivePoints, TimeLineBlock,} from '../../shared/types/event';
 import {getTimeAndDateString} from '../../shared/utils/formatTimeAndData';
 import {getDescription} from '../../shared/utils/helpFunctions';
 import {ReadOnlyMapBlock} from '../../widgets/ReadOnlyMapBlock/ReadOnlyMapBlock';
@@ -70,10 +70,6 @@ export const EventPage: FC = () => {
                         <div className={styles.heroTitleBlock}>
                             <Typography className={styles.pageTitle}>
                                 {eventData.name}
-                            </Typography>
-
-                            <Typography className={styles.pageDescription}>
-                                {getDescription(eventData)}
                             </Typography>
                         </div>
                     </div>
