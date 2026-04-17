@@ -77,6 +77,7 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
     }, [payload]);
 
     const handleAddMode = () => {
+        setTimePoints([]);
         setSelectedIndex(null);
         if (points.length >= MAX_POINTS) {
             alert(`Достигнут лимит точек (максимум ${MAX_POINTS})`);
@@ -375,7 +376,7 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                             height: 24,
                             borderRadius: '50%',
                             border: selectedIndex === index ? '3px solid black' : '2px solid black',
-                            backgroundColor: 'yellow',
+                            backgroundColor: selectedIndex === index ? 'lightgreen' : 'yellow',
                             opacity: selectedIndex === index ? 1 : 0.5,
                             cursor: 'pointer',
                             zIndex: selectedIndex === index ? 2 : 1,
@@ -444,14 +445,9 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                             </Box>
                         </Stack>
                     ) : selectedIndex !== null ? (
-                        <>
-                            <Typography variant="subtitle1" sx={{fontWeight: 'bold', mb: 1}}>
-                                {points[selectedIndex].text}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                Координаты: ({points[selectedIndex].x.toFixed(2)}, {points[selectedIndex].y.toFixed(2)})
-                            </Typography>
-                        </>
+                        <Typography variant="subtitle1" sx={{fontWeight: 'bold', mb: 1}}>
+                            {points[selectedIndex].text}
+                        </Typography>
                     ) : (
                         <Typography variant="body2" color="text.secondary">
                             Точка не выбрана

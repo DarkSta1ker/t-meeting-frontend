@@ -2,7 +2,6 @@
     position: relative;
     width: 100%;
     border-radius: 18px;
-    overflow: hidden;
     background: #f3f4f6;
     border: 1px solid rgba(0, 0, 0, 0.06);
 }
@@ -40,13 +39,16 @@
     transform: scale(1.1);
 }
 
+
 .pointTooltip {
     position: absolute;
     left: 50%;
     bottom: calc(100% + 12px);
-    transform: translateX(-50%);
-    min-width: 160px;
-    max-width: 240px;
+
+    min-width: 80px;
+    max-width: 320px;
+    width: max-content;
+
     padding: 10px 12px;
     border-radius: 12px;
     background: rgba(31, 31, 31, 0.96);
@@ -54,8 +56,30 @@
     font-size: 13px;
     line-height: 1.4;
     text-align: center;
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
     white-space: normal;
+    overflow-wrap: break-word;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+
+    transform-origin: center bottom;
+    transition: opacity 0.22s ease,
+    transform 0.22s ease,
+    visibility 0.22s ease;
+
+    pointer-events: none;
+}
+
+.pointTooltipOpen {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.pointTooltipClosed {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-50%) translateY(8px) scale(0.6);
+    pointer-events: none;
 }
 
 .pointTooltip::after {

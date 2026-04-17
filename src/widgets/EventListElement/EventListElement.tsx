@@ -30,7 +30,13 @@ export const EventListElement: FC<EventListElementProps> = ({
                 <div
                     className={styles.mainInfo}
                 >
-                    <Typography className={styles.title}>
+                    <Typography className={styles.title}
+                                sx={{
+                                    fontSize: '24px',
+                                    fontWeight: '600',
+                                    marginBottom: '6px'
+                                }}
+                    >
                         {event.name}
                     </Typography>
 

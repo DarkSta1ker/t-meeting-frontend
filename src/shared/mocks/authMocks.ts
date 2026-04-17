@@ -1,42 +1,97 @@
-import {ResultError, ResultSuccess} from '../types/api';
+import {AuthData} from '../types/auth';
 
-interface LoginSuccessPayload {
-    token: string;
-    login: string;
+type HTTPMethods = 'GET' | 'POST' | 'PUT' | 'DELETE';
+
+interface MockUser {
+    id: number;
+    email: string;
+    password: string;
 }
 
-const usersInDB = [
-    {login: 'login1', password: 'password', token: 'token1', email: 'email1'},
-    {login: 'login2', password: 'password', token: 'token2', email: 'email2'},
-    {login: 'login3', password: 'password', token: 'token3', email: 'email3'},
+interface MockToken {
+    accessToken: string;
+    refreshToken: string;
+    userId: number;
+}
+
+const users: MockUser[] = [
+    {id: 1, email: 'email1', password: 'password'},
+    {id: 2, email: 'email2', password: 'password'},
 ];
 
-type LoginResult = ResultSuccess<LoginSuccessPayload> | ResultError<string>;
+let currentToken: MockToken | null = null;
 
-export const mockLoginUser = (login: string, password: string): Promise<void> => {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            for (const person of usersInDB) {
-                if (person.email === login && person.password === password) {
-                    resolve();
-                    return;
-                }
-            }
-            reject('Неправильный логин или пароль');
-        }, 2000);
-    });
-};
+const delay = (ms = 400) => new Promise((res) => setTimeout(res, ms));
 
-export const mockGetUserData = (login: string, password: string): Promise<void> => {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            for (const person of usersInDB) {
-                if (person.email === login && person.password === password) {
-                    resolve();
-                    return;
-                }
+const generateToken = (userId: number): MockToken => ({
+    accessToken: 'access_' + Math.random().toString(36),
+    refreshToken: 'refresh_' + Math.random().toString(36),
+    userId,
+});
+
+export const createMockApiClient = () => {
+    return async <T>(
+        endpoint: string,
+        options: { method: HTTPMethods; body?: any }
+    ): Promise<T> => {
+        await delay();
+
+        if (endpoint === '/login' && options.method === 'POST') {
+            const {email, password} = options.body as AuthData;
+
+            const user = users.find(
+                (u) => u.email === email && u.password === password
+            );
+
+            if (!user) {
+                throw {status: 401, message: 'Invalid credentials'};
             }
-            reject('Неправильный логин или пароль');
-        }, 2000);
-    });
+
+            currentToken = generateToken(user.id);
+
+            return {
+                accessToken: currentToken.accessToken,
+                refreshToken: currentToken.refreshToken,
+            } as T;
+        }
+
+        if (endpoint === '/register' && options.method === 'POST') {
+            const {email, password} = options.body as AuthData;
+
+            const exists = users.find((u) => u.email === email);
+            if (exists) {
+                throw {status: 400, message: 'User already exists'};
+            }
+
+            const newUser: MockUser = {
+                id: users.length + 1,
+                email,
+                password,
+            };
+
+            users.push(newUser);
+
+            currentToken = generateToken(newUser.id);
+
+            return {
+                accessToken: currentToken.accessToken,
+                refreshToken: currentToken.refreshToken,
+            } as T;
+        }
+
+        if (endpoint === '/refresh' && options.method === 'POST') {
+            if (!currentToken) {
+                throw {status: 401, message: 'No refresh token'};
+            }
+
+            currentToken = generateToken(currentToken.userId);
+
+            return {
+                accessToken: currentToken.accessToken,
+                refreshToken: currentToken.refreshToken,
+            } as T;
+        }
+
+        throw {status: 404, message: 'Endpoint not found'};
+    };
 };

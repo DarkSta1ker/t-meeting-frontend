@@ -5,7 +5,7 @@ import {useParams} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEventForm} from '../../hooks/useEventForm';
 import {Loader} from '../../shared/loader/Loader';
-import {InteractivePoints, MapBlock, TimeLineBlock,} from '../../shared/types/event';
+import {InteractivePoints, TimeLineBlock,} from '../../shared/types/event';
 import {getTimeAndDateString} from '../../shared/utils/formatTimeAndData';
 import {getDescription} from '../../shared/utils/helpFunctions';
 import {ReadOnlyMapBlock} from '../../widgets/ReadOnlyMapBlock/ReadOnlyMapBlock';
@@ -105,7 +105,7 @@ export const EventPage: FC = () => {
 
                 <section className={styles.sectionCard}>
                     <Typography className={styles.sectionTitle}>
-                        Карта
+                        Площадка мероприятия
                     </Typography>
 
                     <ReadOnlyMapBlock payload={mapBlock}/>
