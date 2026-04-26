@@ -8,7 +8,7 @@ import {CreateEventPage} from '../pages/CreateEventPage/CreateEventPage';
 import {EditEventPage} from '../pages/EditEventPage/EditEventPage';
 import {EventPage} from '../pages/EventPage/EventPage';
 import {EventsListPage} from '../pages/EventsListPage/EventsListPage';
-import {PersonalAccount} from '../pages/PersonalAccount/PersonalAccount';
+//import {PersonalAccount} from '../pages/PersonalAccount/PersonalAccount';
 import {ROUTES} from '../shared/constants/constants';
 import {Header} from '../widgets/Header/Header';
 import styles from './App.module.css';
@@ -32,7 +32,7 @@ function App() {
                             <Route path={ROUTES.EVENTS_LIST} element={<EventsListPage/>}/>
                             <Route path={ROUTES.CREATE_EVENT} element={<CreateEventPage/>}/>
                             <Route path={ROUTES.EDIT_EVENT} element={<EditEventPage/>}/>
-                            <Route path={ROUTES.PERSONAL_ACCOUNT} element={<PersonalAccount/>}/>
+
                             <Route path={ROUTES.EVENT} element={<EventPage/>}/>
                         </Route>
 
