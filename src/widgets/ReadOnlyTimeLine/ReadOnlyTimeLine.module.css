@@ -1,7 +1,14 @@
 .timelineWrapper {
-    position: relative;
-    padding: 28px 12px 8px;
+    width: 100%;
     overflow-x: auto;
+    overflow-y: hidden;
+    padding: 20px 0 12px;
+}
+
+.timelineInner {
+    position: relative;
+    min-width: max-content;
+    padding: 24px 24px 28px;
 }
 
 .timelineLine {
@@ -9,7 +16,7 @@
     left: 24px;
     right: 24px;
     top: 50%;
-    height: 12px;
+    height: 10px;
     transform: translateY(-50%);
     border-radius: 999px;
     background: linear-gradient(
@@ -22,64 +29,40 @@
     opacity: 0.95;
 }
 
-.timelineGrid {
+.timelineRow {
     position: relative;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+    gap: 28px;
     min-height: 280px;
 }
 
 .timelineItem {
     position: relative;
     display: flex;
+    width: 180px;
     flex-direction: column;
     align-items: center;
-    text-align: center;
+    justify-content: space-between;
 }
 
 .topItem {
-    justify-content: flex-start;
-    padding-bottom: 146px;
+
+    padding-bottom: 150px;
 }
 
 .bottomItem {
-    justify-content: flex-end;
-    padding-top: 146px;
+    flex-direction: column-reverse;
+    padding-top: 150px;
 }
 
-.connector {
-    position: absolute;
-    width: 2px;
-    height: 46px;
-    background: #d1d5db;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.topItem .connector {
-    bottom: 94px;
-}
-
-.bottomItem .connector {
-    top: 94px;
-}
-
-.iconCircle {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: #4b5563;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-    z-index: 1;
+.itemCard {
+    max-width: 160px;
+    text-align: center;
 }
 
 .itemTitle {
-    margin-top: 12px;
     font-size: 15px;
     font-weight: 700;
     color: #374151;
@@ -92,16 +75,34 @@
     color: #6b7280;
 }
 
+
+.connector {
+    left: 50%;
+    width: 2px;
+    height: 60px;
+    background: #d1d5db;
+    transform: translateX(-50%);
+}
+
+
+.point {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ffdd2d;
+    border: 2px solid #111827;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
 .emptyState {
     border-radius: 16px;
     background: #f6f7f8;
     color: #6b7280;
     padding: 20px;
     text-align: center;
-}
-
-@media (max-width: 900px) {
-    .timelineGrid {
-        min-width: 720px;
-    }
 }

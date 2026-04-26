@@ -101,7 +101,7 @@ export const EventPage: FC = () => {
 
                 <section className={styles.sectionCard}>
                     <Typography className={styles.sectionTitle}>
-                        Карта
+                        Площадка мероприятия
                     </Typography>
 
                     <ReadOnlyMapBlock payload={mapBlock}/>

@@ -1,4 +1,3 @@
-import {CalendarDays} from 'lucide-react';
 import React, {FC, useEffect} from 'react';
 import {TimeLineBlock} from '../../shared/types/event';
 import styles from './ReadOnlyTimeLine.module.css';
@@ -41,37 +40,35 @@ export const ReadOnlyTimeline: FC<ReadOnlyTimelineProps> = ({items}) => {
 
     return (
         <div className={styles.timelineWrapper}>
-            <div className={styles.timelineLine}>
-                {items.map((item, index) => (
-                    <div
-                        key={`${item.name}-${item.time}-${index}`}
-                        className={styles.segment}
-                    />
-                ))}
-            </div>
+            <div className={styles.timelineInner}>
+                <div className={styles.timelineLine}/>
 
-            <div className={styles.timelineGrid}>
-                {items.map((item, index) => {
-                    const isTop = index % 2 === 0;
+                <div className={styles.timelineRow}>
+                    {items.map((item, index) => {
+                        const isTop = index % 2 === 0;
 
-                    return (
-                        <div
-                            key={`${item.name}-${item.time}-${index}-content`}
-                            className={`${styles.timelineItem} ${
-                                isTop ? styles.topItem : styles.bottomItem
-                            }`}
-                        >
-                            <div className={styles.connector}/>
+                        return (
+                            <div
+                                key={index}
+                                className={`${styles.timelineItem} ${
+                                    isTop ? styles.topItem : styles.bottomItem
+                                }`}
+                            >
+                                <div className={styles.itemCard}>
+                                    <div className={styles.itemTitle}>
+                                        {item.name || 'Без названия'}
+                                    </div>
+                                    <div className={styles.itemTime}>
+                                        {formatTime(item.time)}
+                                    </div>
+                                </div>
 
-                            <div className={styles.iconCircle}>
-                                <CalendarDays size={18}/>
+                                <div className={styles.connector}/>
+                                <div className={styles.point}/>
                             </div>
-
-                            <div className={styles.itemTitle}>{item.name || 'Без названия'}</div>
-                            <div className={styles.itemTime}>{formatTime(item.time)}</div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </div>
             </div>
         </div>
     );
