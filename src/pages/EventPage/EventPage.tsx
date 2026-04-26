@@ -71,10 +71,6 @@ export const EventPage: FC = () => {
                             <Typography className={styles.pageTitle}>
                                 {eventData.name}
                             </Typography>
-
-                            <Typography className={styles.pageDescription}>
-                                {getDescription(eventData)}
-                            </Typography>
                         </div>
                     </div>
 
