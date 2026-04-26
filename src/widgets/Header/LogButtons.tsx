@@ -1,4 +1,4 @@
-import {LogOut, User} from 'lucide-react';
+import {LogOut} from 'lucide-react';
 import React, {FC} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import {useAuth} from '../../contexts/AuthContext';
@@ -14,15 +14,15 @@ export const LogButtons: FC = () => {
 
     return (
         <div className={styles.headerElements}>
-            {!isPersonalAccountPage && (
-                <button
-                    className={styles.userButton}
-                    onClick={() => nav('/personalAccount')}
-                >
-                    <User size={20}/>
-                    <span>{userData?.email}</span>
-                </button>
-            )}
+            {/*{!isPersonalAccountPage && (*/}
+            {/*    <button*/}
+            {/*        className={styles.userButton}*/}
+            {/*        onClick={() => nav('/personalAccount')}*/}
+            {/*    >*/}
+            {/*        <User size={20}/>*/}
+            {/*        <span>{userData?.email}</span>*/}
+            {/*    </button>*/}
+            {/*)}*/}
 
             <button
                 className={styles.logoutButton}
