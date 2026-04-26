@@ -12,6 +12,7 @@ import {EventsListPage} from '../pages/EventsListPage/EventsListPage';
 import {ROUTES} from '../shared/constants/constants';
 import {Header} from '../widgets/Header/Header';
 import styles from './App.module.css';
+import {EventGuard} from './routing/EventGuard';
 import {PrivateRoute} from './routing/PrivateRoute';
 import {theme} from './theme';
 
@@ -28,14 +29,14 @@ function App() {
                         <Route path={ROUTES.AUTH} element={<AuthPage/>}/>
 
                         <Route element={<PrivateRoute/>}>
-
                             <Route path={ROUTES.EVENTS_LIST} element={<EventsListPage/>}/>
                             <Route path={ROUTES.CREATE_EVENT} element={<CreateEventPage/>}/>
                             <Route path={ROUTES.EDIT_EVENT} element={<EditEventPage/>}/>
-
-                            <Route path={ROUTES.EVENT} element={<EventPage/>}/>
                         </Route>
 
+                        <Route path={ROUTES.EVENT} element={<EventGuard/>}>
+                            <Route index element={<EventPage/>}/>
+                        </Route>
                     </Routes>
                 </div>
             </LocalizationProvider>
