@@ -24,7 +24,7 @@ export const TimePointsBlock: FC<TimePointsProps> = ({timeline = [], onUpdate}) 
     const [editName, setEditName] = useState('');
 
     useEffect(() => {
-        console.log('юзэфект у блока таймпоинтов');
+        //  console.log('юзэфект у блока таймпоинтов');
         if (timeline && timeline.length > 0) {
             setTimePoints(timeline);
             setSelectedIndex(null);
@@ -41,7 +41,7 @@ export const TimePointsBlock: FC<TimePointsProps> = ({timeline = [], onUpdate}) 
 
     const handleAddTimePoint = () => {
         if (timePoints.length >= MAX_TIME_POINTS) {
-            console.log('Нельзя делать больше 10 точек');
+            //   console.log('Нельзя делать больше 10 точек');
         } else {
             const newTimePoint = {
                 time: `00:00:00Z`,
@@ -281,13 +281,10 @@ export const TimePointsBlock: FC<TimePointsProps> = ({timeline = [], onUpdate}) 
 
             {timePoints.length > 0 && (
                 <div style={{
-                    border: '1px solid rgba(0,0,0,0.05)',
-                    borderRadius: 12,
-                    padding: 12,
+                    padding: 0,
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'flex-start',
-                    background: '#fafafa'
                 }}>
                     <div style={{flex: 1}}>
                         {getEditPannel()}

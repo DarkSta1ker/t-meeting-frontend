@@ -106,6 +106,28 @@ paths:
           description: Успешная операция
         '400':
           description: Предоставлен некорректный Id
+  /published-event/{eventId}:
+    get:
+      tags:
+        - event
+      summary: Получить опубликованное мероприятие по Id
+      operationId: getPublishedEvent
+      security: [ ]
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+      responses:
+        '200':
+          description: Успешная операция
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Предоставлен некорректный Id
+        '404':
+          description:
+            Мероприятия с таким Id не существует
+            либо оно не является опубликованным
   /user:
     get:
       tags:

@@ -6,6 +6,7 @@ import {Route, Routes} from 'react-router-dom';
 import {AuthPage} from '../pages/AuthPage/AuthPage';
 import {CreateEventPage} from '../pages/CreateEventPage/CreateEventPage';
 import {EditEventPage} from '../pages/EditEventPage/EditEventPage';
+import {ErrorPage} from '../pages/ErrorPage/ErrorPage';
 import {EventPage} from '../pages/EventPage/EventPage';
 import {EventsListPage} from '../pages/EventsListPage/EventsListPage';
 //import {PersonalAccount} from '../pages/PersonalAccount/PersonalAccount';
@@ -26,15 +27,17 @@ function App() {
                 <div className={styles.container}>
                     <Header/>
                     <Routes>
+                        <Route path={ROUTES.ERROR} element={<ErrorPage/>}/>
                         <Route path={ROUTES.AUTH} element={<AuthPage/>}/>
 
                         <Route element={<PrivateRoute/>}>
                             <Route path={ROUTES.EVENTS_LIST} element={<EventsListPage/>}/>
                             <Route path={ROUTES.CREATE_EVENT} element={<CreateEventPage/>}/>
                             <Route path={ROUTES.EDIT_EVENT} element={<EditEventPage/>}/>
+                            <Route path={ROUTES.EVENT} element={<EventPage/>}/>
                         </Route>
 
-                        <Route path={ROUTES.EVENT} element={<EventGuard/>}>
+                        <Route path={ROUTES.PUBLISHED_EVENT} element={<EventGuard/>}>
                             <Route index element={<EventPage/>}/>
                         </Route>
                     </Routes>
