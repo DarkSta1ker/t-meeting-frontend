@@ -265,7 +265,13 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                             Добавить первую точку
                         </Button>
                     ) : (
-                        <Typography color="primary" variant="body2">
+                        <Typography variant="body2"
+                                    sx={{
+                                        fontWeight: 600,
+                                        marginBottom: 1,
+                                        fontSize: 20,
+                                        color: 'black'
+                                    }}>
                             Кликните по карте, чтобы разместить точку
                         </Typography>
                     )}
@@ -395,6 +401,7 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                     justifyContent: 'space-between',
                     alignItems: 'flex-start',
                     gap: 2,
+                    padding: 0
                 }}
             >
                 <Box sx={{flex: 1}}>

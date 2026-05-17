@@ -24,6 +24,11 @@
     transition: all 0.2s ease;
 }
 
+.section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
 .innerSection {
     background: #ffffff;
     border-radius: 16px;
@@ -39,10 +44,6 @@
     border: 1px solid rgba(0, 0, 0, 1);
 }
 
-.section:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-}
 
 .sectionTitle {
     margin-top: 0;

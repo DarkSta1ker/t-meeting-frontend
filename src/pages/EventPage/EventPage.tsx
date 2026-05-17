@@ -5,7 +5,7 @@ import {useParams} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEventForm} from '../../hooks/useEventForm';
 import {Loader} from '../../shared/loader/Loader';
-import {InteractivePoints, TimeLineBlock,} from '../../shared/types/event';
+import {InteractivePoints,} from '../../shared/types/event';
 import {getTimeAndDateString} from '../../shared/utils/formatTimeAndData';
 import {getDescription} from '../../shared/utils/helpFunctions';
 import {ReadOnlyMapBlock} from '../../widgets/ReadOnlyMapBlock/ReadOnlyMapBlock';
@@ -15,7 +15,6 @@ export const EventPage: FC = () => {
     const {eventId} = useParams<{ eventId: string }>();
     const {getEvent, isLoading} = useEvent();
     const {eventData, setEventData} = useEventForm();
-
     useEffect(() => {
         const loadEvent = async () => {
             if (!eventId) {
@@ -32,16 +31,8 @@ export const EventPage: FC = () => {
                     console.log('Error while fetching getEvent: ', err);
                 });
         };
-
         loadEvent();
     }, [getEvent, eventId, setEventData]);
-
-    const timeline = useMemo(() => {
-        const block = eventData.content.find(
-            (item): item is TimeLineBlock => item.block === 'timeline'
-        );
-        return block?.payload ?? [];
-    }, [eventData.content]);
 
     const mapBlock = useMemo(() => {
         const block = eventData.content.find(
@@ -82,7 +73,14 @@ export const EventPage: FC = () => {
 
                         <div className={styles.metaItem}>
                             <MapPinIcon size={18}/>
-                            <span>{eventData.metadata.location || 'Место не указано'}</span>
+                            <a
+                                href={`https://yandex.ru/maps/?text=${eventData.metadata.location}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={styles.locationLink}
+                            >
+                                {eventData.metadata.location || 'Местро проведения не указано'}
+                            </a>
                         </div>
                     </div>
                 </section>

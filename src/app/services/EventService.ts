@@ -14,6 +14,10 @@ export const EventService = {
         return eventApi(`/event/${eventId}`, {method: 'GET'});
     },
 
+    async getPublishedEvent(eventId: string): Promise<EventListItem> {
+        return eventApi(`/published-event/${eventId}`, {method: 'GET'});
+    },
+
     async getAllEvents(): Promise<EventListItem[]> {
         return eventApi('/events', {method: 'GET'});
     },

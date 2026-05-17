@@ -22,9 +22,6 @@ export const AuthPage: FC = () => {
                     <a className={styles.switchLink} onClick={changeForm} role="button">
                         {registration ? 'Авторизация' : 'Регистрация'}
                     </a>
-                    <a className={styles.switchLink} onClick={forgetPassword} role="button">
-                        Забыли пароль?
-                    </a>
                 </div>
                 <p>Тестовые учетные записи:</p>
                 <p>email1 / password</p>

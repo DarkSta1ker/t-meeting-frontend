@@ -24,7 +24,12 @@ const redirectToLogin = () => {
 const redirectPlugin = {
     error: (context: Context, next: Next) => {
         const error = context.getState().error;
-        if (error && error.status === 401) {
+        const req = context.getRequest();
+        const url = (req.url as string) || '';
+        
+        const isAuthEndpoint = /\/(me|refresh|login|register)$/.test(url);
+
+        if (error && error.status === 401 && !isAuthEndpoint) {
             const currentPath = window.location.pathname;
             if (!currentPath.endsWith(ROUTES.AUTH) && !window.location.href.endsWith(basename)) {
                 redirectToLogin();

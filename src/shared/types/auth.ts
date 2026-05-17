@@ -18,6 +18,7 @@ export interface UserData {
 export interface AuthContextType {
     isAuth: boolean;
     isLoadingAuth: boolean;
+    isAuthChecking: boolean;
     userData: UserData | null;
     authUser: (authData: AuthData) => Promise<any>;
     regUser: (authData: AuthData) => Promise<any>;

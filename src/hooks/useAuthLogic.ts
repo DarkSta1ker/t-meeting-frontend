@@ -1,5 +1,5 @@
-import {useCallback, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useCallback, useEffect, useState} from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {tokenManager} from '../api/tokenManager';
 import {AuthService} from '../app/services/AuthService';
 import {ROUTES} from '../shared/constants/constants';
@@ -7,81 +7,103 @@ import {AuthData, UserData} from '../shared/types/auth';
 
 export const useAuthLogic = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [isAuth, setIsAuth] = useState(false);
     const [isLoadingAuth, setIsLoadingAuth] = useState(false);
+    const [isAuthChecking, setIsAuthChecking] = useState(true);
     const [userData, setUserData] = useState<UserData | null>(null);
     const [authError, setAuthError] = useState('');
+
+    useEffect(() => {
+        let cancelled = false;
+
+        (async () => {
+            try {
+                const user = await AuthService.getUserData();
+                if (cancelled) {
+                    return;
+                }
+                setUserData(user);
+                setIsAuth(true);
+                tokenManager.startRefresh();
+            } catch {
+                if (cancelled) {
+                    return;
+                }
+                setIsAuth(false);
+                setUserData(null);
+            } finally {
+                if (!cancelled) {
+                    setIsAuthChecking(false);
+                }
+            }
+        })();
+
+        return () => {
+            cancelled = true;
+        };
+    }, []);
+
     const authUser = useCallback(async (authData: AuthData) => {
         setIsLoadingAuth(true);
         setAuthError('');
-        return AuthService.loginUser(authData)
-            .then((res) => {
-                console.log('User logged in successfully');
-                setIsAuth(true);
-                tokenManager.startRefresh();
-                AuthService.getUserData()
-                    .then((resp) => {
-                        setUserData(resp);
-                    })
-                    .catch((err) => {
-                        console.log('Error while getting user data: ', err);
-                    });
-                const urlParams = new URLSearchParams(window.location.search);
-                const backUrl = urlParams.get('back');
+        try {
+            const res = await AuthService.loginUser(authData);
+            setIsAuth(true);
+            tokenManager.startRefresh();
 
-                if (backUrl) {
-                    console.log(backUrl);
-                    console.log(window.location.href);
-                    navigate(decodeURIComponent(backUrl), {replace: true});
-                    console.log(window.location.href);
-                }
-                return (res);
-            })
-            .catch((err) => {
-                console.log('Error while fetching login user: ', err);
-                setIsAuth(false);
-                setAuthError(err);
-                throw err;
-            })
-            .finally(() => {
-                setIsLoadingAuth(false);
-            });
-    }, []);
+            try {
+                const user = await AuthService.getUserData();
+                setUserData(user);
+            } catch (err) {
+                console.log('Error while getting user data: ', err);
+            }
+
+            const params = new URLSearchParams(location.search);
+            const backUrl = params.get('back');
+            if (backUrl) {
+                navigate(decodeURIComponent(backUrl), {replace: true});
+            } else {
+                navigate(ROUTES.EVENTS_LIST, {replace: true});
+            }
+            return res;
+        } catch (err) {
+            setIsAuth(false);
+            setAuthError(err as string);
+            throw err;
+        } finally {
+            setIsLoadingAuth(false);
+        }
+    }, [navigate, location.search]);
 
     const regUser = useCallback(async (authData: AuthData) => {
         setIsLoadingAuth(true);
         setAuthError('');
-        return AuthService.regUser(authData)
-            .then((res) => {
-                console.log('User registered successfully');
-                setIsAuth(true);
-                tokenManager.startRefresh();
-                AuthService.getUserData()
-                    .then((resp) => {
-                        setUserData(resp);
-                    })
-                    .catch((err) => {
-                        console.log('Error while getting user data: ', err);
-                    });
-                return (res);
-            })
-            .catch((err) => {
-                console.log('Error while fetching register user: ', err);
-                setAuthError(err);
-                throw err;
-            })
-            .finally(() => {
-                setIsLoadingAuth(false);
-            });
-    }, []);
+        try {
+            const res = await AuthService.regUser(authData);
+            setIsAuth(true);
+            tokenManager.startRefresh();
+            try {
+                const user = await AuthService.getUserData();
+                setUserData(user);
+            } catch (err) {
+                console.log('Error while getting user data: ', err);
+            }
+            navigate(ROUTES.EVENTS_LIST, {replace: true});
+            return res;
+        } catch (err) {
+            setAuthError(err as string);
+            throw err;
+        } finally {
+            setIsLoadingAuth(false);
+        }
+    }, [navigate]);
 
     const logoutUser = useCallback(() => {
-        setIsLoadingAuth(true);
+        navigate(ROUTES.AUTH, {replace: true});
         setIsAuth(false);
         setUserData(null);
-        setIsLoadingAuth(false);
         tokenManager.stopRefresh();
-        navigate(ROUTES.AUTH);
     }, [navigate]);
 
     const clearAuthError = useCallback(() => {
@@ -91,12 +113,13 @@ export const useAuthLogic = () => {
     return {
         isAuth,
         isLoadingAuth,
+        isAuthChecking,
         userData,
         authError,
         authUser,
         regUser,
         logoutUser,
         clearAuthError,
-        setAuthError
+        setAuthError,
     };
 };

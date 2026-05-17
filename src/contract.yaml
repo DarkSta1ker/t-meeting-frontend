@@ -106,6 +106,28 @@ paths:
           description: Успешная операция
         '400':
           description: Предоставлен некорректный Id
+  /published-event/{eventId}:
+    get:
+      tags:
+        - event
+      summary: Получить опубликованное мероприятие по Id
+      operationId: getPublishedEvent
+      security: [ ]
+      parameters:
+        - $ref: '#/components/parameters/EventId'
+      responses:
+        '200':
+          description: Успешная операция
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Предоставлен некорректный Id
+        '404':
+          description:
+            Мероприятия с таким Id не существует
+            либо оно не является опубликованным
   /user:
     get:
       tags:
@@ -188,7 +210,6 @@ paths:
       tags:
         - auth
       summary: Обновить токен
-      security: [ ]
       parameters:
         - name: refresh_token
           in: cookie
@@ -306,14 +327,12 @@ components:
           description: Тип содержимого
       oneOf:
         - $ref: '#/components/schemas/PromoTextBlock'
-        - $ref: '#/components/schemas/MapBlock'
-        - $ref: '#/components/schemas/TimelineBlock'
+        - $ref: '#/components/schemas/InteractivePointsBlock'
       discriminator:
         propertyName: block
         mapping:
           promo-text: '#/components/schemas/PromoTextBlock'
-          map: '#/components/schemas/MapBlock'
-          timeline: '#/components/schemas/TimelineBlock'
+          interactive-points: '#/components/schemas/InteractivePointsBlock'
     PromoTextBlock:
       type: object
       properties:
@@ -323,42 +342,56 @@ components:
           type: array
           items:
             type: string
-    MapBlock:
+    InteractivePointsBlock:
       type: object
+      required:
+        - block
+        - payload
       properties:
         block:
-          const: map
+          type: string
+          const: interactive-points
         payload:
-          type: object
-          properties:
-            background:
-              type: string
-            points:
-              type: array
-              items:
-                type: object
-                properties:
-                  x:
-                    type: number
-                  y:
-                    type: number
-                  text:
-                    type: string
-    TimelineBlock:
+          $ref: '#/components/schemas/InteractivePointsPayload'
+    InteractivePointsPayload:
       type: object
+      required:
+        - backround
+        - points
       properties:
-        block:
-          const: timeline
-        payload:
+        background:
+          type: string
+        points:
           type: array
           items:
-            type: object
-            properties:
-              name:
-                type: string
-              time:
-                type: string
-                format: time
+            $ref: '#/components/schemas/InteractivePoint'
+    InteractivePoint:
+      type: object
+      required:
+        - x
+        - y
+        - text
+      properties:
+        x:
+          type: number
+        y:
+          type: number
+        text:
+          type: string
+        timeline:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimelineItem'
+    TimelineItem:
+      type: object
+      required:
+        - name
+        - time
+      properties:
+        name:
+          type: string
+        time:
+          type: string
     AuthCredentials:
       type: object
       required:
