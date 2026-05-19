@@ -5,13 +5,11 @@ interface EventActionButtonsProps {
     eventId?: string;
     onCancel: () => void;
     onDelete?: () => void;
-    onSubmit: () => void;
-    disabled: boolean;
     isLoading: boolean;
 }
 
 export const EventActionButtons: FC<EventActionButtonsProps> = (
-    {eventId, onCancel, onDelete, onSubmit, disabled, isLoading}) => (
+    {eventId, onCancel, onDelete, isLoading}) => (
     <div className={styles.actionButtonsWrapper}>
         <button
             type="button"
@@ -33,8 +31,7 @@ export const EventActionButtons: FC<EventActionButtonsProps> = (
 
         <button
             type="submit"
-            onClick={onSubmit}
-            disabled={disabled || isLoading}
+            disabled={isLoading}
             className={`${styles.actionButton} ${styles.primaryButton}`}
         >
             {isLoading ? 'Сохраняем...' : 'Сохранить'}

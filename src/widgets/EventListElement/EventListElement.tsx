@@ -14,13 +14,15 @@ interface EventListElementProps {
     handleEventPage: (eventId: string) => void;
     handleEditEvent: (eventId: string) => void;
     handleDeleteEvent: (eventId: string) => void;
+    onCopyLink?: (link: string) => void;
 }
 
 export const EventListElement: FC<EventListElementProps> = ({
                                                                 event,
                                                                 handleEditEvent,
                                                                 handleEventPage,
-                                                                handleDeleteEvent
+                                                                handleDeleteEvent,
+                                                                onCopyLink,
                                                             }) => {
     return (
         <div className={styles.card}
@@ -62,6 +64,18 @@ export const EventListElement: FC<EventListElementProps> = ({
                             side="left"
                             onClick={(e) => e.stopPropagation()}
                         >
+                            <DropdownMenu.Item
+                                className={styles.dropdownMenuItem}
+                                onSelect={(e) => {
+                                    e.stopPropagation();
+                                    const link = `${window.location.origin}/published-event/${event.id}`;
+                                    navigator.clipboard.writeText(link)
+                                        .then(() => onCopyLink?.(link))
+                                        .catch((err) => console.log('Не удалось скопировать:', err));
+                                }}
+                            >
+                                Скопировать ссылку
+                            </DropdownMenu.Item>
                             <DropdownMenu.Item
                                 className={styles.dropdownMenuItem}
                                 onSelect={(e) => {
