@@ -3,7 +3,7 @@ import {createApiClient} from '../../api/requestor'; //не моки
 import {EventBase, EventListItem} from '../../shared/types/event';
 
 //const eventApi = mockApiClient; // моки
-const eventApi = createApiClient('http://localhost:33');//не моки
+const eventApi = createApiClient('/api');//не моки
 
 export const EventService = {
     async addEvent(eventPayload: EventBase) {

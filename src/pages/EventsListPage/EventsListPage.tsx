@@ -1,6 +1,7 @@
+import {Alert, Snackbar} from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import {CirclePlus} from 'lucide-react';
-import React, {type FC, useCallback, useEffect} from 'react';
+import React, {type FC, useCallback, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEvents} from '../../hooks/useEvents';
@@ -15,6 +16,7 @@ export const EventsListPage: FC = () => {
     const nav = useNavigate();
     const {deleteEvent} = useEvent();
     const {events, getAllEvents, isLoading} = useEvents();
+    const [copiedLink, setCopiedLink] = useState<string | null>(null);
 
     useEffect(() => {
         getAllEvents();
@@ -74,6 +76,7 @@ export const EventsListPage: FC = () => {
                                     handleEditEvent={handleEditEvent}
                                     handleEventPage={handleEventPage}
                                     handleDeleteEvent={handleDeleteEvent}
+                                    onCopyLink={(link) => setCopiedLink(link)}
                                 />
                             ))
                             :
@@ -81,6 +84,16 @@ export const EventsListPage: FC = () => {
                                 Пока что тут нет мероприятий, вы можете добавить их с помощью кнопки ниже.
                             </div>
                     }
+                    <Snackbar
+                        open={!!copiedLink}
+                        autoHideDuration={2000}
+                        onClose={() => setCopiedLink(null)}
+                        anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
+                    >
+                        <Alert severity="success" onClose={() => setCopiedLink(null)}>
+                            Ссылка скопирована
+                        </Alert>
+                    </Snackbar>
                     <IconButton
                         onClick={() => nav(ROUTES.CREATE_EVENT)}
                         sx={{

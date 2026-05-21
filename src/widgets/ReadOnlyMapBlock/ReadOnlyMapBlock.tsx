@@ -1,5 +1,5 @@
 import {Box} from '@mui/material';
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {InteractivePoints} from '../../shared/types/event';
 import {ReadOnlyTimeline} from '../ReadOnlyTimeLine/ReadOnlyTimeLine';
 import styles from './ReadOnlyMapBlock.module.css';
@@ -16,9 +16,23 @@ export interface TimePoint {
 export const ReadOnlyMapBlock: FC<ReadOnlyMapBlockProps> = ({payload}) => {
     const [activePointIndex, setActivePointIndex] = useState<number | null>(null);
     const [timePoints, setTimePoints] = useState<TimePoint[]>([]);
+    const [imageDimensions, setImageDimensions] = useState<{ width: number; height: number } | null>(null);
+
+    useEffect(() => {
+        if (!payload.background) {
+            return;
+        }
+        const img = new Image();
+        img.src = payload.background;
+        img.onload = () => {
+            setImageDimensions({width: img.naturalWidth, height: img.naturalHeight});
+        };
+    }, [payload.background]);
+
     if (!payload.background) {
         return <div className={styles.emptyState}>Карта пока не добавлена</div>;
     }
+
     const handlePointClick = (index: number) => {
         const newActiveIndex = activePointIndex === index ? null : index;
         setActivePointIndex(newActiveIndex);
@@ -32,16 +46,25 @@ export const ReadOnlyMapBlock: FC<ReadOnlyMapBlockProps> = ({payload}) => {
         } else {
             setTimePoints([]);
         }
-
     };
+
     return (
         <div>
-            <div className={styles.mapWrapper}>
-                <img
-                    src={payload.background}
-                    alt="Карта мероприятия"
-                    className={styles.mapImage}
-                />
+            <Box
+                sx={{
+                    position: 'relative',
+                    width: '100%',
+                    maxWidth: 800,
+                    ...(imageDimensions
+                        ? {aspectRatio: `${imageDimensions.width} / ${imageDimensions.height}`}
+                        : {height: 400}),
+                    backgroundImage: `url(${payload.background})`,
+                    backgroundSize: 'contain',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center',
+                    mx: 'auto',
+                }}
+            >
                 <button
                     type="button"
                     className={styles.overlayButton}
@@ -69,11 +92,11 @@ export const ReadOnlyMapBlock: FC<ReadOnlyMapBlockProps> = ({payload}) => {
                                 width: 24,
                                 height: 24,
                                 borderRadius: '50%',
-                                border: activePointIndex === index ? '3px solid black' : '2px solid black',
-                                backgroundColor: activePointIndex === index ? 'lightgreen' : 'yellow',
-                                opacity: activePointIndex === index ? 1 : 0.5,
+                                border: isActive ? '3px solid black' : '2px solid black',
+                                backgroundColor: isActive ? 'lightgreen' : 'yellow',
+                                opacity: isActive ? 1 : 0.5,
                                 cursor: 'pointer',
-                                zIndex: activePointIndex === index ? 3 : 2,
+                                zIndex: isActive ? 3 : 2,
                                 boxShadow: 1,
                             }}
                         >
@@ -86,20 +109,15 @@ export const ReadOnlyMapBlock: FC<ReadOnlyMapBlockProps> = ({payload}) => {
                                 {point.text || 'Без описания'}
                             </div>
                         </Box>
-
                     );
                 })}
-
-
-            </div>
+            </Box>
             {
                 timePoints.length > 0 &&
                 <div className={styles.timeline}>
                     <ReadOnlyTimeline items={timePoints}/>
                 </div>
             }
-
-
         </div>
     );
 };
