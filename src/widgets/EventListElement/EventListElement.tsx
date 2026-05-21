@@ -5,7 +5,6 @@ import React, {FC} from 'react';
 import {getRuStatus} from '../../shared/constants/constants';
 import {EventListItem} from '../../shared/types/event';
 import {EventStatusCircle} from '../../shared/ui/EventStatus/EventStatusCircle';
-import {copyToClipboard} from '../../shared/utils/copyToClipboard';
 import {getTimeAndDateString} from '../../shared/utils/formatTimeAndData';
 import {getDescription} from '../../shared/utils/helpFunctions';
 import styles from './EventListElement.module.css';
@@ -70,9 +69,7 @@ export const EventListElement: FC<EventListElementProps> = ({
                                 onSelect={(e) => {
                                     e.stopPropagation();
                                     const link = `${window.location.origin}/published-event/${event.id}`;
-                                    copyToClipboard(link)
-                                        .then(() => onCopyLink?.(link))
-                                        .catch((err) => console.log('Не удалось скопировать:', err));
+                                    onCopyLink?.(link);
                                 }}
                             >
                                 Скопировать ссылку

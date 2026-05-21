@@ -1,4 +1,3 @@
-import {Alert, Snackbar} from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import {CirclePlus} from 'lucide-react';
 import React, {type FC, useCallback, useEffect, useState} from 'react';
@@ -7,6 +6,7 @@ import {useEvent} from '../../hooks/useEvent';
 import {useEvents} from '../../hooks/useEvents';
 import {buildEditEventRoute, buildEventRoute, ROUTES} from '../../shared/constants/constants';
 import {Loader} from '../../shared/loader/Loader';
+import {CopyLinkDialog} from '../../shared/ui/CopyLinkDialog/CopyLinkDialog';
 import {PageTitle} from '../../shared/ui/PageTitle/PageTitle';
 import {EventListElement} from '../../widgets/EventListElement/EventListElement';
 import styles from './EventsListPage.module.css';
@@ -84,16 +84,11 @@ export const EventsListPage: FC = () => {
                                 Пока что тут нет мероприятий, вы можете добавить их с помощью кнопки ниже.
                             </div>
                     }
-                    <Snackbar
+                    <CopyLinkDialog
                         open={!!copiedLink}
-                        autoHideDuration={2000}
+                        link={copiedLink || ''}
                         onClose={() => setCopiedLink(null)}
-                        anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
-                    >
-                        <Alert severity="success" onClose={() => setCopiedLink(null)}>
-                            Ссылка скопирована
-                        </Alert>
-                    </Snackbar>
+                    />
                     <IconButton
                         onClick={() => nav(ROUTES.CREATE_EVENT)}
                         sx={{
