@@ -94,15 +94,15 @@ export const EventListElement: FC<EventListElementProps> = ({
                                 Редактировать
                             </DropdownMenu.Item>
 
-                            <DropdownMenu.Item
-                                className={styles.dropdownMenuItem}
-                                onSelect={(e) => {
-                                    e.stopPropagation();
-                                    handleDeleteEvent(event.id);
-                                }}
-                            >
-                                Удалить
-                            </DropdownMenu.Item>
+                            {/*<DropdownMenu.Item*/}
+                            {/*    className={styles.dropdownMenuItem}*/}
+                            {/*    onSelect={(e) => {*/}
+                            {/*        e.stopPropagation();*/}
+                            {/*        handleDeleteEvent(event.id);*/}
+                            {/*    }}*/}
+                            {/*>*/}
+                            {/*    Удалить*/}
+                            {/*</DropdownMenu.Item>*/}
                         </DropdownMenu.Content>
                     </DropdownMenu.Portal>
                 </DropdownMenu.Root>
