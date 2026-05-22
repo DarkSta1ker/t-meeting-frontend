@@ -9,6 +9,7 @@ import {EditEventPage} from '../pages/EditEventPage/EditEventPage';
 import {ErrorPage} from '../pages/ErrorPage/ErrorPage';
 import {EventPage} from '../pages/EventPage/EventPage';
 import {EventsListPage} from '../pages/EventsListPage/EventsListPage';
+import {PublishedEventPage} from '../pages/PublishedEventPage/PublishedEventPage';
 //import {PersonalAccount} from '../pages/PersonalAccount/PersonalAccount';
 import {ROUTES} from '../shared/constants/constants';
 import {Header} from '../widgets/Header/Header';
@@ -38,7 +39,7 @@ function App() {
                         </Route>
 
                         <Route path={ROUTES.PUBLISHED_EVENT} element={<EventGuard/>}>
-                            <Route index element={<EventPage/>}/>
+                            <Route index element={<PublishedEventPage/>}/>
                         </Route>
                     </Routes>
                 </div>
