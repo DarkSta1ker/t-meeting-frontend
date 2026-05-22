@@ -1,11 +1,12 @@
 import IconButton from '@mui/material/IconButton';
 import {CirclePlus} from 'lucide-react';
-import React, {type FC, useCallback, useEffect} from 'react';
+import React, {type FC, useCallback, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEvents} from '../../hooks/useEvents';
 import {buildEditEventRoute, buildEventRoute, ROUTES} from '../../shared/constants/constants';
 import {Loader} from '../../shared/loader/Loader';
+import {CopyLinkDialog} from '../../shared/ui/CopyLinkDialog/CopyLinkDialog';
 import {PageTitle} from '../../shared/ui/PageTitle/PageTitle';
 import {EventListElement} from '../../widgets/EventListElement/EventListElement';
 import styles from './EventsListPage.module.css';
@@ -15,6 +16,7 @@ export const EventsListPage: FC = () => {
     const nav = useNavigate();
     const {deleteEvent} = useEvent();
     const {events, getAllEvents, isLoading} = useEvents();
+    const [copiedLink, setCopiedLink] = useState<string | null>(null);
 
     useEffect(() => {
         getAllEvents();
@@ -74,6 +76,7 @@ export const EventsListPage: FC = () => {
                                     handleEditEvent={handleEditEvent}
                                     handleEventPage={handleEventPage}
                                     handleDeleteEvent={handleDeleteEvent}
+                                    onCopyLink={(link) => setCopiedLink(link)}
                                 />
                             ))
                             :
@@ -81,6 +84,11 @@ export const EventsListPage: FC = () => {
                                 Пока что тут нет мероприятий, вы можете добавить их с помощью кнопки ниже.
                             </div>
                     }
+                    <CopyLinkDialog
+                        open={!!copiedLink}
+                        link={copiedLink || ''}
+                        onClose={() => setCopiedLink(null)}
+                    />
                     <IconButton
                         onClick={() => nav(ROUTES.CREATE_EVENT)}
                         sx={{

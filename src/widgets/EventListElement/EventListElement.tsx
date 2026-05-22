@@ -14,13 +14,15 @@ interface EventListElementProps {
     handleEventPage: (eventId: string) => void;
     handleEditEvent: (eventId: string) => void;
     handleDeleteEvent: (eventId: string) => void;
+    onCopyLink?: (link: string) => void;
 }
 
 export const EventListElement: FC<EventListElementProps> = ({
                                                                 event,
                                                                 handleEditEvent,
                                                                 handleEventPage,
-                                                                handleDeleteEvent
+                                                                handleDeleteEvent,
+                                                                onCopyLink,
                                                             }) => {
     return (
         <div className={styles.card}
@@ -30,7 +32,13 @@ export const EventListElement: FC<EventListElementProps> = ({
                 <div
                     className={styles.mainInfo}
                 >
-                    <Typography className={styles.title}>
+                    <Typography className={styles.title}
+                                sx={{
+                                    fontSize: '24px',
+                                    fontWeight: '600',
+                                    marginBottom: '6px'
+                                }}
+                    >
                         {event.name}
                     </Typography>
 
@@ -60,6 +68,16 @@ export const EventListElement: FC<EventListElementProps> = ({
                                 className={styles.dropdownMenuItem}
                                 onSelect={(e) => {
                                     e.stopPropagation();
+                                    const link = `${window.location.origin}/published-event/${event.id}`;
+                                    onCopyLink?.(link);
+                                }}
+                            >
+                                Скопировать ссылку
+                            </DropdownMenu.Item>
+                            <DropdownMenu.Item
+                                className={styles.dropdownMenuItem}
+                                onSelect={(e) => {
+                                    e.stopPropagation();
                                     handleEventPage(event.id);
                                 }}
                             >
@@ -76,15 +94,15 @@ export const EventListElement: FC<EventListElementProps> = ({
                                 Редактировать
                             </DropdownMenu.Item>
 
-                            <DropdownMenu.Item
-                                className={styles.dropdownMenuItem}
-                                onSelect={(e) => {
-                                    e.stopPropagation();
-                                    handleDeleteEvent(event.id);
-                                }}
-                            >
-                                Удалить
-                            </DropdownMenu.Item>
+                            {/*<DropdownMenu.Item*/}
+                            {/*    className={styles.dropdownMenuItem}*/}
+                            {/*    onSelect={(e) => {*/}
+                            {/*        e.stopPropagation();*/}
+                            {/*        handleDeleteEvent(event.id);*/}
+                            {/*    }}*/}
+                            {/*>*/}
+                            {/*    Удалить*/}
+                            {/*</DropdownMenu.Item>*/}
                         </DropdownMenu.Content>
                     </DropdownMenu.Portal>
                 </DropdownMenu.Root>

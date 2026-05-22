@@ -2,7 +2,7 @@ import {useCallback} from 'react';
 import {EventService} from '../app/services/EventService';
 import {EventListItem, EventNew} from '../shared/types/event';
 import {useEvents} from './useEvents';
-//TODO много повторяющегося кода
+
 export const useEvent = () => {
     const {isLoading, setIsLoading} = useEvents();
     const addEvent = useCallback(async (event: EventNew) => {
@@ -21,6 +21,19 @@ export const useEvent = () => {
     const getEvent = useCallback(async (eventId: string) => {
         setIsLoading(true);
         return EventService.getEvent(eventId)
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                console.log('Error while fetching addEvent: ', err);
+                throw err;
+            })
+            .finally(() => setIsLoading(false));
+    }, [setIsLoading]);
+
+    const getPublishedEvent = useCallback(async (eventId: string) => {
+        setIsLoading(true);
+        return EventService.getPublishedEvent(eventId)
             .then((res) => {
                 return res;
             })
@@ -60,6 +73,7 @@ export const useEvent = () => {
     return {
         addEvent,
         getEvent,
+        getPublishedEvent,
         deleteEvent,
         updateEvent,
         isLoading

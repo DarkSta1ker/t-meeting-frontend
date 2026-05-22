@@ -1,7 +1,7 @@
-import {debounce, SelectChangeEvent} from '@mui/material';
+import {Alert, SelectChangeEvent, Snackbar} from '@mui/material';
 import TextField from '@mui/material/TextField';
 import {Dayjs} from 'dayjs';
-import React, {ChangeEvent, FC, useCallback, useEffect, useMemo} from 'react';
+import React, {ChangeEvent, FC, useCallback, useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useEvent} from '../../hooks/useEvent';
 import {useEventFormValidation} from '../../hooks/useEventFormValidation';
@@ -56,6 +56,7 @@ export const EventForm: FC<EventFormProps> = ({
     const {eventId} = useParams<{ eventId: string }>();
     const nav = useNavigate();
     const {deleteEvent, isLoading} = useEvent();
+    const [showError, setShowError] = useState(false);
     const maxSimbols = 2000;
     const {
         errors,
@@ -151,7 +152,16 @@ export const EventForm: FC<EventFormProps> = ({
 
         const isValid = validateForm(eventData.name, currentDate);
         if (!isValid) {
+            setShowError(true);
+            setTimeout(() => {
+                document.querySelector('[aria-invalid="true"]')?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }, 0);
             return;
+        } else {
+            setShowError(false);
         }
 
         handlePostOrUpdate();
@@ -163,91 +173,98 @@ export const EventForm: FC<EventFormProps> = ({
         );
         return block?.payload || {background: '', points: []};
     };
-    const debounceTextAreaChange = useMemo(
-        () => debounce((e: ChangeEvent<HTMLInputElement>) => TextAreaChange(e.target.value), 500),
-        [TextAreaChange]
-    );
+
     return (
-        <form onSubmit={handleSubmit}>
-            <div className={styles.container}>
+        <>
+            <form onSubmit={handleSubmit}>
+                <div className={styles.container}>
 
-                <div className={styles.section}>
-                    <h3 className={styles.sectionTitle}>Основная информация</h3>
+                    <div className={styles.section}>
+                        <h3 className={styles.sectionTitle}>Основная информация</h3>
 
-                    <div className={styles.grid}>
-                        <EventNameField
-                            value={eventData.name}
-                            error={touched.name && !!errors.name}
-                            helperText={touched.name ? errors.name : ''}
-                            onChange={handleNameChange}
-                            onBlur={() => handleBlur('name')}
-                        />
+                        <div className={styles.grid}>
+                            <EventNameField
+                                value={eventData.name}
+                                error={touched.name && !!errors.name}
+                                helperText={touched.name ? errors.name : ''}
+                                onChange={handleNameChange}
+                                onBlur={() => handleBlur('name')}
+                            />
 
+                            <TextField
+                                label="Место проведения"
+                                fullWidth
+                                sx={{
+                                    '& .MuiInputLabel-root.Mui-focused': {
+                                        color: '#000000',
+                                    }
+                                }}
+                                helperText={eventData.metadata.location.length > 200 ? `${eventData.metadata.location.length}/300` : ''}
+                                inputProps={{maxLength: 300}}
+                                value={eventData.metadata.location}
+                                onChange={(e) => handleMetadataFieldChange('location', e.target.value)}
+                            />
+
+                            <EventDateTimeField
+                                value={eventData.metadata.datetime ? getTZTimeAndDate(eventData.metadata.datetime) : null}
+                                errorText={errors.date}
+                                touched={touched.date}
+                                onChange={handleDateTimeChange}
+                                onBlur={() => handleBlur('date')}
+                            />
+
+                            <EventStatusRadioGroup
+                                eventId={eventId}
+                                value={eventData.status}
+                                onChange={handleStatus}
+                            />
+                        </div>
+                    </div>
+
+                    <div className={styles.section}>
+                        <h3 className={styles.sectionTitle}>Описание</h3>
                         <TextField
-                            label="Место проведения"
+                            multiline
                             fullWidth
+                            minRows={3}
+                            maxRows={14}
                             sx={{
-                                '& .MuiInputLabel-root.Mui-focused': {
-                                    color: '#000000',
+                                '& .MuiFormHelperText-root': {
+                                    marginLeft: 0,
                                 }
                             }}
-                            helperText={eventData.metadata.location.length > 200 ? `${eventData.metadata.location.length}/300` : ''}
-                            inputProps={{maxLength: 300}}
-                            value={eventData.metadata.location}
-                            onChange={(e) => handleMetadataFieldChange('location', e.target.value)}
-                        />
-
-                        <EventDateTimeField
-                            value={eventData.metadata.datetime ? getTZTimeAndDate(eventData.metadata.datetime) : null}
-                            errorText={errors.date}
-                            touched={touched.date}
-                            onChange={handleDateTimeChange}
-                            onBlur={() => handleBlur('date')}
-                        />
-
-                        <EventStatusRadioGroup
-                            eventId={eventId}
-                            value={eventData.status}
-                            onChange={handleStatus}
+                            inputProps={{maxLength: maxSimbols}}
+                            value={eventData.content.find((block): block is PromoTextBlock => block.block === 'promo-text')?.payload.join('') || ''}
+                            onChange={(e) => TextAreaChange(e.target.value)}
+                            helperText={`${eventData.content.find((block): block is PromoTextBlock => block.block === 'promo-text')?.payload.join('').length}/${maxSimbols}`}
                         />
                     </div>
-                </div>
 
-                <div className={styles.section}>
-                    <h3 className={styles.sectionTitle}>Описание</h3>
-                    <TextField
-                        multiline
-                        fullWidth
-                        minRows={3}
-                        maxRows={14}
-                        sx={{
-                            '& .MuiFormHelperText-root': {
-                                marginLeft: 0,
-                            }
-                        }}
-                        inputProps={{maxLength: maxSimbols}}
-                        value={eventData.content.find((block): block is PromoTextBlock => block.block === 'promo-text')?.payload.join('') || ''}
-                        onChange={(e) => TextAreaChange(e.target.value)}
-                        helperText={`${eventData.content.find((block): block is PromoTextBlock => block.block === 'promo-text')?.payload.join('').length}/${maxSimbols}`}
+                    <InteractivePointsBlock
+                        onUpdate={handleUpdateInteractivePointsBlock}
+                        payload={findInteractivePointsBlock(eventData.content)}
                     />
+
+                    <EventActionButtons
+                        eventId={eventId}
+                        onCancel={handleCancel}
+                        onDelete={eventId ? handleDeleteEvent : undefined}
+                        isLoading={isLoading}
+                    />
+
                 </div>
 
-                <InteractivePointsBlock
-                    onUpdate={handleUpdateInteractivePointsBlock}
-                    payload={findInteractivePointsBlock(eventData.content)}
-                />
-
-                <EventActionButtons
-                    eventId={eventId}
-                    onCancel={handleCancel}
-                    onDelete={eventId ? handleDeleteEvent : undefined}
-                    onSubmit={handlePostOrUpdate}
-                    disabled={hasErrors}
-                    isLoading={isLoading}
-                />
-
-            </div>
-
-        </form>
+            </form>
+            <Snackbar
+                open={showError}
+                autoHideDuration={4000}
+                onClose={() => setShowError(false)}
+                anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
+            >
+                <Alert severity="error" onClose={() => setShowError(false)}>
+                    Проверьте правильность заполнения полей
+                </Alert>
+            </Snackbar>
+        </>
     );
 };

@@ -9,11 +9,11 @@ import {InteractivePoints,} from '../../shared/types/event';
 import {getTimeAndDateString} from '../../shared/utils/formatTimeAndData';
 import {getDescription} from '../../shared/utils/helpFunctions';
 import {ReadOnlyMapBlock} from '../../widgets/ReadOnlyMapBlock/ReadOnlyMapBlock';
-import styles from './EventPage.module.css';
+import styles from './PublishedEventPage.module.css';
 
-export const EventPage: FC = () => {
+export const PublishedEventPage: FC = () => {
     const {eventId} = useParams<{ eventId: string }>();
-    const {getEvent, isLoading} = useEvent();
+    const {getPublishedEvent, isLoading} = useEvent();
     const {eventData, setEventData} = useEventForm();
     useEffect(() => {
         const loadEvent = async () => {
@@ -22,17 +22,17 @@ export const EventPage: FC = () => {
                 return;
             }
 
-            getEvent(eventId)
+            getPublishedEvent(eventId)
                 .then((res) => {
                     setEventData(res);
                     console.log('Event loaded');
                 })
                 .catch((err) => {
-                    console.log('Error while fetching getEvent: ', err);
+                    console.log('Error while fetching getPublishedEvent: ', err);
                 });
         };
         loadEvent();
-    }, [getEvent, eventId, setEventData]);
+    }, [getPublishedEvent, eventId, setEventData]);
 
     const mapBlock = useMemo(() => {
         const block = eventData.content.find(

@@ -137,12 +137,14 @@ export const buttonStyles = {
 };
 
 export const ROUTES = {
+    ERROR: '*',
     AUTH: '/',
     EVENTS_LIST: '/eventsList',
     CREATE_EVENT: '/createEvent',
     EDIT_EVENT: '/editEvent/:eventId',
     PERSONAL_ACCOUNT: '/personalAccount',
     EVENT: '/event/:eventId',
+    PUBLISHED_EVENT: '/published-event/:eventId',
 } as const;
 export const buildEventRoute = (eventId: string | number) => `/event/${eventId}`;
 export const buildEditEventRoute = (eventId: string | number) => `/editEvent/${eventId}`;
@@ -150,6 +152,7 @@ export const buildEditEventRoute = (eventId: string | number) => `/editEvent/${e
 export const defaultAuthContext: AuthContextType = {
     isAuth: false,
     isLoadingAuth: false,
+    isAuthChecking: true,
     userData: null,
     authUser: async () => ({
         status: 'Error' as const,

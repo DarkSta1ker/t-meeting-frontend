@@ -77,6 +77,7 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
     }, [payload]);
 
     const handleAddMode = () => {
+        setTimePoints([]);
         setSelectedIndex(null);
         if (points.length >= MAX_POINTS) {
             alert(`Достигнут лимит точек (максимум ${MAX_POINTS})`);
@@ -93,7 +94,6 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
             return;
         }
         if (!isAddingMode) {
-            console.log('нажали на контейнер но без режима добавления кода');
             return;
         }
         if (!containerRef.current) {
@@ -105,8 +105,6 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
         const y = (e.clientY - rect.top) / rect.height;
         const clampedX = Math.min(1, Math.max(0, x));
         const clampedY = Math.min(1, Math.max(0, y));
-
-        console.log('нажали на контейнер с режимом добавления новой точки');
         const newPoint: MapPoint = {
             x: clampedX,
             y: clampedY,
@@ -129,9 +127,9 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
         setSelectedIndex(index);
         setIsEditing(false);
         setIsAddingMode(false);
-        console.log(points, index);
+
         const newPoints = points[index].timeline;
-        console.log(newPoints, 'это новые');
+
         if (newPoints && newPoints.length > 0) {
             setTimePoints(newPoints);
             console.log('удалось загрузить точки');
@@ -267,7 +265,13 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                             Добавить первую точку
                         </Button>
                     ) : (
-                        <Typography color="primary" variant="body2">
+                        <Typography variant="body2"
+                                    sx={{
+                                        fontWeight: 600,
+                                        marginBottom: 1,
+                                        fontSize: 20,
+                                        color: 'black'
+                                    }}>
                             Кликните по карте, чтобы разместить точку
                         </Typography>
                     )}
@@ -378,7 +382,7 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                             height: 24,
                             borderRadius: '50%',
                             border: selectedIndex === index ? '3px solid black' : '2px solid black',
-                            backgroundColor: 'yellow',
+                            backgroundColor: selectedIndex === index ? 'lightgreen' : 'yellow',
                             opacity: selectedIndex === index ? 1 : 0.5,
                             cursor: 'pointer',
                             zIndex: selectedIndex === index ? 2 : 1,
@@ -397,6 +401,7 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                     justifyContent: 'space-between',
                     alignItems: 'flex-start',
                     gap: 2,
+                    padding: 0
                 }}
             >
                 <Box sx={{flex: 1}}>
@@ -447,14 +452,9 @@ export const InteractivePointsBlock: React.FC<InteractivePointsEditorProps> = ({
                             </Box>
                         </Stack>
                     ) : selectedIndex !== null ? (
-                        <>
-                            <Typography variant="subtitle1" sx={{fontWeight: 'bold', mb: 1}}>
-                                {points[selectedIndex].text}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                Координаты: ({points[selectedIndex].x.toFixed(2)}, {points[selectedIndex].y.toFixed(2)})
-                            </Typography>
-                        </>
+                        <Typography variant="subtitle1" sx={{fontWeight: 'bold', mb: 1}}>
+                            {points[selectedIndex].text}
+                        </Typography>
                     ) : (
                         <Typography variant="body2" color="text.secondary">
                             Точка не выбрана
